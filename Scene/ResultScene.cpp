@@ -1,11 +1,9 @@
-#include <DxLib.h>
 #include "../Game.h"
-#include "ResultScene.h"
 #include "TitleScene.h"
+#include "ResultScene.h"
 
 ResultScene::ResultScene()
 {
-	Init();
 }
 
 
@@ -19,9 +17,9 @@ void ResultScene::Init()
 
 void ResultScene::Update(const Input & p)
 {
-	if (p.IsTrigger(PAD_INPUT_10))
+	DrawString(0, 0, "Result", 0xffffff);
+	if (p.IsKeyTrigger(KEY_INPUT_SPACE))
 	{
-		Game::GetInstance().ChangeScene(new TitleScene());
-		return;
+		LpGame.ChangeScene(std::make_shared<TitleScene>());
 	}
 }

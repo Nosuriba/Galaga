@@ -1,6 +1,7 @@
 #include <DxLib.h>
 #include "Game.h"
 #include "Input.h"
+#include "Object/Player.h"
 #include "Scene/Scene.h"
 #include "Scene/TitleScene.h"
 
@@ -24,7 +25,8 @@ void Game::Init()
 		return;
 	}
 	DxLib::SetDrawScreen(DX_SCREEN_BACK);
-	ChangeScene(new TitleScene());
+
+	_scene = std::make_shared<TitleScene>();
 }
 
 void Game::Run()
@@ -35,8 +37,7 @@ void Game::Run()
 		ClsDrawScreen();
 
 		input.Update();
-
-		scene->Update(input);
+		_scene->Update(input);
 
 		ScreenFlip();
 	}
@@ -47,9 +48,8 @@ void Game::End()
 	DxLib_End();
 }
 
-void Game::ChangeScene(Scene * scene)
+void Game::ChangeScene(const shared_scene & scene)
 {
-	this->scene.reset(scene);
+	_scene = scene;
 }
-
 

@@ -1,10 +1,13 @@
 #pragma once
 
+#include <vector>
 #include <memory>
 
 #define LpGame (Game::GetInstance())
 
 class Scene;
+
+using shared_scene = std::shared_ptr<Scene>;
 
 class Game
 {
@@ -18,7 +21,7 @@ public:
 	void Run();
 	void End();
 
-	void ChangeScene(Scene * scene);
+	void ChangeScene(const shared_scene& scene);
 private:
 	Game();
 	~Game();
@@ -31,6 +34,6 @@ private:
 	};
 
 	static std::unique_ptr<Game, GameDeleter> s_Instance;
-	std::shared_ptr<Scene> scene;
+	std::shared_ptr<Scene> _scene;
 };
 

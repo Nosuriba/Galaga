@@ -9,6 +9,10 @@ public:
 	Player();
 	~Player();
 
+	void Draw();
+	void Update();
+
 private:
+
 };
 

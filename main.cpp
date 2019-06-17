@@ -9,6 +9,6 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 {
 	LpGame.Init();
 	LpGame.Run();
-	LpGame.End();
+
 	return 0;
 }
