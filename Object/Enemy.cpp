@@ -6,6 +6,12 @@ Enemy::Enemy()
 {
 }
 
+Enemy::Enemy(const Vector2f& pos, const Vector2f& vel)
+{
+	_pos = pos;
+	_vel = vel;
+}
+
 Enemy::~Enemy()
 {
 }
@@ -16,6 +22,5 @@ void Enemy::Update(const Input& p)
 
 void Enemy::Draw()
 {
-	DxLib::DrawRectGraph(250, 250, 0, 0, charSize.x, charSize.y,
-						 ImageMng::GetInstance().GetID("image/enemy.png"), true, true);
+	Object::Draw(ImageMng::GetInstance().GetID("image/enemy.png"));
 }

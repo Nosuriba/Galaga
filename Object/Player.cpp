@@ -18,8 +18,7 @@ Player::~Player()
 
 void Player::Draw()
 {
-	DxLib::DrawRectGraph(_pos.x,_pos.y,0,0, charSize.x, charSize.y, 
-						ImageMng::GetInstance().GetID("image/player.png"), true, true);
+	Object::Draw(ImageMng::GetInstance().GetID("image/player.png"));
 }
 
 void Player::Update(const Input& p)

@@ -20,7 +20,7 @@ void MainScene::Init()
 {
 	/// âºÇÃê∂ê¨
 	objs.push_back(std::make_shared<Player>(Vector2f(0, 0), Vector2f(0, 0)));
-	objs.push_back(std::make_shared<Enemy>());
+	objs.push_back(std::make_shared<Enemy>(Vector2f(200, 100), Vector2f(0,0)));
 }
 
 void MainScene::Update(const Input & p)
