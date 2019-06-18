@@ -7,8 +7,9 @@ public:
 	Enemy();
 	~Enemy();
 
+	void Update(const Input& p);
 	void Draw();
-	void Update();
+	
 private:
 };
 

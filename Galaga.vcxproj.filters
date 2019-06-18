@@ -19,6 +19,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{219258ec-bfe5-40cf-aab7-f450b95ce43e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{3222b74c-46c2-44e7-9794-dd3c00f56fca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -54,6 +57,9 @@
     <ClCompile Include="Scene\TitleScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="ImageMng.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -85,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="Scene\TitleScene.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageMng.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

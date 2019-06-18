@@ -9,8 +9,8 @@
 
 MainScene::MainScene()
 {
+	Init();
 }
-
 
 MainScene::~MainScene()
 {
@@ -18,22 +18,23 @@ MainScene::~MainScene()
 
 void MainScene::Init()
 {
+	/// ‰¼‚Ì¶¬
+	objs.push_back(std::make_shared<Player>(Vector2f(0, 0), Vector2f(0, 0)));
+	objs.push_back(std::make_shared<Enemy>());
 }
 
 void MainScene::Update(const Input & p)
 {
 	/// ƒvƒŒƒCƒ„[‚Æ“G‚Ì‰¼•`‰æ
-	std::vector<std::unique_ptr<Object>> obj;
-	obj.push_back(std::make_unique<Player>());
-	obj.push_back(std::make_unique<Enemy>());
-	for (auto& itr : obj)
+	for (auto obj : objs)
 	{
-		itr->Draw();
+		obj->Draw();
+		obj->Update(p);
 	}
 
 	DrawString(0, 0, "Main", 0xffffff);
 	if (p.IsKeyTrigger(KEY_INPUT_SPACE))
 	{
-		LpGame.ChangeScene(std::make_shared<ResultScene>());
+		Game::GetInstance().ChangeScene(std::make_shared<ResultScene>());
 	}
 }

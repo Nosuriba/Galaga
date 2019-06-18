@@ -7,10 +7,11 @@ class Player :
 {
 public:
 	Player();
+	Player(const Vector2f& pos, const Vector2f& vel);
 	~Player();
 
 	void Draw();
-	void Update();
+	void Update(const Input& p);
 
 private:
 

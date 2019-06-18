@@ -7,8 +7,8 @@ int main()
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdLine)
 #endif
 {
-	LpGame.Init();
-	LpGame.Run();
+	Game::GetInstance().Init();
+	Game::GetInstance().Run();
 
 	return 0;
 }

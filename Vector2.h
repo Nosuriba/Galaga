@@ -13,7 +13,7 @@ public:
 		this->x = x;
 		this->y = y;
 	}
-	~Vector2D() { };
+	~Vector2D(){};
 
 	// ‘ã“ü‰‰ŽZŽq
 	Vector2D& operator=(const Vector2D& vec)

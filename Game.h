@@ -3,8 +3,6 @@
 #include <vector>
 #include <memory>
 
-#define LpGame (Game::GetInstance())
-
 class Scene;
 
 using shared_scene = std::shared_ptr<Scene>;
