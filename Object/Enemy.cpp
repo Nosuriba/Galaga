@@ -1,6 +1,6 @@
 #include <DxLib.h>
 #include "Enemy.h"
-#include "../ImageMng.h"
+#include "../Common/ImageMng.h"
 
 Enemy::Enemy()
 {

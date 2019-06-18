@@ -6,6 +6,7 @@
 #include "../Object/Object.h"
 #include "../Object/Player.h"
 #include "../Object/Enemy.h"
+#include "../Common/ImageMng.h"
 
 MainScene::MainScene()
 {
@@ -28,7 +29,8 @@ void MainScene::Update(const Input & p)
 	/// ƒvƒŒƒCƒ„[‚Æ“G‚Ì‰¼•`‰æ
 	for (auto obj : objs)
 	{
-		obj->Draw();
+		//obj->Draw();
+		obj->Draw(ImageMng::GetInstance().GetID("image/flag.png"));
 		obj->Update(p);
 	}
 

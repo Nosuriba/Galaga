@@ -142,8 +142,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="common\ImageMng.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="ImageMng.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene\MainScene.cpp" />
@@ -156,8 +156,8 @@
     <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="common\ImageMng.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="ImageMng.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Scene\MainScene.h" />
     <ClInclude Include="Object\Enemy.h" />

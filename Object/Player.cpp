@@ -1,5 +1,5 @@
 #include <DxLib.h>
-#include "../ImageMng.h"
+#include "../Common/ImageMng.h"
 #include "Player.h"
 
 Player::Player()
