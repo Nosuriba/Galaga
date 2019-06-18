@@ -19,6 +19,6 @@ void TitleScene::Update(const Input & p)
 	DrawString(0, 0, "Title", 0xffffff);
 	if (p.IsKeyTrigger(KEY_INPUT_SPACE))
 	{
-		Game::GetInstance().ChangeScene(std::make_shared<MainScene>());
+		Game::GetInstance().ChangeScene(new MainScene());
 	}
 }

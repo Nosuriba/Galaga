@@ -37,6 +37,6 @@ void MainScene::Update(const Input & p)
 	DrawString(0, 0, "Main", 0xffffff);
 	if (p.IsKeyTrigger(KEY_INPUT_SPACE))
 	{
-		Game::GetInstance().ChangeScene(std::make_shared<ResultScene>());
+		Game::GetInstance().ChangeScene(new ResultScene());
 	}
 }

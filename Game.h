@@ -5,7 +5,7 @@
 
 class Scene;
 
-using shared_scene = std::shared_ptr<Scene>;
+using unique_scene = std::unique_ptr<Scene>;
 
 class Game
 {
@@ -19,7 +19,7 @@ public:
 	void Run();
 	void End();
 
-	void ChangeScene(const shared_scene& scene);
+	void ChangeScene(Scene * scene);
 private:
 	Game();
 	~Game();
@@ -32,6 +32,6 @@ private:
 	};
 
 	static std::unique_ptr<Game, GameDeleter> s_Instance;
-	std::shared_ptr<Scene> _scene;
+	unique_scene _scene;
 };
 

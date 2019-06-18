@@ -150,7 +150,7 @@ Vector2D<T> operator*(const Vector2D<T>& vec, const T & k)
 template <typename T>
 Vector2D<T> operator/(const Vector2D<T> & vec1, const Vector2D<T> & vec2)
 {
-	return Vector2D<T>(vec1.x / vec2.x, vec1.y / vec2.y);
+	 return Vector2D<T>(vec1.x / vec2.x, vec1.y / vec2.y);
 }
 
 // Vector2D‚ÆÃİÌßÚ°ÄŒ^‚ÌœZ

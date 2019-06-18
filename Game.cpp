@@ -26,7 +26,7 @@ void Game::Init()
 	}
 	DxLib::SetDrawScreen(DX_SCREEN_BACK);
 
-	_scene = std::make_shared<TitleScene>();
+	_scene = std::make_unique<TitleScene>();
 }
 
 void Game::Run()
@@ -37,7 +37,7 @@ void Game::Run()
 		ClsDrawScreen();
 
 		input.Update();
-		_scene->Update(input);
+ 		_scene->Update(input);
 
 		ScreenFlip();
 	}
@@ -48,8 +48,8 @@ void Game::End()
 	DxLib_End();
 }
 
-void Game::ChangeScene(const shared_scene & scene)
+void Game::ChangeScene(Scene * scene)
 {
-	_scene = scene;
+	_scene.reset(scene);
 }
 

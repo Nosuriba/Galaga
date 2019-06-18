@@ -20,6 +20,6 @@ void ResultScene::Update(const Input & p)
 	DrawString(0, 0, "Result", 0xffffff);
 	if (p.IsKeyTrigger(KEY_INPUT_SPACE))
 	{
-		Game::GetInstance().ChangeScene(std::make_shared<TitleScene>());
+		Game::GetInstance().ChangeScene(new TitleScene());
 	}
 }
