@@ -142,9 +142,9 @@ Vector2D<T> operator*(const Vector2D<T> & vec1, const Vector2D<T> & vec2)
 }
 // Vector2D‚ÆÃİÌßÚ°ÄŒ^‚ÌæZ
 template <typename T>
-Vector2D<T> operator*(const Vector2D<T>& vec1, const T & k)
+Vector2D<T> operator*(const Vector2D<T>& vec, const T & k)
 {
-	return Vector2<T>(vec.x * k, vec.y * k);
+	return Vector2D<T>(vec.x * k, vec.y * k);
 }
 // Vector2D“¯m‚ÌœZ
 template <typename T>
@@ -155,9 +155,9 @@ Vector2D<T> operator/(const Vector2D<T> & vec1, const Vector2D<T> & vec2)
 
 // Vector2D‚ÆÃİÌßÚ°ÄŒ^‚ÌœZ
 template <typename T>
-Vector2D<T> operator/(const Vector2D<T>& vec1, const T & k)
+Vector2D<T> operator/(const Vector2D<T>& vec, const T & k)
 {
-	return Vector2<T>(vec.x / k, vec.y / k);
+	return Vector2D<T>(vec.x / k, vec.y / k);
 }
 
 using Vector2  = Vector2D<int>;
