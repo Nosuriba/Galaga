@@ -6,7 +6,7 @@
 
 /// g‚í‚È‚¢‚Ì‚ÅŒã‚ÅºÒİÄ±³Ä‚·‚é
 #include "../Vector2.h"
-using VEC_INT = std::vector<int>;		/// LoadDivGraph
+using VEC_INT = std::vector<int>;		/// LoadDivGraph—p‚ÌŒ^
 
 class ImageMng
 {
@@ -24,12 +24,6 @@ public:
 private:
 	ImageMng();
 	~ImageMng();
-
-	const int& GetID(std::string key, std::string fileName);
-	/// g‚í‚È‚¢‚Ì‚ÅÁ‚·ºÒİÄ±³Ä‚·‚é
-	const VEC_INT& GetID(std::string key, std::string fileName,
-						 const Vector2& cnt, const Vector2& size);
-
 	struct ImageMngDeleter
 	{
 		void operator()(ImageMng * imageMng) const
