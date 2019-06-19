@@ -4,7 +4,7 @@
 #include <vector>
 #include <map>
 
-/// 使わないので後で消す
+/// 使わないので後でｺﾒﾝﾄｱｳﾄする
 #include "../Vector2.h"
 using VEC_INT = std::vector<int>;		/// LoadDivGraph
 
@@ -18,7 +18,7 @@ public:
 
 	const int& GetID(std::string key);
 	
-	/// 使わないので後で消す
+	/// 使わないので後でｺﾒﾝﾄｱｳﾄする
 	const VEC_INT& GetID(std::string fileName, const Vector2& cnt, const Vector2& size);		
 
 private:
@@ -26,6 +26,7 @@ private:
 	~ImageMng();
 
 	const int& GetID(std::string key, std::string fileName);
+	/// 使わないので消すｺﾒﾝﾄｱｳﾄする
 	const VEC_INT& GetID(std::string key, std::string fileName,
 						 const Vector2& cnt, const Vector2& size);
 
@@ -38,7 +39,7 @@ private:
 	};
 	static std::unique_ptr<ImageMng, ImageMngDeleter> s_Instance;
 
-	//std::map<std::string, int> _imgMap;	// LoadGraphしか使わないので、取っておく
+	//std::map<std::string, int> _imgMap;	// LoadGraphを使う予定なので、取っておく
 	std::map<std::string, std::vector<int>> _imgMap;
 };
 

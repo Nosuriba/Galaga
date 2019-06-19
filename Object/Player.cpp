@@ -39,6 +39,8 @@ void Player::Update(const Input& p)
 
 void Player::Draw()
 {
-	DrawRectGraph(_pos.x, _pos.y, 0, 0, charSize.x, charSize.y,
-				 ImageMng::GetInstance().GetID("image/player.png"), true, true);
+	/*DrawRectGraph(_pos.x, _pos.y, 0, 0, charSize.x, charSize.y,
+				 ImageMng::GetInstance().GetID("image/player.png"), true, true);*/
+
+	DrawGraph(_pos.x, _pos.y, ImageMng::GetInstance().GetID("image/player.png", Vector2(3, 1), Vector2(charSize.x, charSize.y))[0], true);
 }
