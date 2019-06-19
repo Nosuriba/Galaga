@@ -8,9 +8,8 @@ public:
 	Enemy(const Vector2f & pos, const Vector2f & vel);
 	~Enemy();
 
-	void Update(const Input& p);
-	void Draw();
-	
+	void Update(const Input& p) override;
+	void Draw() override;
 private:
 };
 

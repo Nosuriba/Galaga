@@ -29,8 +29,7 @@ void MainScene::Update(const Input & p)
 	/// ƒvƒŒƒCƒ„[‚Æ“G‚Ì‰¼•`‰æ
 	for (auto obj : objs)
 	{
-		//obj->Draw();
-		obj->Draw(ImageMng::GetInstance().GetID("image/flag.png"));
+		obj->Draw();
 		obj->Update(p);
 	}
 

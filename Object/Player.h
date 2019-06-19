@@ -10,9 +10,8 @@ public:
 	Player(const Vector2f& pos, const Vector2f& vel);
 	~Player();
 
-	void Draw();
-	void Update(const Input& p);
-
+	void Update(const Input& p) override;
+	void Draw() override;
 private:
 
 };

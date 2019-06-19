@@ -10,9 +10,7 @@ public:
 	virtual ~Object();
 	virtual void Update(const Input& p) = 0;
 	virtual void Draw() = 0;
-	void Draw(int id);				/// 
 protected:
-	/*void Draw(int id);*/
 	Vector2f _pos;
 	Vector2f _vel;
 

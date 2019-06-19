@@ -22,5 +22,9 @@ void Enemy::Update(const Input& p)
 
 void Enemy::Draw()
 {
-	Object::Draw(ImageMng::GetInstance().GetID("image/enemy.png"));
+	//DrawRectGraph(_pos.x, _pos.y, 0, 0, charSize.x, charSize.y,
+	//			  ImageMng::GetInstance().GetID("image/enemy.png"), true, true);
+
+	int debug = ImageMng::GetInstance().GetID("image/enemy.png", Vector2(3, 10), Vector2(charSize.x, charSize.y))[1];
+	DrawGraph(_pos.x, _pos.y, ImageMng::GetInstance().GetID("image/enemy.png", Vector2(3, 10), Vector2(charSize.x, charSize.y))[1], true);
 }

@@ -16,11 +16,6 @@ Player::~Player()
 {
 }
 
-void Player::Draw()
-{
-	Object::Draw(ImageMng::GetInstance().GetID("image/player.png"));
-}
-
 void Player::Update(const Input& p)
 {
 	if (p.IsKeyPressing(KEY_INPUT_D))
@@ -39,5 +34,11 @@ void Player::Update(const Input& p)
 	{
 		_pos.y += 1.f;
 	}
-	else{}
+	else {}
+}
+
+void Player::Draw()
+{
+	DrawRectGraph(_pos.x, _pos.y, 0, 0, charSize.x, charSize.y,
+				 ImageMng::GetInstance().GetID("image/player.png"), true, true);
 }
