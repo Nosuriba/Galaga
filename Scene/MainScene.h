@@ -9,8 +9,8 @@ class MainScene :
 public:
 	MainScene();
 	~MainScene();
-	void Init();
-	void Update(const Input& p);
+	void Init()override;
+	void Update(const Input& p)override;
 
 private:
 	std::vector<std::shared_ptr<Object>> objs;

@@ -8,7 +8,7 @@ public:
 	TitleScene();
 	~TitleScene();
 
-	void Init();
-	void Update(const Input& p);
+	void Init() override;
+	void Update(const Input& p) override;
 };
 

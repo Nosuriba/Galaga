@@ -6,7 +6,7 @@ class ResultScene :
 public:
 	ResultScene();
 	~ResultScene();
-	void Init();
-	void Update(const Input& p);
+	void Init()override;
+	void Update(const Input& p)override;
 };
 
