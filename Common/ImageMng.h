@@ -16,22 +16,22 @@ public:
 		return *s_Instance;
 	}
 
-	const int& GetID(std::string key);
+	const int& GetID(const std::string& key);
 	
 	/// g‚í‚È‚¢‚Ì‚ÅŒã‚ÅºÒİÄ±³Ä‚·‚é
-	const VEC_INT& GetID(std::string fileName, const Vector2& cnt, const Vector2& size);		
+	const VEC_INT& GetID(const std::string& fileName, const Vector2& cnt, const Vector2& size);		
 
 private:
 	ImageMng();
 	~ImageMng();
-	struct ImageMngDeleter
+	struct ImageDeleter
 	{
 		void operator()(ImageMng * imageMng) const
 		{
 			delete imageMng;
 		}
 	};
-	static std::unique_ptr<ImageMng, ImageMngDeleter> s_Instance;
+	static std::unique_ptr<ImageMng, ImageDeleter> s_Instance;
 
 	//std::map<std::string, int> _imgMap;	// LoadGraph‚ğg‚¤—\’è‚È‚Ì‚ÅAæ‚Á‚Ä‚¨‚­
 	std::map<std::string, std::vector<int>> _imgMap;

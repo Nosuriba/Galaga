@@ -11,16 +11,16 @@ Enemy::Enemy(const Vector2f& pos, const Vector2f& vel)
 	_pos = pos;
 	_vel = vel;
 
-	_updater = &Enemy::IdleUpdate;
+	_updater = &Enemy::MoveUpdate;
 }
 
 Enemy::~Enemy()
 {
 }
 
-void Enemy::Idle()
+void Enemy::Rotation()
 {
-	_updater = &Enemy::IdleUpdate;
+	_updater = &Enemy::RotationUpdate;
 }
 
 void Enemy::Move()
@@ -36,6 +36,10 @@ void Enemy::Shot()
 void Enemy::Die()
 {
 	_updater = &Enemy::DieUpdate;
+}
+
+void Enemy::RotationUpdate()
+{
 }
 
 void Enemy::IdleUpdate()
@@ -56,15 +60,14 @@ void Enemy::DieUpdate()
 
 void Enemy::Update(const Input& p)
 {
+	animCnt++;
 	(this->*_updater)();
 }
 
 void Enemy::Draw()
 {
-	/// こっちが本命
-	//DrawRectGraph(_pos.x, _pos.y, 0, 0, charSize.x, charSize.y,
-	//			  ImageMng::GetInstance().GetID("image/enemy.png"), true, true);
-
-	int img = ImageMng::GetInstance().GetID("image/enemy.png", Vector2(10, 3), Vector2(charSize.x, charSize.y))[1];
-	DrawGraph(_pos.x, _pos.y, img, true);
+	/// 仮でｱﾆﾒｰｼｮﾝをさせている
+	int cnt = (animCnt / 60) % 2;
+	DrawRectGraph(_pos.x, _pos.y, 0 + (charSize.x * cnt), 0 , charSize.x, charSize.y,
+				  ImageMng::GetInstance().GetID("image/enemy.png"), true, true);
 }

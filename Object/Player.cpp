@@ -80,9 +80,6 @@ void Player::Update(const Input& p)
 
 void Player::Draw()
 {
-	/// こっちが本命
-	/*DrawRectGraph(_pos.x, _pos.y, 0, 0, charSize.x, charSize.y,
-				 ImageMng::GetInstance().GetID("image/player.png"), true, true);*/
-	int img = ImageMng::GetInstance().GetID("image/player.png", Vector2(3, 1), Vector2(charSize.x, charSize.y))[0];
-	DrawGraph(_pos.x, _pos.y, img, true);
+	DrawRectGraph(_pos.x, _pos.y, 0, 0, charSize.x, charSize.y,
+				 ImageMng::GetInstance().GetID("image/player.png"), true, true);
 }

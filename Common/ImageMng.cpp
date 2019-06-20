@@ -1,7 +1,7 @@
 #include <DxLib.h>
 #include "ImageMng.h"
 
-std::unique_ptr<ImageMng, ImageMng::ImageMngDeleter> ImageMng::s_Instance(new ImageMng());
+std::unique_ptr<ImageMng, ImageMng::ImageDeleter> ImageMng::s_Instance(new ImageMng());
 
 ImageMng::ImageMng()
 {
@@ -10,8 +10,7 @@ ImageMng::ImageMng()
 ImageMng::~ImageMng()
 {
 }
-
-const int & ImageMng::GetID(std::string key)
+const int & ImageMng::GetID(const std::string& key)
 {
 	if (_imgMap.find(key) == _imgMap.end())
 	{
@@ -21,7 +20,7 @@ const int & ImageMng::GetID(std::string key)
 	return _imgMap[key][0];
 }
 
-const VEC_INT& ImageMng::GetID(std::string key, const Vector2& cnt, const Vector2& size)
+const VEC_INT& ImageMng::GetID(const std::string& key, const Vector2& cnt, const Vector2& size)
 {
 	if (_imgMap.find(key) == _imgMap.end())
 	{

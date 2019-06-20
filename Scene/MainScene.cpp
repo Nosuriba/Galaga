@@ -20,7 +20,7 @@ MainScene::~MainScene()
 void MainScene::Init()
 {
 	/// âºÇÃê∂ê¨
-	objs.push_back(std::make_shared<Player>(Vector2f(500, 400), Vector2f(0, 0)));
+	objs.push_back(std::make_shared<Player>(Vector2f(500, 450), Vector2f(0, 0)));
 	objs.push_back(std::make_shared<Enemy>(Vector2f(300, 300), Vector2f(0,0)));
 }
 
@@ -33,8 +33,9 @@ void MainScene::Update(const Input & p)
 		obj->Update(p);
 	}
 
-	DrawString(0, 0, "Main", 0xffffff);
 	DrawGraph(0, 0, ImageMng::GetInstance().GetID("image/frame.png"), true);
+	DrawString(0, 0, "Main", 0xffffff);
+
 	if (p.IsKeyTrigger(KEY_INPUT_SPACE))
 	{
 		Game::GetInstance().ChangeScene(new ResultScene());

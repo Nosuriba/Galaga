@@ -7,12 +7,13 @@ public:
 	Enemy();
 	Enemy(const Vector2f & pos, const Vector2f & vel);
 	~Enemy();
-
-	void Idle();
+	
+	void Rotation();
 	void Move();
 	void Shot();
 	void Die();
 
+	void RotationUpdate();
 	void IdleUpdate();
 	void MoveUpdate();
 	void ShotUpdate();
@@ -22,6 +23,7 @@ public:
 	void Draw() override;
 private:
 
+	int animCnt = 0;
 	void (Enemy::*_updater)();
 };
 
