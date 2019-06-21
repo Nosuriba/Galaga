@@ -23,11 +23,6 @@ void Player::Idle()
 	_updater = &Player::IdleUpdate;
 }
 
-void Player::Move()
-{
-	_updater = &Player::MoveUpdate;
-}
-
 void Player::Shot()
 {
 	_updater = &Player::ShotUpdate;
@@ -40,27 +35,7 @@ void Player::Die()
 
 void Player::IdleUpdate(const Input & p)
 {
-	if (p.IsKeyPressing(KEY_INPUT_D) ||
-		p.IsKeyPressing(KEY_INPUT_A))
-	{
-		Move();
-	}
-}
-
-void Player::MoveUpdate(const Input & p)
-{
-	if (p.IsKeyPressing(KEY_INPUT_D))
-	{
-		_pos.x += 5.f;
-	}
-	else if (p.IsKeyPressing(KEY_INPUT_A))
-	{
-		_pos.x -= 5.f;
-	}
-	else
-	{
-		Idle();
-	}
+	
 }
 
 void Player::ShotUpdate(const Input & p)
@@ -73,8 +48,22 @@ void Player::DieUpdate(const Input & p)
 	_updater = &Player::DieUpdate;
 }
 
+void Player::Move(const Input& p)
+{
+	if (p.IsKeyPressing(KEY_INPUT_D))
+	{
+		_pos.x += 5.f;
+	}
+	else if (p.IsKeyPressing(KEY_INPUT_A))
+	{
+		_pos.x -= 5.f;
+	}
+}
+
+
 void Player::Update(const Input& p)
 {
+	Move(p);
 	(this->*_updater)(p);
 }
 

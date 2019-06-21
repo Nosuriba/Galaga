@@ -5,7 +5,6 @@
 #include <memory>
 #include <Windows.h>
 
-// ÄÚ°½‚Ì’†g‚ğdebug’†‚Ì‚İ‘‚«‚Ş‚æ‚¤‚É‚·‚é
 #define TRACE(fmt, ...) printf(fmt, __VA_ARGS__)		
 
 class DebugConOut

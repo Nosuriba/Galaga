@@ -13,6 +13,7 @@ public:
 protected:
 	Vector2f _pos;
 	Vector2f _vel;
+	Rect _rect;
 
 	const Vector2 charSize = Vector2(30, 32);
 };

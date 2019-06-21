@@ -41,3 +41,8 @@ void MainScene::Update(const Input & p)
 		Game::GetInstance().ChangeScene(new ResultScene());
 	}
 }
+
+const SCN_ID MainScene::GetSceneID() const
+{
+	return SCN_ID::MAIN;
+}

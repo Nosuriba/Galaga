@@ -39,7 +39,7 @@ void Game::Init()
 void Game::Run()
 {
 	Input input;
-	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+	while (!ProcessMessage() && !CheckHitKey(KEY_INPUT_ESCAPE))
 	{
 		ClsDrawScreen();
 
@@ -48,10 +48,6 @@ void Game::Run()
 
 		ScreenFlip();
 	}
-}
-
-void Game::End()
-{
 	DxLib_End();
 }
 

@@ -10,5 +10,6 @@ public:
 
 	void Init() override;
 	void Update(const Input& p) override;
+	const SCN_ID GetSceneID() const override;
 };
 

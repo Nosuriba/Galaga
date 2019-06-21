@@ -22,3 +22,8 @@ void TitleScene::Update(const Input & p)
 		Game::GetInstance().ChangeScene(new MainScene());
 	}
 }
+
+const SCN_ID TitleScene::GetSceneID() const
+{
+	return SCN_ID::TITLE;
+}

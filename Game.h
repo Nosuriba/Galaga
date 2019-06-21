@@ -17,7 +17,6 @@ public:
 
 	void Init();
 	void Run();
-	void End();
 
 	void ChangeScene(Scene * scene);
 private:

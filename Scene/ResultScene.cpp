@@ -23,3 +23,8 @@ void ResultScene::Update(const Input & p)
 		Game::GetInstance().ChangeScene(new TitleScene());
 	}
 }
+
+const SCN_ID ResultScene::GetSceneID() const
+{
+	return SCN_ID::RESULT;
+}

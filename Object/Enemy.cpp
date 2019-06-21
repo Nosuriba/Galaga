@@ -66,8 +66,8 @@ void Enemy::Update(const Input& p)
 
 void Enemy::Draw()
 {
-	/// 仮でｱﾆﾒｰｼｮﾝをさせている
+	/// 仮でｱﾆﾒｰｼｮﾝをさせている(後でｱﾆﾒｰｼｮﾝの位置を設定している)
 	int cnt = (animCnt / 60) % 2;
-	DrawRectGraph(_pos.x, _pos.y, 0 + (charSize.x * cnt), 0 , charSize.x, charSize.y,
+	DrawRectGraph(_pos.x, _pos.y, charSize.x * cnt, 0 , charSize.x, charSize.y,
 				  ImageMng::GetInstance().GetID("image/enemy.png"), true, true);
 }
