@@ -24,14 +24,15 @@ Shot::~Shot()
 
 void Shot::Update()
 {
+	invCnt++;
 	_pos += _vel;
 }
 
 void Shot::Draw()
 {
-	animCnt = (invCnt / 10) % 8;
-	DrawRectGraph(_pos.x, _pos.y, animCnt * shotSize.x, 0, shotSize.x, shotSize.y,
-						  ImageMng::GetInstance().GetID("image/shot.png"), true, true);
+	animCnt = (invCnt / 5) % 7;
+	DrawRectGraph(_pos.x, _pos.y, animCnt * _shotSize.width, 0, _shotSize.width, _shotSize.height,
+				  LpImageMng.GetID("image/shot.png"), true, true);
 }
 
 bool Shot::CheckDestroy(const Rect & r)

@@ -36,7 +36,7 @@ void MainScene::Update(const Input & p)
 	DrawGraph(0, 0, ImageMng::GetInstance().GetID("image/frame.png"), true);
 	DrawString(0, 0, "Main", 0xffffff);
 
-	if (p.IsKeyTrigger(KEY_INPUT_SPACE))
+	if (p.IsKeyTrigger(KEY_INPUT_F5))
 	{
 		Game::GetInstance().ChangeScene(new ResultScene());
 	}

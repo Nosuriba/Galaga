@@ -60,14 +60,14 @@ void Enemy::DieUpdate()
 
 void Enemy::Update(const Input& p)
 {
-	animCnt++;
+	invCnt++;
 	(this->*_updater)();
 }
 
 void Enemy::Draw()
 {
 	/// 仮でｱﾆﾒｰｼｮﾝをさせている(後でｱﾆﾒｰｼｮﾝの位置を設定している)
-	int cnt = (animCnt / 60) % 2;
-	DrawRectGraph(_pos.x, _pos.y, charSize.x * cnt, 0 , charSize.x, charSize.y,
-				  ImageMng::GetInstance().GetID("image/enemy.png"), true, true);
+	animCnt = (invCnt / 10) % 2;
+	DrawRectGraph(_pos.x, _pos.y, _charSize.width * animCnt, 0 , _charSize.width, _charSize.height,
+				  LpImageMng.GetID("image/enemy.png"), true, true);
 }

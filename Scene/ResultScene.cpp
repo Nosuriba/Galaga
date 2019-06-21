@@ -18,7 +18,7 @@ void ResultScene::Init()
 void ResultScene::Update(const Input & p)
 {
 	DrawString(0, 0, "Result", 0xffffff);
-	if (p.IsKeyTrigger(KEY_INPUT_SPACE))
+	if (p.IsKeyTrigger(KEY_INPUT_F5))
 	{
 		Game::GetInstance().ChangeScene(new TitleScene());
 	}

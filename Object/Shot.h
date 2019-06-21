@@ -14,9 +14,9 @@ private:
 	Vector2f _vel;
 	Rect _rect;
 
-	int invCnt;
-	int animCnt;
+	int invCnt = 0;
+	int animCnt = 0;
 
-	const Vector2 shotSize = Vector2(20,20);
+	const Size _shotSize = Size(20,20);
 };
 

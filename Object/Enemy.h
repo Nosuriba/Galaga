@@ -23,7 +23,6 @@ public:
 	void Draw() override;
 private:
 
-	int animCnt = 0;
 	void (Enemy::*_updater)();
 };
 

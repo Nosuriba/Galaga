@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+#include <memory>
 #include "../Vector2.h"
 #include "../Input.h"
 
@@ -15,6 +17,9 @@ protected:
 	Vector2f _vel;
 	Rect _rect;
 
-	const Vector2 charSize = Vector2(30, 32);
+	int invCnt = 0;
+	int animCnt = 0;
+
+	const Size _charSize = Size(30, 32);
 };
 

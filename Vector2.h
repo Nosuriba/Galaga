@@ -163,12 +163,24 @@ Vector2D<T> operator/(const Vector2D<T>& vec, const T & k)
 using Vector2  = Vector2D<int>;
 using Vector2f = Vector2D<float>;
 
+struct Size
+{
+	int height, width;
+	Size() {};
+	Size(int w, int h)
+	{
+		width = w;
+		height = h;
+	}
+	
+};
+
 struct Rect
 {
 	Vector2 center;
-	Vector2 size;
+	Size size;
 	Rect() : center(0, 0), size(0, 0) {};
-	Rect(Vector2 & p, Vector2 & s)
+	Rect(Vector2 & p, Size & s)
 	{
 		center = p;
 		size = s;
@@ -178,6 +190,4 @@ struct Rect
 	const int Right() const;
 	const int Top() const;
 	const int Bottom() const;
-	const int Width() const;
-	const int Height() const;
 };
