@@ -21,6 +21,7 @@ public:
 
 	void Update(const Input& p) override;
 	void Draw() override;
+	const Obj GetObjID() const override;
 private:
 
 	void (Enemy::*_updater)();

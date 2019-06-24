@@ -5,6 +5,12 @@
 #include "../Vector2.h"
 #include "../Input.h"
 
+enum class Obj
+{
+	PLAYER,
+	ENEMY,
+	MAX
+};
 class Object
 {
 public:
@@ -12,6 +18,7 @@ public:
 	virtual ~Object();
 	virtual void Update(const Input& p) = 0;
 	virtual void Draw() = 0;
+	virtual const Obj GetObjID() const = 0;
 protected:
 	Vector2f _pos;
 	Vector2f _vel;

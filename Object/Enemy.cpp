@@ -71,3 +71,8 @@ void Enemy::Draw()
 	DrawRectGraph(_pos.x, _pos.y, _charSize.width * animCnt, 0 , _charSize.width, _charSize.height,
 				  LpImageMng.GetID("image/enemy.png"), true, true);
 }
+
+const Obj Enemy::GetObjID() const
+{
+	return Obj::ENEMY;
+}

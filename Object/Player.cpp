@@ -114,3 +114,8 @@ void Player::Draw()
 	}
 	
 }
+
+const Obj Player::GetObjID() const
+{
+	return Obj::PLAYER;
+}

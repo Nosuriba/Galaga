@@ -8,7 +8,6 @@ public:
 	~Shot();
 	void Update();
 	void Draw();
-	bool CheckDestroy(const Rect& r);
 private:
 	Vector2f _pos;
 	Vector2f _vel;

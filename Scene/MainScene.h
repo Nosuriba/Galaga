@@ -1,4 +1,5 @@
 #pragma once
+#include <list>
 #include "Scene.h"
 
 class Object;
@@ -13,6 +14,6 @@ public:
 	void Update(const Input& p)override;
 	const SCN_ID GetSceneID() const override;
 private:
-	std::vector<std::shared_ptr<Object>> objs;
+	std::list<std::shared_ptr<Object>> objList;
 };
 

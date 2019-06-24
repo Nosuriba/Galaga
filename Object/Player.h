@@ -24,10 +24,10 @@ public:
 
 	void Update(const Input& p) override;
 	void Draw() override;
+	const Obj GetObjID() const override;
 private:
 
 	void (Player::*_updater)(const Input& p);
 	std::vector<shared_shot> _shots;
-
 };
 
