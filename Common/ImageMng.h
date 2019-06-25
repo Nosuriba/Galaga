@@ -3,11 +3,12 @@
 #include <memory>
 #include <vector>
 #include <map>
+#include "Vector2.h"
 
-/// LpImageMngÇå„Ç≈è¡Ç∑
-#define LpImageMng (ImageMng::GetInstance())
+#define IMAGE_ID(KEY) (ImageMng::GetInstance().GetID(KEY))
+#define SET_IMAGE_ID(KEY,  ...) (ImageMng::GetInstance().GetID(KEY, __VA_ARGS__))
 
-#define IMAGE_ID(PATH) (ImageMng::GetInstance().GetID(PATH)) 
+using VEC_INT = std::vector<int>;
 
 class ImageMng
 {
@@ -17,7 +18,10 @@ public:
 		return *s_Instance;
 	}
 
-	const int& GetID(const std::string& key);
+	const VEC_INT& GetID(const std::string& key);
+	const VEC_INT& GetID(const std::string& key, const std::string& path);
+	const VEC_INT& GetID(const std::string& key, const std::string& path,
+						 const Vector2& divCnt, const Vector2& divSize);
 private:
 	ImageMng();
 	~ImageMng();
@@ -30,6 +34,6 @@ private:
 	};
 	static std::unique_ptr<ImageMng, ImageDeleter> s_Instance;
 
-	std::map<std::string, int> _imgMap;
+	std::map<std::string, VEC_INT> _imgMap;
 };
 

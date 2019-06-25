@@ -13,6 +13,7 @@ using anim_vec = std::vector<std::pair<int, int>>;
 enum class ANIM
 {
 	NORMAL,		// í èÌ
+	BLAST,
 	EX,			// ì¡éÍ
 	MAX
 };
@@ -36,15 +37,17 @@ protected:
 	Vector2f _vel;
 	Rect _rect;
 
+	ANIM animID;
 	int _invCnt  = 0;
 	int _animCnt = 0;
 
+	std::map<ANIM, anim_vec> GetAnim() const;
 	bool SetAnim(const ANIM key, const anim_vec& data);
-	std::map<ANIM, anim_vec> _animMap;
 
 	const Size _charSize = Size(30, 32);
 
 private:
-	//std::map<ANIM, anim_vec> _animMap;
+	// first : animOffset, second : frame
+	std::map<ANIM, anim_vec> _animMap;
 };
 

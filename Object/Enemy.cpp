@@ -11,6 +11,7 @@ Enemy::Enemy(const Vector2f& pos, const Vector2f& vel)
 	_pos = pos;
 	_vel = vel;
 
+	SET_IMAGE_ID("enemy", "image/enemy.png", Vector2(10, 3), Vector2(_charSize.width, _charSize.height));
 	_updater = &Enemy::MoveUpdate;
 }
 
@@ -70,10 +71,7 @@ void Enemy::Update(const Input& p)
 
 void Enemy::Draw()
 {
-	/// 仮でｱﾆﾒｰｼｮﾝをさせている(後でｱﾆﾒｰｼｮﾝの位置を設定している)
-	_animCnt = (_invCnt / 10) % 2;
-	DrawRectGraph(_pos.x, _pos.y, _charSize.width * _animCnt, 0 , _charSize.width, _charSize.height,
-				  LpImageMng.GetID("image/enemy.png"), true, true);
+	DrawGraph(_pos.x, _pos.y, IMAGE_ID("enemy")[0], true);
 }
 
 const Obj Enemy::GetObjID() const

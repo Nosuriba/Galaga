@@ -8,6 +8,11 @@ Object::~Object()
 {
 }
 
+std::map<ANIM, anim_vec> Object::GetAnim() const
+{
+	return _animMap;
+}
+
 bool Object::SetAnim(const ANIM key, const anim_vec& data)
 {
 	/// ±ÆÒ°¼®Ý‚Ì“o˜^

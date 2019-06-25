@@ -23,7 +23,6 @@ Shot::Shot(const Vector2f & pos, const Vector2f & vel)
 
 Shot::~Shot()
 {
-	DeleteGraph(ImageMng::GetInstance().GetID("image/shot.png"));
 }
 
 void Shot::Update()
@@ -41,5 +40,5 @@ void Shot::Draw()
 {
 	animCnt = (invCnt / 5) % 7;
 	DrawRectGraph(_pos.x, _pos.y, animCnt * _shotSize.width, 0, _shotSize.width, _shotSize.height,
-				  LpImageMng.GetID("image/shot.png"), true, true);
+				  IMAGE_ID("image/shot.png")[0], true, true);
 }

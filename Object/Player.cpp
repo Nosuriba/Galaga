@@ -16,7 +16,11 @@ Player::Player(const Vector2f & pos, const Vector2f & vel)
 	auto size = _charSize;
 	_rect = Rect(center, size);
 
+	SET_IMAGE_ID("player", "image/player.png", Vector2(3, 1), Vector2(_charSize.width, _charSize.height));
+	SET_IMAGE_ID("blast", "image/pl_blast.png", Vector2(4, 1), Vector2(_charSize.width * 2, _charSize.height * 2));
+
 	Init();
+	animID = ANIM::NORMAL;
 
 	_updater = &Player::IdleUpdate;
 }
@@ -32,6 +36,7 @@ void Player::Idle()
 
 void Player::Die()
 {
+	animID = ANIM::BLAST;
 	_updater = &Player::DieUpdate;
 }
 
@@ -73,24 +78,29 @@ void Player::MoveUpdate(const Input & p)
 
 void Player::DieUpdate(const Input & p)
 {
-	_invCnt++;
-	/// 一定時間経つと、死亡状態から解除される
-	if (_invCnt >= 40)
-	{
-		_invCnt = 0;
-		Idle();
-	}
+	
 }
 
 void Player::Init()
 {
+	/*_invCnt*/
 	anim_vec data;
 
 	/// ID(描画する位置番号), フレーム
 	data.emplace_back(0, 30);
 	data.emplace_back(1, 60);
-
 	SetAnim(ANIM::NORMAL, data);
+	data.clear();
+
+	/// 爆破ｱﾆﾒｰｼｮﾝの登録(仮)
+	data.resize(4);
+	auto id = data.begin();
+	for (; id != data.end(); ++id)
+	{
+		auto cnt = id - data.begin();
+		data[cnt] = std::make_pair(cnt, 10);
+	}
+	SetAnim(ANIM::BLAST, data);
 }
 
 void Player::Update(const Input& p)
@@ -107,23 +117,29 @@ void Player::Update(const Input& p)
 		shot->Update();
 		shot->Draw();
 	}
+
+	AnimUpdate();
+}
+
+void Player::AnimUpdate()
+{
+	_invCnt++;
+	if (_invCnt > GetAnim()[animID][_animCnt].second)
+	{
+		_animCnt = (_animCnt + 1) % GetAnim()[ANIM::NORMAL].size();
+		_invCnt = 0;
+	}
 }
 
 void Player::Draw()
 {
-	/// 死亡時の爆破にｱﾆﾒｰｼｮﾝをつけている
-	if (_updater == &Player::DieUpdate)
+	if (_updater != &Player::DieUpdate)
 	{
-		/// 仮のｱﾆﾒｰｼｮﾝ
-		_animCnt = (_invCnt / 10) % 4;
-		DrawRectGraph(_pos.x - 16, _pos.y - 16, _animCnt * 64 , 0, 64, 64,
-					   LpImageMng.GetID("image/pl_blast.png"), true, true);
+		DrawGraph(_pos.x, _pos.y, IMAGE_ID("player")[GetAnim()[animID][_animCnt].first], true);
 	}
 	else
 	{
-
-		DrawRectGraph(_pos.x, _pos.y, 0, 0, _charSize.width, _charSize.height,
-					  LpImageMng.GetID("image/player.png"), true, true);
+		DrawGraph(_pos.x - 16, _pos.y - 16, IMAGE_ID("blast")[GetAnim()[animID][_animCnt].first], true);
 	}
 	
 }
