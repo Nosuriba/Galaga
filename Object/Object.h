@@ -6,10 +6,14 @@
 #include "../Vector2.h"
 #include "../Input.h"
 
+// ｱﾆﾒｰｼｮﾝ管理用の可変長配列
+using anim_vec = std::vector<std::pair<int, int>>;
+
+/// 中身を修正する可能性あり
 enum class ANIM
 {
-	ID,
-	FRAME,
+	NORMAL,		// 通常
+	EX,			// 特殊
 	MAX
 };
 
@@ -32,11 +36,15 @@ protected:
 	Vector2f _vel;
 	Rect _rect;
 
-	int invCnt = 0;
-	int animCnt = 0;
+	int _invCnt  = 0;
+	int _animCnt = 0;
 
-	std::map<std::string, std::vector<int>> _animMap;
+	bool SetAnim(const ANIM key, const anim_vec& data);
+	std::map<ANIM, anim_vec> _animMap;
 
 	const Size _charSize = Size(30, 32);
+
+private:
+	//std::map<ANIM, anim_vec> _animMap;
 };
 

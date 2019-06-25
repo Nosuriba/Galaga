@@ -24,6 +24,7 @@ public:
 	const Obj GetObjID() const override;
 private:
 
+	void Init();
 	void (Enemy::*_updater)();
 };
 

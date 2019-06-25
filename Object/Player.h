@@ -27,6 +27,8 @@ public:
 	const Obj GetObjID() const override;
 private:
 
+	void Init();
+
 	void (Player::*_updater)(const Input& p);
 	std::vector<shared_shot> _shots;
 };

@@ -4,7 +4,10 @@
 #include <vector>
 #include <map>
 
+/// LpImageMng‚ğŒã‚ÅÁ‚·
 #define LpImageMng (ImageMng::GetInstance())
+
+#define IMAGE_ID(PATH) (ImageMng::GetInstance().GetID(PATH)) 
 
 class ImageMng
 {
@@ -27,6 +30,6 @@ private:
 	};
 	static std::unique_ptr<ImageMng, ImageDeleter> s_Instance;
 
-	std::map<std::string, int> _imgMap;	// LoadGraph‚ğg‚¤—\’è‚È‚Ì‚ÅAæ‚Á‚Ä‚¨‚­
+	std::map<std::string, int> _imgMap;
 };
 

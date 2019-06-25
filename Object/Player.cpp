@@ -16,6 +16,8 @@ Player::Player(const Vector2f & pos, const Vector2f & vel)
 	auto size = _charSize;
 	_rect = Rect(center, size);
 
+	Init();
+
 	_updater = &Player::IdleUpdate;
 }
 
@@ -71,13 +73,24 @@ void Player::MoveUpdate(const Input & p)
 
 void Player::DieUpdate(const Input & p)
 {
-	invCnt++;
+	_invCnt++;
 	/// 一定時間経つと、死亡状態から解除される
-	if (invCnt >= 40)
+	if (_invCnt >= 40)
 	{
-		invCnt = 0;
+		_invCnt = 0;
 		Idle();
 	}
+}
+
+void Player::Init()
+{
+	anim_vec data;
+
+	/// ID(描画する位置番号), フレーム
+	data.emplace_back(0, 30);
+	data.emplace_back(1, 60);
+
+	SetAnim(ANIM::NORMAL, data);
 }
 
 void Player::Update(const Input& p)
@@ -102,8 +115,8 @@ void Player::Draw()
 	if (_updater == &Player::DieUpdate)
 	{
 		/// 仮のｱﾆﾒｰｼｮﾝ
-		animCnt = (invCnt / 10) % 4;
-		DrawRectGraph(_pos.x - 16, _pos.y - 16, animCnt * 64 , 0, 64, 64,
+		_animCnt = (_invCnt / 10) % 4;
+		DrawRectGraph(_pos.x - 16, _pos.y - 16, _animCnt * 64 , 0, 64, 64,
 					   LpImageMng.GetID("image/pl_blast.png"), true, true);
 	}
 	else
