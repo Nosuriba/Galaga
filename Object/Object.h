@@ -42,7 +42,7 @@ protected:
 	int _animCnt = 0;
 
 	std::map<ANIM, anim_vec> GetAnim() const;
-	bool SetAnim(const ANIM key, const anim_vec& data);
+	bool SetAnim(const ANIM key, const anim_vec&& data);
 
 	const Size _charSize = Size(30, 32);
 

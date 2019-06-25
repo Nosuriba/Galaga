@@ -89,7 +89,7 @@ void Player::Init()
 	/// ID(描画する位置番号), フレーム
 	data.emplace_back(0, 30);
 	data.emplace_back(1, 60);
-	SetAnim(ANIM::NORMAL, data);
+	SetAnim(ANIM::NORMAL, std::move(data));
 	data.clear();
 
 	/// 爆破ｱﾆﾒｰｼｮﾝの登録(仮)
@@ -100,7 +100,7 @@ void Player::Init()
 		auto cnt = id - data.begin();
 		data[cnt] = std::make_pair(cnt, 10);
 	}
-	SetAnim(ANIM::BLAST, data);
+	SetAnim(ANIM::BLAST, std::move(data));
 }
 
 void Player::Update(const Input& p)
