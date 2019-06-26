@@ -67,7 +67,7 @@ void Enemy::Init()
 
 	data.emplace_back(IMAGE_ID("enemy")[0], 30);
 	data.emplace_back(IMAGE_ID("enemy")[1], 30);
-	SetAnim(ANIM::NORMAL, std::move(data));
+	SetAnim(ANIM::NORMAL, data);
 }
 
 void Enemy::Update(const Input& p)

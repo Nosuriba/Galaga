@@ -41,13 +41,14 @@ protected:
 	int _invCnt  = 0;
 	int _animID = 0;
 
-	bool SetAnim(const ANIM key, const anim_vec&& data);
+	// ±ÆÒ°¼®Ý‚Ì“o˜^
+	bool SetAnim(ANIM key, anim_vec& data);
 	void AnimUpdate();
 
 	const Size _charSize = Size(30, 32);
 
 private:
-	// first : animOffset, second : frame
+	// pair‚Ì—v‘f(first : ID, second : frame)
 	std::map<ANIM, anim_vec> _animMap;
 };
 
