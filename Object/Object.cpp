@@ -15,11 +15,12 @@ bool Object::SetAnim(ANIM key, anim_vec& data)
 
 void Object::AnimUpdate()
 {
-	if (_invCnt++ >= _animMap[_animKey][_animID].second)
+	if (_invCnt >= _animMap[_animKey][_animID].second)
 	{
 		_invCnt = 0;
 		_animID = (_animID + 1) % _animMap[_animKey].size();
 	}
+	++_invCnt;
 }
 
 void Object::Draw()
