@@ -12,6 +12,8 @@ Enemy::Enemy(const Vector2f& pos, const Vector2f& vel)
 	_vel = vel;
 
 	SET_IMAGE_ID("enemy", "image/enemy.png", Vector2(10, 3), Vector2(_charSize.width, _charSize.height));
+	Init();
+	_animKey = ANIM::NORMAL;
 	_updater = &Enemy::MoveUpdate;
 }
 
@@ -61,17 +63,21 @@ void Enemy::DieUpdate()
 
 void Enemy::Init()
 {
+	anim_vec data;
+
+	data.emplace_back(IMAGE_ID("enemy")[0], 30);
+	data.emplace_back(IMAGE_ID("enemy")[1], 30);
+	SetAnim(ANIM::NORMAL, std::move(data));
 }
 
 void Enemy::Update(const Input& p)
 {
-	_invCnt++;
 	(this->*_updater)();
+	Object::AnimUpdate();
 }
 
 void Enemy::Draw()
 {
-	DrawGraph(_pos.x, _pos.y, IMAGE_ID("enemy")[0], true);
 }
 
 const Obj Enemy::GetObjID() const

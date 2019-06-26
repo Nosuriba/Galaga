@@ -23,7 +23,6 @@ public:
 	void Draw() override;
 	const Obj GetObjID() const override;
 private:
-
 	void Init();
 	void (Enemy::*_updater)();
 };

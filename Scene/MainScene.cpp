@@ -30,7 +30,7 @@ void MainScene::Update(const Input & p)
 	/// ƒvƒŒƒCƒ„[‚Æ“G‚Ì‰¼•`‰æ
 	for (auto obj : objList)
 	{
-		obj->Draw();
+		obj->Object::Draw();
 		obj->Update(p);
 	}
 

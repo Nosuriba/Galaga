@@ -13,7 +13,7 @@ using anim_vec = std::vector<std::pair<int, int>>;
 enum class ANIM
 {
 	NORMAL,		// í èÌ
-	BLAST,
+	BLAST,		// îöîj
 	EX,			// ì¡éÍ
 	MAX
 };
@@ -30,19 +30,19 @@ public:
 	Object();
 	virtual ~Object();
 	virtual void Update(const Input& p) = 0;
-	virtual void Draw() = 0;
+	virtual void Draw();
 	virtual const Obj GetObjID() const = 0;
 protected:
 	Vector2f _pos;
 	Vector2f _vel;
 	Rect _rect;
 
-	ANIM animID;
+	ANIM _animKey;
 	int _invCnt  = 0;
-	int _animCnt = 0;
+	int _animID = 0;
 
-	std::map<ANIM, anim_vec> GetAnim() const;
 	bool SetAnim(const ANIM key, const anim_vec&& data);
+	void AnimUpdate();
 
 	const Size _charSize = Size(30, 32);
 

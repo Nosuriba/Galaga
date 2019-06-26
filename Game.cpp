@@ -18,10 +18,6 @@ Game::~Game()
 
 void Game::Init()
 {
-#ifdef _DEBUG
-	DebugConOut::GetInstance();
-#endif
-
 	DxLib::SetGraphMode(800, 600, 32);
 	DxLib::ChangeWindowMode(true);
 	DxLib::SetWindowText("1701310_ñkêÏ èÅàÍ : Galaga");

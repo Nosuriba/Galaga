@@ -18,7 +18,10 @@ public:
 		return *s_Instance;
 	}
 
+	// ·°‚Ìî•ñ‚©‚çID‚Ìî•ñ‚ğæ“¾‚·‚é
 	const VEC_INT& GetID(const std::string& key);
+
+	/// ‰æ‘œ‚Ì·°‚ÆÊß½‚ğİ’è‚·‚éˆ—
 	const VEC_INT& GetID(const std::string& key, const std::string& path);
 	const VEC_INT& GetID(const std::string& key, const std::string& path,
 						 const Vector2& divCnt, const Vector2& divSize);
