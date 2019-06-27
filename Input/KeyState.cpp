@@ -24,6 +24,7 @@ void KeyState::Init()
 
 void KeyState::Update()
 {
+	/// ‚±‚¢‚Â‚ğg‚Á‚Äs‚¤
 	GetHitKeyStateAll(_buf);
 }
 
