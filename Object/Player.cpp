@@ -111,7 +111,7 @@ void Player::Update(const Input& p)
 	_input->Update();
 	(this->*_updater)();
 
-	if (p.IsKeyTrigger(KEY_INPUT_SPACE))
+	if (_input->IsTrigger(INPUT_ID::BTN_1))
 	{
 		_shots.push_back(std::make_shared<Shot>(_pos, Vector2f(0, -2.f)));
 	}

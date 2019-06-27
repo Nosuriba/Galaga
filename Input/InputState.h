@@ -28,10 +28,10 @@ public:
 	bool IsTrigger(const INPUT_ID& id) const;
 	bool IsPressing(const INPUT_ID& id) const;
 
-	// ﾏｯﾌﾟ情報を取得用
-	const key_map& state() const;
-	// ｷｰ情報の取得用
-	const key_pair state(INPUT_ID id) const;
+	//// ﾏｯﾌﾟ情報を取得用
+	//const key_map& state() const;
+	//// ｷｰ情報の取得用
+	//const key_pair state(INPUT_ID id) const;
 private:
 	// 入力情報の登録用
 	bool state(const INPUT_ID id, const key_pair key);

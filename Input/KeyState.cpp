@@ -14,6 +14,10 @@ void KeyState::Update()
 {
 	GetHitKeyStateAll(_buf);
 
+	for (int i = 0; i < _state.size(); ++i)
+	{
+		_state[INPUT_ID(i)].second = _state[INPUT_ID(i)].first;
+	}
 
 	_state[INPUT_ID::RIGHT].first = _buf[KEY_INPUT_RIGHT];
 	_state[INPUT_ID::LEFT].first  = _buf[KEY_INPUT_LEFT];
@@ -27,5 +31,6 @@ void KeyState::Update()
 
 void KeyState::GetState()
 {
+
 }
 
