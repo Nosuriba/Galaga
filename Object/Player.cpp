@@ -20,7 +20,7 @@ Player::Player(const Vector2f & pos, const Vector2f & vel)
 	SET_IMAGE_ID("blast", "image/pl_blast.png", Vector2(4, 1), Vector2(_charSize.width * 2, _charSize.height * 2));
 
 	Init();
-	_animKey = ANIM::NORMAL;
+	animKey(ANIM::EX);
 
 	_updater = &Player::IdleUpdate;
 }
@@ -36,7 +36,7 @@ void Player::Idle()
 
 void Player::Die()
 {
-	_animKey = ANIM::BLAST;
+	animKey(ANIM::BLAST);
 	_updater = &Player::DieUpdate;
 }
 
@@ -84,11 +84,14 @@ void Player::Init()
 {
 	anim_vec data;
 
-	/// ID(描画する位置番号), フレーム
+	/// ﾃﾞﾌｫﾙﾄｱﾆﾒｰｼｮﾝの登録
 	data.emplace_back(IMAGE_ID("player")[0], 30);
 	data.emplace_back(IMAGE_ID("player")[1], 30);
 	SetAnim(ANIM::NORMAL, data);
-	data.clear();
+
+	/// 捕獲時ｱﾆﾒｰｼｮﾝの登録
+	data.emplace_back(IMAGE_ID("player")[2], 30);
+	SetAnim(ANIM::EX, data);
 
 	/// 爆破ｱﾆﾒｰｼｮﾝの登録(仮)
 	data.resize(4);
@@ -115,8 +118,6 @@ void Player::Update(const Input& p)
 		shot->Update();
 		shot->Draw();
 	}
-
-	Object:: AnimUpdate();
 }
 
 void Player::Draw()

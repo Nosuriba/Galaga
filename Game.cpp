@@ -34,7 +34,7 @@ void Game::Init()
 
 void Game::Run()
 {
-	Input input;
+	Input input;			/// ‚±‚¢‚Â‚ªPadState‚Ì¸×½‚É•Ï‚í‚è‚»‚¤...
 	while (!ProcessMessage() && !CheckHitKey(KEY_INPUT_ESCAPE))
 	{
 		ClsDrawScreen();

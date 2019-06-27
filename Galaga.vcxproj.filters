@@ -22,6 +22,9 @@
     <Filter Include="Common">
       <UniqueIdentifier>{d1f270fc-e52f-47ac-814c-14ac54a26850}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{264afbc1-e29a-4b92-9705-d5c06602d963}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -63,6 +66,12 @@
     <ClCompile Include="common\ImageMng.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="Input\InputState.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\KeyState.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -103,6 +112,12 @@
     </ClInclude>
     <ClInclude Include="common\ImageMng.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\InputState.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\KeyState.h">
+      <Filter>Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
