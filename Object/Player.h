@@ -1,8 +1,10 @@
 #pragma once
 
+#include <memory>
 #include "Object.h"
 
 class Shot;
+class InputState;
 
 using shared_shot = std::shared_ptr<Shot>;
 
@@ -18,9 +20,9 @@ public:
 	void Die();
 	void Move();
 
-	void IdleUpdate(const Input& p);
-	void MoveUpdate(const Input& p);
-	void DieUpdate(const Input& p);
+	void IdleUpdate();
+	void MoveUpdate();
+	void DieUpdate();
 
 	void Update(const Input& p) override;
 	void Draw() override;
@@ -28,7 +30,9 @@ public:
 private:
 	void Init();
 
-	void (Player::*_updater)(const Input& p);
+	void (Player::*_updater)();
+
+	std::unique_ptr<InputState> _input;
 	std::vector<shared_shot> _shots;
 };
 

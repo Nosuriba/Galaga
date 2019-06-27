@@ -2,6 +2,7 @@
 #include "../Common/ImageMng.h"
 #include "Player.h"
 #include "Shot.h"
+#include "../Input/KeyState.h"
 
 Player::Player()
 {
@@ -20,7 +21,8 @@ Player::Player(const Vector2f & pos, const Vector2f & vel)
 	SET_IMAGE_ID("blast", "image/pl_blast.png", Vector2(4, 1), Vector2(_charSize.width * 2, _charSize.height * 2));
 
 	Init();
-	animKey(ANIM::EX);
+	animKey(ANIM::NORMAL);
+	_input = std::make_unique<KeyState>();
 
 	_updater = &Player::IdleUpdate;
 }
@@ -45,28 +47,28 @@ void Player::Move()
 	_updater = &Player::MoveUpdate;
 }
 
-void Player::IdleUpdate(const Input & p)
+void Player::IdleUpdate()
 {
 	/// 仮の死亡処理
-	if (p.IsKeyTrigger(KEY_INPUT_Z))
+	/*if (_input->IsTrigger(INPUT_ID::BTN_1))
 	{
 		Die();
 	}
-
-	if (p.IsKeyPressing(KEY_INPUT_A) ||
-		p.IsKeyPressing(KEY_INPUT_D))
+*/
+	if (_input->IsPressing(INPUT_ID::RIGHT) ||
+		_input->IsPressing(INPUT_ID::LEFT))
 	{
 		Move();
 	}
 }
 
-void Player::MoveUpdate(const Input & p)
+void Player::MoveUpdate()
 {
-	if (p.IsKeyPressing(KEY_INPUT_D))
+	if (_input->IsPressing(INPUT_ID::RIGHT))
 	{
 		_pos.x += 5.f;
 	}
-	else if (p.IsKeyPressing(KEY_INPUT_A))
+	else if (_input->IsPressing(INPUT_ID::LEFT))
 	{
 		_pos.x -= 5.f;
 	}
@@ -76,7 +78,7 @@ void Player::MoveUpdate(const Input & p)
 	}
 }
 
-void Player::DieUpdate(const Input & p)
+void Player::DieUpdate()
 {
 }
 
@@ -106,7 +108,8 @@ void Player::Init()
 
 void Player::Update(const Input& p)
 {
-	(this->*_updater)(p);
+	_input->Update();
+	(this->*_updater)();
 
 	if (p.IsKeyTrigger(KEY_INPUT_SPACE))
 	{
