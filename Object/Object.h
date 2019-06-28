@@ -28,7 +28,7 @@ class Object
 public:
 	Object();
 	virtual ~Object();
-	virtual void Update(const Input& p) = 0;
+	virtual void Update() = 0;
 	virtual void Draw();
 	virtual const Obj GetObjID() const = 0;
 

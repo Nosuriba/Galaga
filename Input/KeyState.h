@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "InputState.h"
 class KeyState :
 	public InputState
@@ -8,12 +9,11 @@ public:
 	~KeyState();
 
 	void Update() override;
-	void GetState() override;
-
 private:
-	void Init();
-
 	char _buf[256];
-	char _oldBuf[256];
+
+	std::vector<int> _keyID;
+	// ÃŞÌ«ÙÄ·[‚ÌÃ°ÌŞÙ•Û‘¶—p
+	int _keyTable[static_cast<int>(INPUT_ID::MAX)];
 };
 

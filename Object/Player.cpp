@@ -55,8 +55,10 @@ void Player::IdleUpdate()
 		Die();
 	}
 */
-	if (_input->IsPressing(INPUT_ID::RIGHT) ||
-		_input->IsPressing(INPUT_ID::LEFT))
+	/*if (_input->IsPressing(INPUT_ID::RIGHT) ||
+		  _input->IsPressing(INPUT_ID::LEFT))*/
+	if (_input->state(INPUT_ID::RIGHT).first ||
+		_input->state(INPUT_ID::LEFT).first)
 	{
 		Move();
 	}
@@ -64,11 +66,13 @@ void Player::IdleUpdate()
 
 void Player::MoveUpdate()
 {
-	if (_input->IsPressing(INPUT_ID::RIGHT))
+	/*if (_input->IsPressing(INPUT_ID::RIGHT))*/
+	if (_input->state(INPUT_ID::RIGHT).first)
 	{
 		_pos.x += 5.f;
 	}
-	else if (_input->IsPressing(INPUT_ID::LEFT))
+	/*else if (_input->IsPressing(INPUT_ID::LEFT))*/
+	else if (_input->state(INPUT_ID::LEFT).first)
 	{
 		_pos.x -= 5.f;
 	}
@@ -106,12 +110,14 @@ void Player::Init()
 	SetAnim(ANIM::BLAST, data);
 }
 
-void Player::Update(const Input& p)
+void Player::Update()
 {
 	_input->Update();
 	(this->*_updater)();
 
-	if (_input->IsTrigger(INPUT_ID::BTN_1))
+	/*if (_input->IsTrigger(INPUT_ID::BTN_1))*/
+	if (_input->state(INPUT_ID::BTN_1).first &&
+		!(_input->state(INPUT_ID::BTN_1).second))
 	{
 		_shots.push_back(std::make_shared<Shot>(_pos, Vector2f(0, -2.f)));
 	}

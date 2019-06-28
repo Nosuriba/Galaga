@@ -7,6 +7,8 @@
 
 #define TRACE(fmt, ...) printf(fmt, __VA_ARGS__)		
 
+/// ‚±‚±‚ÉAST()‚Ìˆ—‚ğ‘‚¢‚ÄAtry, catchƒGƒ‰[‚Ì‘Îˆ‚ª‚Å‚«‚é‚æ‚¤‚É‚·‚é
+
 class DebugConOut
 {
 public:

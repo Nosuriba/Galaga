@@ -31,13 +31,13 @@ void MainScene::Update(const Input & p)
 	for (auto obj : objList)
 	{
 		obj->Object::Draw();
-		obj->Update(p);
+		obj->Update();
 	}
 
 	DrawGraph(0, 0, IMAGE_ID("bg")[0], true);
 	DrawString(0, 0, "Main", 0xffffff);
 
-	if (p.IsKeyTrigger(KEY_INPUT_F5))
+	if (p.IsKeyTrigger(KEY_INPUT_SPACE))
 	{
 		Game::GetInstance().ChangeScene(new ResultScene());
 	}

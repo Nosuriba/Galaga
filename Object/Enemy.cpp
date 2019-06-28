@@ -70,7 +70,7 @@ void Enemy::Init()
 	SetAnim(ANIM::NORMAL, data);
 }
 
-void Enemy::Update(const Input& p)
+void Enemy::Update()
 {
 	(this->*_updater)();
 }

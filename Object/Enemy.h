@@ -19,7 +19,7 @@ public:
 	void ShotUpdate();
 	void DieUpdate();
 
-	void Update(const Input& p) override;
+	void Update() override;
 	void Draw() override;
 	const Obj GetObjID() const override;
 private:
