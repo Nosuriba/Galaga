@@ -26,7 +26,6 @@ KeyState::~KeyState()
 void KeyState::Update()
 {
 	GetHitKeyStateAll(_buf);
-
 	SetOld();
 
 	/// ボタンの入力情報の更新を行っている

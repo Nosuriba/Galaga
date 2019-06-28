@@ -35,6 +35,7 @@ const key_pair InputState::state(INPUT_ID id) const
 	}
 	catch(...)
 	{
+
 	}
 }
 

@@ -15,6 +15,6 @@ DebugConOut::DebugConOut()
 DebugConOut::~DebugConOut()
 {
 	/// ºÝ¿°Ù³¨ÝÄÞ³‚ÌŠJ•ú
-	FreeConsole();
+ 	FreeConsole();
 }
 #endif
