@@ -35,7 +35,8 @@ const key_pair InputState::state(INPUT_ID id) const
 	}
 	catch(...)
 	{
-
+		return { 0,0 };
+		/// 例外処理
 	}
 }
 
@@ -59,7 +60,7 @@ void InputState::SetOld(void)
 		}
 		catch (...)
 		{
-			/// 何も値が入力されていない時の復旧用
+			/// 何も値が登録されていない時の復旧用
 			//AST();
 			_state.try_emplace(id, key_pair{ 0, 1 });
 		}

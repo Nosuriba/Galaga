@@ -4,19 +4,21 @@
 KeyState::KeyState()
 {
 	/// ﾃﾞﾌｫﾙﾄのｷｰ設定
-	_keyTable[static_cast<int>(INPUT_ID::LEFT)]  = KEY_INPUT_LEFT;
-	_keyTable[static_cast<int>(INPUT_ID::RIGHT)] = KEY_INPUT_RIGHT;
-	_keyTable[static_cast<int>(INPUT_ID::UP)]	 = KEY_INPUT_UP;
-	_keyTable[static_cast<int>(INPUT_ID::DOWN)]  = KEY_INPUT_DOWN;
-	_keyTable[static_cast<int>(INPUT_ID::BTN_1)] = KEY_INPUT_Z;
-	_keyTable[static_cast<int>(INPUT_ID::BTN_2)] = KEY_INPUT_X;
-	_keyTable[static_cast<int>(INPUT_ID::BTN_3)] = KEY_INPUT_A;
-	_keyTable[static_cast<int>(INPUT_ID::BTN_4)] = KEY_INPUT_S;
+	_defKeyID.reserve(static_cast<size_t>(end(INPUT_ID())));
+	_defKeyID.emplace_back(KEY_INPUT_LEFT);
+	_defKeyID.emplace_back(KEY_INPUT_RIGHT);
+	_defKeyID.emplace_back(KEY_INPUT_UP);
+	_defKeyID.emplace_back(KEY_INPUT_DOWN);
+	_defKeyID.emplace_back(KEY_INPUT_Z);
+	_defKeyID.emplace_back(KEY_INPUT_X);
+	_defKeyID.emplace_back(KEY_INPUT_A);
+	_defKeyID.emplace_back(KEY_INPUT_S);
 
-	for (auto key : _keyTable)
-	{
-		_keyID.emplace_back(key);
-	}
+	/// ｷｰ入力の初期設定
+	_keyID.reserve(static_cast<size_t>(end(INPUT_ID())));
+	_keyID = _defKeyID;
+
+	_keyMode = &KeyState::RefKeyData;
 }
 
 KeyState::~KeyState()
@@ -27,10 +29,25 @@ void KeyState::Update()
 {
 	GetHitKeyStateAll(_buf);
 	SetOld();
+	(this->*_keyMode)();
 
+	if (CheckHitKey(KEY_INPUT_F1) == 1)
+	{
+		/// _stateのIDを初期化するようにしておく
+		_keyMode = &KeyState::SetKeyConfig;
+	}
+}
+
+void KeyState::RefKeyData()
+{
 	/// ボタンの入力情報の更新を行っている
 	for (auto id : INPUT_ID())
 	{
 		state(id, _buf[_keyID[static_cast<int>(id)]]);
 	}
+}
+
+void KeyState::SetKeyConfig()
+{
+	_keyID.clear();
 }

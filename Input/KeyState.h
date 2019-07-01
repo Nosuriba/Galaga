@@ -10,10 +10,15 @@ public:
 
 	void Update() override;
 private:
+	// ｷー情報を反映するためのもの(名前は後で変えるかも)
+	void RefKeyData();
+	void SetKeyConfig();
 	char _buf[256];
 
+	void (KeyState::*_keyMode)();
+
 	std::vector<int> _keyID;
-	// ﾃﾞﾌｫﾙﾄｷーのﾃｰﾌﾞﾙ保存用
-	int _keyTable[static_cast<int>(INPUT_ID::MAX)];
+	// ﾃﾞﾌｫﾙﾄｷｰの設定
+	std::vector<int> _defKeyID;
 };
 
