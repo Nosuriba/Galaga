@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Shot.h"
 #include "../Input/KeyState.h"
+#include "../Input/PadState.h"
 
 Player::Player()
 {

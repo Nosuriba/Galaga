@@ -1,6 +1,6 @@
 #pragma once
-#include <vector>
 #include "InputState.h"
+
 class KeyState :
 	public InputState
 {
@@ -11,8 +11,9 @@ public:
 	void Update() override;
 private:
 	// ·[î•ñ‚ğ”½‰f‚·‚é‚½‚ß‚Ì‚à‚Ì(–¼‘O‚ÍŒã‚Å•Ï‚¦‚é‚©‚à)
-	void RefKeyData();
-	void SetKeyConfig();
+	void RefKeyData() override;
+	void ResetKeyData() override;
+	void SetKeyData() override;
 	char _buf[256];
 
 	void (KeyState::*_keyMode)();

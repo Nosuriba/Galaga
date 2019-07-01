@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <vector>
 #include "INPUT_ID.h"
 
 using key_pair = std::pair<int, int>;
@@ -24,6 +25,12 @@ public:
 	bool state(INPUT_ID id, int data);
 	// ‘O‚É“ü—Í‚µ‚½·°î•ñæ“¾—p
 	void SetOld(void);
+
+protected:
+	virtual void RefKeyData() = 0;
+	virtual void ResetKeyData() = 0;
+	virtual void SetKeyData() = 0;
+
 private:
 	// first : nowInput, second : oldInput
 	key_map _state;

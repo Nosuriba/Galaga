@@ -33,8 +33,18 @@ void KeyState::Update()
 
 	if (CheckHitKey(KEY_INPUT_F1) == 1)
 	{
-		/// _state‚ÌID‚ð‰Šú‰»‚·‚é‚æ‚¤‚É‚µ‚Ä‚¨‚­
-		_keyMode = &KeyState::SetKeyConfig;
+		/// ID‚ÆƒL[î•ñ‚Ì‰Šú‰»‚ð‚µ‚Ä‚¢‚é
+		_keyID.clear();
+		for (auto id : INPUT_ID())
+		{
+			state(id, 0);
+		}
+		_keyMode = &KeyState::SetKeyData;
+	}
+
+	if (CheckHitKey(KEY_INPUT_DELETE) == 1)
+	{
+		_keyMode = &KeyState::ResetKeyData;
 	}
 }
 
@@ -47,7 +57,21 @@ void KeyState::RefKeyData()
 	}
 }
 
-void KeyState::SetKeyConfig()
+void KeyState::ResetKeyData()
 {
-	_keyID.clear();
+	_keyID = _defKeyID;
+	_keyMode = &KeyState::RefKeyData;
+}
+
+void KeyState::SetKeyData()
+{
+	if (CheckHitKeyAll() == 0)
+	{
+		_keyID.emplace_back(WaitKey());
+	}
+	
+	if (_keyID.size() >= static_cast<int>(INPUT_ID::MAX))
+	{
+		_keyMode = &KeyState::RefKeyData;
+	}
 }
