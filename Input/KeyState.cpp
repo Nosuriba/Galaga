@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include "KeyState.h"
+#include "../DebugConOut.h"
 
 KeyState::KeyState()
 {
@@ -31,8 +32,10 @@ void KeyState::Update()
 	SetOld();
 	(this->*_keyMode)();
 
-	if (CheckHitKey(KEY_INPUT_F1) == 1)
+	if (CheckHitKey(KEY_INPUT_F1) == 1 &&
+		_keyMode == &KeyState::RefKeyData)
 	{
+		TRACE("ｷｰｺﾝﾌｨｸﾞに移行する\n");
 		/// IDとキー情報の初期化をしている
 		_keyID.clear();
 		for (auto id : INPUT_ID())
@@ -42,8 +45,10 @@ void KeyState::Update()
 		_keyMode = &KeyState::SetKeyData;
 	}
 
-	if (CheckHitKey(KEY_INPUT_DELETE) == 1)
+	if (CheckHitKey(KEY_INPUT_DELETE) == 1 &&
+		_keyMode == &KeyState::RefKeyData)
 	{
+		TRACE("ｷｰ情報をﾘｾｯﾄする\n");
 		_keyMode = &KeyState::ResetKeyData;
 	}
 }
@@ -67,11 +72,21 @@ void KeyState::SetKeyData()
 {
 	if (CheckHitKeyAll() == 0)
 	{
-		_keyID.emplace_back(WaitKey());
+		auto num = WaitKey();
+		for (auto key : _keyID)
+		{
+			if (key == num)
+			{
+				TRACE("同じｷｰが登録されています。\n");
+				return;
+			}
+		}
+		_keyID.emplace_back(num);
 	}
 	
 	if (_keyID.size() >= static_cast<int>(INPUT_ID::MAX))
 	{
+		TRACE("%s", "ｷｰｺﾝﾌｨｸﾞ終了\n");
 		_keyMode = &KeyState::RefKeyData;
 	}
 }

@@ -28,8 +28,6 @@ void Game::Init()
 	DxLib::SetDrawScreen(DX_SCREEN_BACK);
 
 	_scene = std::make_unique<TitleScene>();
-	/*TRACE("DXLIB‚Ì‰Šú‰»I—¹\n");
-	TRACE("%d", 20);*/
 }
 
 void Game::Run()
