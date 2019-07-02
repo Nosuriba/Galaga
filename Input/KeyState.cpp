@@ -15,10 +15,13 @@ KeyState::KeyState()
 	_defKeyID.emplace_back(KEY_INPUT_A);
 	_defKeyID.emplace_back(KEY_INPUT_S);
 
-	/// ·°“ü—Í‚Ì‰Šúİ’è
-	_keyID.reserve(static_cast<size_t>(end(INPUT_ID())));
-	_keyID = _defKeyID;
-
+	/// Ì§²Ù“Ç‚İ‚İ‚É¸”s‚µ‚½AÃŞÌ«ÙÄ’l‚ğ“ü‚ê‚é
+	if (!LoadKeyData())
+	{
+		/// ·°“ü—Í‚Ì‰Šúİ’è
+		_keyID.reserve(static_cast<size_t>(end(INPUT_ID())));
+		_keyID = _defKeyID;
+	}
 	_keyMode = &KeyState::RefKeyData;
 }
 
@@ -35,22 +38,47 @@ void KeyState::Update()
 	if (CheckHitKey(KEY_INPUT_F1) == 1 &&
 		_keyMode == &KeyState::RefKeyData)
 	{
-		TRACE("·°ºİÌ¨¸Ş‚ÉˆÚs‚·‚é\n");
+		TRACE("·°ºİÌ¨¸ŞÓ°ÄŞ‚ÉˆÚs‚·‚é\n");
 		/// ID‚ÆƒL[î•ñ‚Ì‰Šú‰»‚ğ‚µ‚Ä‚¢‚é
-		_keyID.clear();
 		for (auto id : INPUT_ID())
 		{
 			state(id, 0);
 		}
+
+		_confID = begin(INPUT_ID());
 		_keyMode = &KeyState::SetKeyData;
 	}
 
-	if (CheckHitKey(KEY_INPUT_DELETE) == 1 &&
-		_keyMode == &KeyState::RefKeyData)
+	if (CheckHitKey(KEY_INPUT_DELETE) == 1)
 	{
 		TRACE("·°î•ñ‚ğØ¾¯Ä‚·‚é\n");
 		_keyMode = &KeyState::ResetKeyData;
 	}
+}
+
+bool KeyState::SaveKeyData()
+{
+	/// Ì§²Ù‘‚«o‚µ‚Ìˆ—‚ğ‘‚­
+	FILE *fp;
+	fopen_s(&fp, "Data/keyData.dat", "w");
+	if (fp == NULL)
+	{
+		return false;
+	}
+	for (int i = 0; i < _keyID.size(); ++i)
+	{
+		/*fwrite();*/
+	}
+
+	return true;
+}
+
+bool KeyState::LoadKeyData()
+{
+	/// Ì§²Ù‚Ì“Ç‚İ‚İ‚Ìˆ—‚ğ‘‚­
+	_keyID.resize(static_cast<size_t>(INPUT_ID::MAX));
+
+	return false;
 }
 
 void KeyState::RefKeyData()
@@ -70,23 +98,25 @@ void KeyState::ResetKeyData()
 
 void KeyState::SetKeyData()
 {
-	if (CheckHitKeyAll() == 0)
+	for (int id = 0; id < sizeof(_buf) / sizeof(_buf[0]); ++id)
 	{
-		auto num = WaitKey();
-		for (auto key : _keyID)
+		if (_buf[id] && 
+			id != _lastKeyID && 
+			id != KEY_INPUT_F1)
 		{
-			if (key == num)
-			{
-				TRACE("“¯‚¶·°‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚·B\n");
-				return;
-			}
+			/// “¯‚¶·°‚ª“o˜^‚³‚ê‚Ä‚¢‚È‚¢‚É“o˜^‚·‚é‚æ‚¤‚È”»’è‚ğ’Ç‰Á‚·‚é
+			_lastKeyID = id;
+			_keyID[static_cast<int>(_confID)] = id;
+			++_confID;
+			TRACE("·°‚ª“o˜^‚³‚ê‚½‚æ\n");
+			TRACE("·°‚ª“o˜^‚³‚ê‚½‚æ\n");
+			break;
 		}
-		_keyID.emplace_back(num);
 	}
 	
-	if (_keyID.size() >= static_cast<int>(INPUT_ID::MAX))
+	if (_confID >= end(INPUT_ID()))
 	{
-		TRACE("%s", "·°ºİÌ¨¸ŞI—¹\n");
+		TRACE("·°ºİÌ¨¸ŞI—¹\n");
 		_keyMode = &KeyState::RefKeyData;
 	}
 }

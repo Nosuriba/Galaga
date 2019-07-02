@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include "PadState.h"
+#include "../DebugConOut.h"
 
 PadState::PadState()
 {
@@ -29,8 +30,10 @@ void PadState::Update()
 	SetOld();
 	(this->*_padMode)();
 
-	if (CheckHitKey(KEY_INPUT_F1) == 1)
+	if (CheckHitKey(KEY_INPUT_F1) == 1 &&
+		_padMode == &PadState::RefKeyData)
 	{
+		TRACE("·°ºÝÌ¨¸ÞÓ°ÄÞ‚ÉˆÚs‚·‚é\n");
 		_padID.clear();
 		for (auto id : INPUT_ID())
 		{
@@ -41,6 +44,7 @@ void PadState::Update()
 
 	if (CheckHitKey(KEY_INPUT_DELETE) == 1)
 	{
+		TRACE("·°î•ñ‚ðØ¾¯Ä‚·‚é\n");
 		_padMode = &PadState::ResetKeyData;
 	}
 }
@@ -64,6 +68,14 @@ void PadState::SetKeyData()
 	auto num = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 	if (num > 0)
 	{
+		for (auto pad : _padID)
+		{
+			if (pad == num)
+			{
+				TRACE("“¯‚¶·°‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚·B\n");
+				return;
+			}
+		}
 		_padID.emplace_back(num);
 	}
 	if (_padID.size() >= static_cast<int>(INPUT_ID::MAX))
