@@ -6,10 +6,12 @@ std::unique_ptr<DebugConOut, DebugConOut::DebugDeleter> DebugConOut::s_Instance(
 DebugConOut::DebugConOut()
 {
 	/// ｺﾝｿｰﾙｳｨﾝﾄﾞｳの表示
-	AllocConsole();
-	/// ｺﾝｿｰﾙｳｨﾝﾄﾞｳに対して入出力を行うための設定
-	freopen_s(&_debugFp, "CONOUT$", "w", stdout);
-	freopen_s(&_debugFp, "CONIN$", "r", stdin);
+	if (AllocConsole())
+	{
+		/// ｺﾝｿｰﾙｳｨﾝﾄﾞｳに対して入出力を行うための設定
+		freopen_s(&_debugFp, "CONOUT$", "w", stdout);
+		freopen_s(&_debugFp, "CONIN$", "r", stdin);
+	}
 }
 
 DebugConOut::~DebugConOut()

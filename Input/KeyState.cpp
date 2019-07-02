@@ -15,18 +15,28 @@ KeyState::KeyState()
 	_defKeyID.emplace_back(KEY_INPUT_A);
 	_defKeyID.emplace_back(KEY_INPUT_S);
 
-	/// Ì§²Ù“Ç‚İ‚İ‚É¸”s‚µ‚½AÃŞÌ«ÙÄ’l‚ğ“ü‚ê‚é
+	/// ·°î•ñ‚Ì“o˜^
 	if (!LoadKeyData())
 	{
-		/// ·°“ü—Í‚Ì‰Šúİ’è
 		_keyID.reserve(static_cast<size_t>(end(INPUT_ID())));
 		_keyID = _defKeyID;
+	}
+
+	/// ÃŞ°À‚ÉƒL[î•ñ‚ª‚È‚©‚Á‚½‚Ì“o˜^
+	for (auto id : INPUT_ID())
+	{
+		if (_keyID[static_cast<int>(id)] <= 0)
+		{
+			ResetKeyData();
+			break;
+		}
 	}
 	_keyMode = &KeyState::RefKeyData;
 }
 
 KeyState::~KeyState()
 {
+	SaveKeyData();
 }
 
 void KeyState::Update()
@@ -40,7 +50,7 @@ void KeyState::Update()
 	{
 		TRACE("·°ºİÌ¨¸ŞÓ°ÄŞ‚ÉˆÚs‚·‚é\n");
 		/// ID‚ÆƒL[î•ñ‚Ì‰Šú‰»‚ğ‚µ‚Ä‚¢‚é
-		for (auto id : INPUT_ID())
+		for (auto id : INPUT_ID())	
 		{
 			state(id, 0);
 		}
@@ -51,34 +61,50 @@ void KeyState::Update()
 
 	if (CheckHitKey(KEY_INPUT_DELETE) == 1)
 	{
-		TRACE("·°î•ñ‚ğØ¾¯Ä‚·‚é\n");
-		_keyMode = &KeyState::ResetKeyData;
+		for (auto id : INPUT_ID())
+		{
+			if (_keyID[static_cast<int>(id)] != _defKeyID[static_cast<int>(id)])
+			{
+				TRACE("·°î•ñ‚ğØ¾¯Ä‚·‚é\n");
+				_keyMode = &KeyState::ResetKeyData;
+				break;
+			}
+		}
 	}
 }
 
 bool KeyState::SaveKeyData()
 {
-	/// Ì§²Ù‘‚«o‚µ‚Ìˆ—‚ğ‘‚­
 	FILE *fp;
-	fopen_s(&fp, "Data/keyData.dat", "w");
-	if (fp == NULL)
+	if (fopen_s(&fp, "keyData.dat", "wb") != 0)
 	{
 		return false;
 	}
-	for (int i = 0; i < _keyID.size(); ++i)
+	for (auto id : _keyID)
 	{
-		/*fwrite();*/
+		fwrite(&id, sizeof(_keyID[0]), 1, fp);
 	}
+	fclose(fp);
 
 	return true;
 }
 
 bool KeyState::LoadKeyData()
 {
-	/// Ì§²Ù‚Ì“Ç‚İ‚İ‚Ìˆ—‚ğ‘‚­
 	_keyID.resize(static_cast<size_t>(INPUT_ID::MAX));
+			
+	FILE *fp;
+	if (fopen_s(&fp, "keyData.dat", "rb") != 0)
+	{
+		return false;
+	}
+	for (auto id : INPUT_ID())
+	{
+		fread(&_keyID[static_cast<size_t>(id)], sizeof(_keyID[0]), 1, fp);
+	}
+	fclose(fp);
 
-	return false;
+	return true;
 }
 
 void KeyState::RefKeyData()
@@ -101,15 +127,16 @@ void KeyState::SetKeyData()
 	for (int id = 0; id < sizeof(_buf) / sizeof(_buf[0]); ++id)
 	{
 		if (_buf[id] && 
+			!_buf[_lastKeyID] &&
 			id != _lastKeyID && 
 			id != KEY_INPUT_F1)
 		{
+			/// â‘ÎC³‚µ‚Ä‚â‚é‚¼.....
 			/// “¯‚¶·°‚ª“o˜^‚³‚ê‚Ä‚¢‚È‚¢‚É“o˜^‚·‚é‚æ‚¤‚È”»’è‚ğ’Ç‰Á‚·‚é
 			_lastKeyID = id;
 			_keyID[static_cast<int>(_confID)] = id;
 			++_confID;
-			TRACE("·°‚ª“o˜^‚³‚ê‚½‚æ\n");
-			TRACE("·°‚ª“o˜^‚³‚ê‚½‚æ\n");
+			TRACE("İ’è‚µ‚½·° : " "%d\n", _confID);
 			break;
 		}
 	}
