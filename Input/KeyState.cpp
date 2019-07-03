@@ -15,18 +15,19 @@ KeyState::KeyState()
 	_defKeyID.emplace_back(KEY_INPUT_A);
 	_defKeyID.emplace_back(KEY_INPUT_S);
 
-	/// ·°î•ñ‚Ì“o˜^
+	/// ·°î•ñ‚Ì“Ç‚İ‚İ
 	if (!LoadKeyData())
 	{
 		_keyID.reserve(static_cast<size_t>(end(INPUT_ID())));
 		_keyID = _defKeyID;
 	}
 
-	/// ÃŞ°À‚ÉƒL[î•ñ‚ª‚È‚©‚Á‚½‚Ì“o˜^
+	/// “Ç‚İ‚İ‚É¸”s‚µ‚½A·°î•ñ‚ğÃŞÌ«ÙÄ‚É–ß‚·
 	for (auto id : INPUT_ID())
 	{
 		if (_keyID[static_cast<int>(id)] <= 0)
 		{
+			TRACE("ˆê•”·°‚Ì“Ç‚İ‚İ‚É¸”s‚µ‚Ü‚µ‚½B");
 			ResetKeyData();
 			break;
 		}
@@ -53,13 +54,15 @@ void KeyState::Update()
 		for (auto id : INPUT_ID())	
 		{
 			state(id, 0);
+			_keyID[static_cast<int>(id)] = 0;
 		}
 
 		_confID = begin(INPUT_ID());
 		_keyMode = &KeyState::SetKeyData;
 	}
 
-	if (CheckHitKey(KEY_INPUT_DELETE) == 1)
+	if (CheckHitKey(KEY_INPUT_DELETE) == 1 &&
+		_keyMode == &KeyState::RefKeyData)
 	{
 		for (auto id : INPUT_ID())
 		{
