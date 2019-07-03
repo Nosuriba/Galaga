@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="common\ImageMng.cpp" />
     <ClCompile Include="DebugConOut.cpp" />
+    <ClCompile Include="DebugDisp.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Input\InputState.cpp" />
@@ -167,6 +168,7 @@
   <ItemGroup>
     <ClInclude Include="common\ImageMng.h" />
     <ClInclude Include="DebugConOut.h" />
+    <ClInclude Include="DebugDisp.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Input\InputState.h" />

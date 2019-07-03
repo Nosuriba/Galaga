@@ -43,8 +43,6 @@ void Game::Run()
 	while (!ProcessMessage() && !CheckHitKey(KEY_INPUT_ESCAPE))
 	{
 		_drawList.clear();
-		
-
 		input.Update();
 		_scene = _scene->Update(std::move(_scene), input);
 		DxLib::SetDrawScreen(DX_SCREEN_BACK);
