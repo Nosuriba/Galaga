@@ -2,10 +2,21 @@
 
 #include <vector>
 #include <memory>
+#include "Vector2.h"
 
 class Scene;
 
+#define LpGame (Game::GetInstance())
+
 using unique_scene = std::unique_ptr<Scene>;
+using draw_queT = std::tuple<int, int, int>;
+
+enum class DRAW_QUE
+{
+	IMAGE,
+	X,
+	Y
+};
 
 class Game
 {
@@ -18,10 +29,17 @@ public:
 	void Init();
 	void Run();
 
-	void ChangeScene(Scene * scene);
+	bool AddDrawQue(draw_queT dQue);
+
+	const Vector2 screenSize;
+	const Vector2 gameScreenSize;
+	const Vector2 gameScreenPos;
+
 private:
 	Game();
 	~Game();
+
+	void Draw();
 	struct GameDeleter
 	{
 		void operator()(Game * game) const
@@ -30,6 +48,8 @@ private:
 		}
 	};
 
+	// tupleの要素(1.画像ハンドル, 2.X座標, 3.Y座標)
+	std::vector<draw_queT> _drawList;
 	static std::unique_ptr<Game, GameDeleter> s_Instance;
 	unique_scene _scene;
 };

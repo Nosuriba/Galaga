@@ -27,7 +27,7 @@ KeyState::KeyState()
 	{
 		if (_keyID[static_cast<int>(id)] <= 0)
 		{
-			TRACE("一部ｷｰの読み込みに失敗しました。");
+			TRACE("一部ｷｰの読み込みに失敗しました。\n");
 			ResetKeyData();
 			break;
 		}
@@ -79,14 +79,11 @@ void KeyState::Update()
 bool KeyState::SaveKeyData()
 {
 	FILE *fp;
-	if (fopen_s(&fp, "keyData.dat", "wb") != 0)
+	if (fopen_s(&fp, "Data/key.dat", "wb") != 0)
 	{
 		return false;
 	}
-	for (auto id : _keyID)
-	{
-		fwrite(&id, sizeof(_keyID[0]), 1, fp);
-	}
+	fwrite(_keyID.data(), (_keyID.size() * sizeof(_keyID[0])), 1, fp);
 	fclose(fp);
 
 	return true;
@@ -97,14 +94,11 @@ bool KeyState::LoadKeyData()
 	_keyID.resize(static_cast<size_t>(INPUT_ID::MAX));
 			
 	FILE *fp;
-	if (fopen_s(&fp, "keyData.dat", "rb") != 0)
+	if (fopen_s(&fp, "Data/key.dat", "rb") != 0)
 	{
 		return false;
 	}
-	for (auto id : INPUT_ID())
-	{
-		fread(&_keyID[static_cast<size_t>(id)], sizeof(_keyID[0]), 1, fp);
-	}
+	fread(_keyID.data(), (_keyID.size() * sizeof(_keyID[0])), 1, fp);
 	fclose(fp);
 
 	return true;
@@ -147,6 +141,7 @@ void KeyState::SetKeyData()
 	if (_confID >= end(INPUT_ID()))
 	{
 		TRACE("ｷｰｺﾝﾌｨｸﾞ終了\n");
+		/// ここでセーブ処理を行う????
 		_keyMode = &KeyState::RefKeyData;
 	}
 }

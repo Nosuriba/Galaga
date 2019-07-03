@@ -14,14 +14,14 @@ ResultScene::~ResultScene()
 void ResultScene::Init()
 {
 }
-
-void ResultScene::Update(const Input & p)
+unique_scene ResultScene::Update(unique_scene scene, const Input & p)
 {
 	DrawString(0, 0, "Result", 0xffffff);
 	if (p.IsKeyTrigger(KEY_INPUT_SPACE))
 	{
-		Game::GetInstance().ChangeScene(new TitleScene());
+		return std::make_unique<TitleScene>();
 	}
+	return std::move(scene);
 }
 
 const SCN_ID ResultScene::GetSceneID() const

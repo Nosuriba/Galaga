@@ -9,7 +9,7 @@ public:
 	~TitleScene();
 
 	void Init() override;
-	void Update(const Input& p) override;
+	unique_scene Update(unique_scene scene, const Input& p) override;
 	const SCN_ID GetSceneID() const override;
 };
 

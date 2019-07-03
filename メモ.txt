@@ -11,15 +11,24 @@
 
 描画位置の計算 → Vector2((ID % 横のｺﾏの最大値) * size, (ID / 横のｺﾏの最大値) * size )
 
-※ﾊﾟｯﾄﾞ入力でも実装できたらいいな(実装しろ！)
+※ﾊﾟｯﾄﾞ入力でも実装できたらいいな(ｷｰｺﾝﾌｨｸﾞがまだ不完全なのだよ...)
 
 入力の流れ
 
 
 書くこと
-debug用のｸﾗｽにAST()を書いておく, InputStateにも	(アサートは後でやる)
+・debug用のｸﾗｽにAST()を書いておく, InputStateにも	(アサートは後でやる)
+・描画周りを作っていく
+・SceneMng(Game)にDraw関数を作る
 
-F1　	  →　ｷｰコンフィグ
-deleteｷｰ　→　ﾃﾞﾌｫﾙﾄのｷｰにする
+・DebugConOutのｸﾗｽを参考にDebugDispOutというｸﾗｽを作って、Debug情報を描画するように実装してみる
+・DebugDispOutをシングルトンにする
+・DrawGraph, DrawLine, DrawBox, DrawCircleのラッパー関数を用意する
+・_dbgの後ろにDrawGraphなどの関数をつけるようにする
 
-fread_sを使わないといけないかもしれない
+
+・ｽｸﾘｰﾝに対して描画を行うようにする
+・Queに対しての登録はtupleというものを使う
+
+※SceneのUpdateを返り値uniqur_ptrで返してループするような仕組みを実装しておく
+※constで書いている変数を初期化
