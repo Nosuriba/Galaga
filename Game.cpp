@@ -4,6 +4,7 @@
 #include "Object/Player.h"
 #include "Scene/Scene.h"
 #include "Scene/TitleScene.h"
+#include "Scene/MainScene.h"
 #include "Common/ImageMng.h"
 #include "DebugConOut.h"
 
@@ -28,11 +29,11 @@ void Game::Init()
 	{
 		return;
 	}
-	DxLib::SetDrawScreen(DX_SCREEN_BACK);
+	
 
 	SET_IMAGE_ID("˜g", "image/frame.png");
 
-	_scene = std::make_unique<TitleScene>();
+	_scene = std::make_unique<MainScene>();
 }
 
 void Game::Run()
@@ -42,11 +43,12 @@ void Game::Run()
 	while (!ProcessMessage() && !CheckHitKey(KEY_INPUT_ESCAPE))
 	{
 		_drawList.clear();
-		ClsDrawScreen();
+		
 
 		input.Update();
 		_scene = _scene->Update(std::move(_scene), input);
-
+		DxLib::SetDrawScreen(DX_SCREEN_BACK);
+		ClsDrawScreen();
 		AddDrawQue({ IMAGE_ID("˜g")[0], 0, 0 });
 		Draw();
 		ScreenFlip();

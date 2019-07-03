@@ -21,15 +21,15 @@ void MainScene::Init()
 	_ghGameScreen = MakeScreen(LpGame.gameScreenSize.x, LpGame.gameScreenSize.y, true);
 
 	/// 仮の生成
-	objList.emplace_back(std::make_shared<Player>(Vector2f(500, 450), Vector2f(0, 0)));
-	objList.emplace_back(std::make_shared<Enemy>(Vector2f(300, 300), Vector2f(0,0)));
+	objList.emplace_back(std::make_shared<Player>(Vector2f(100, 200), Vector2f(0,0)));
+	objList.emplace_back(std::make_shared<Enemy>(Vector2f(20, 20), Vector2f(0,0)));
 }
 
 void MainScene::Draw()
 {
 	
 	/// debug用の描画をした後、screenの情報を元に戻すための
-	int ghBefor = GetDrawScreen();
+	//int ghBefor = GetDrawScreen();
 	/// SetDrawScreenの使うと真っ暗になるので、その部分を調べる
 	SetDrawScreen(_ghGameScreen);
 	ClsDrawScreen();
@@ -40,7 +40,7 @@ void MainScene::Draw()
 
 	}
 	LpGame.AddDrawQue({ _ghGameScreen, LpGame.gameScreenPos.x, LpGame.gameScreenPos.y });
-	SetDrawScreen(ghBefor);
+	// SetDrawScreen(ghBefor);
 }
 
 unique_scene MainScene::Update(unique_scene scene, const Input & p)
@@ -55,11 +55,11 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 
 	DrawString(0, 0, "Main", 0xffffff);
 
-	if (p.IsKeyTrigger(KEY_INPUT_SPACE))
+	/*if (p.IsKeyTrigger(KEY_INPUT_SPACE))
 	{
 		return std::make_unique<ResultScene>();
 	}
-
+*/
 	return std::move(scene);
 }
 
