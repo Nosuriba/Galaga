@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <tuple>
 #include "Vector2.h"
 
 class Scene;
@@ -49,7 +50,7 @@ private:
 	};
 
 	// tupleの要素(1.画像ハンドル, 2.X座標, 3.Y座標)
-	std::vector<draw_queT> _drawList;
+	std::vector<draw_queT> _drawVector;
 	static std::unique_ptr<Game, GameDeleter> s_Instance;
 	unique_scene _scene;
 };

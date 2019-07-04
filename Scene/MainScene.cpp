@@ -27,10 +27,6 @@ void MainScene::Init()
 
 void MainScene::Draw()
 {
-	
-	/// debug用の描画をした後、screenの情報を元に戻すための
-	//int ghBefor = GetDrawScreen();
-	/// SetDrawScreenの使うと真っ暗になるので、その部分を調べる
 	SetDrawScreen(_ghGameScreen);
 	ClsDrawScreen();
 	/// プレイヤーと敵の仮描画
@@ -40,7 +36,6 @@ void MainScene::Draw()
 
 	}
 	LpGame.AddDrawQue({ _ghGameScreen, LpGame.gameScreenPos.x, LpGame.gameScreenPos.y });
-	// SetDrawScreen(ghBefor);
 }
 
 unique_scene MainScene::Update(unique_scene scene, const Input & p)

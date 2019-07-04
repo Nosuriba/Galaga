@@ -1,5 +1,5 @@
 #include "Object.h"
-
+#include "../DebugDisp.h"
 Object::Object()
 {
 }
@@ -52,6 +52,7 @@ void Object::Draw()
 	}
 
 	AnimUpdate();
+	_dbgDrawBox(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0x00ff00, true);
 	DrawGraph(_pos.x, _pos.y, _animMap[_animKey][_animID].first, true);
 }
 

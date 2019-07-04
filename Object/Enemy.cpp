@@ -11,6 +11,10 @@ Enemy::Enemy(const Vector2f& pos, const Vector2f& vel)
 	_pos = pos;
 	_vel = vel;
 
+	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
+	auto size = _charSize;
+	_rect = Rect(center, size);
+
 	SET_IMAGE_ID("enemy", "image/enemy.png", Vector2(10, 3), Vector2(_charSize.width, _charSize.height));
 	Init();
 	animKey(ANIM::NORMAL);
@@ -73,6 +77,11 @@ void Enemy::Init()
 void Enemy::Update()
 {
 	(this->*_updater)();
+
+
+	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
+	auto size = _charSize;
+	_rect = Rect(center, size);
 }
 
 void Enemy::Draw()

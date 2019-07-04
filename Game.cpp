@@ -7,6 +7,7 @@
 #include "Scene/MainScene.h"
 #include "Common/ImageMng.h"
 #include "DebugConOut.h"
+#include "DebugDisp.h"
 
 std::unique_ptr<Game, Game::GameDeleter> Game::s_Instance(new Game());
 
@@ -29,9 +30,8 @@ void Game::Init()
 	{
 		return;
 	}
-	
-
 	SET_IMAGE_ID("˜g", "image/frame.png");
+	_dbgSetUp(200);
 
 	_scene = std::make_unique<MainScene>();
 }
@@ -42,11 +42,19 @@ void Game::Run()
 	
 	while (!ProcessMessage() && !CheckHitKey(KEY_INPUT_ESCAPE))
 	{
-		_drawList.clear();
+ 		_dbgStartUp;
+		_drawVector.clear();
+
 		input.Update();
 		_scene = _scene->Update(std::move(_scene), input);
+
+		auto debug = GetDrawScreen();
+		/// ‘‚«‚İ‚ğs‚Á‚½½¸Ø°İ‚ğÊŞ¯¸ÊŞ¯Ì§‚É‚Ü‚Æ‚ß‚Ä•`‰æ‚·‚é
 		DxLib::SetDrawScreen(DX_SCREEN_BACK);
+		debug = GetDrawScreen();
 		ClsDrawScreen();
+
+		/// ŠO˜g‚Ì“o˜^
 		AddDrawQue({ IMAGE_ID("˜g")[0], 0, 0 });
 		Draw();
 		ScreenFlip();
@@ -61,17 +69,19 @@ bool Game::AddDrawQue(draw_queT dQue)
 	{
 		return false;
 	}
-	_drawList.emplace_back(dQue);
+	_drawVector.emplace_back(dQue);
 	return true;
 }
 
 void Game::Draw()
 {
-	for (auto dQue : _drawList)
+	_dbgAddDraw;
+	for (auto dQue : _drawVector)
 	{
 		DrawGraph(std::get<static_cast<int>(DRAW_QUE::X)>(dQue),
 				  std::get<static_cast<int>(DRAW_QUE::Y)>(dQue),
 				  std::get<static_cast<int>(DRAW_QUE::IMAGE)>(dQue),
 				  true);
 	}
+
 }

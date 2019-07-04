@@ -14,7 +14,7 @@ Player::Player(const Vector2f & pos, const Vector2f & vel)
 	_pos = pos;
 	_vel = vel;
 
-	auto center = Vector2(_pos.x, pos.y);
+	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
 	auto size = _charSize;
 	_rect = Rect(center, size);
 
@@ -128,6 +128,10 @@ void Player::Update()
 		shot->Update();
 		shot->Draw();
 	}
+
+	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
+	auto size = _charSize;
+	_rect = Rect(center, size);
 }
 
 void Player::Draw()
