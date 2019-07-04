@@ -1,5 +1,6 @@
-#include "DebugDisp.h"
+#include <stdarg.h>
 #include <DxLib.h>
+#include "DebugDisp.h"
 
 std::unique_ptr<DebugDisp, DebugDisp::DispDeleter> DebugDisp::s_Instance(new DebugDisp());
 
@@ -126,16 +127,19 @@ int DebugDisp::DrawString(int x, int y, const TCHAR * String, unsigned int Color
 	int rtnFlag = DxLib::DrawString(x, y, String, Color, EdgeColor);
 
 	SetDrawScreen(_ghBefor);
-	return 0;
+	return rtnFlag;
 }
 
 int DebugDisp::DrawFormatString(int x, int y, unsigned int Color, const TCHAR * FormatString, ...)
 {
 	int _ghBefor = GetDrawScreen();
 	SetDrawScreen(_dbgScreen);
-
-	/// å„Ç≈èëÇ≠
+	
+	va_list arg_list;
+	va_start(arg_list, FormatString);
+	int rtnFlag = DxLib::DrawFormatString(x, y, Color, FormatString, va_arg(arg_list, char*));
+	va_end(arg_list);
 
 	SetDrawScreen(_ghBefor);
-	return 0;
+	return rtnFlag;
 }

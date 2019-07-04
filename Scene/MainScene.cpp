@@ -22,7 +22,7 @@ void MainScene::Init()
 
 	/// âºÇÃê∂ê¨
 	objList.emplace_back(std::make_shared<Player>(Vector2f(100, 200), Vector2f(0,0)));
-	objList.emplace_back(std::make_shared<Enemy>(Vector2f(20, 20), Vector2f(0,0)));
+	//objList.emplace_back(std::make_shared<Enemy>(Vector2f(20, 20), Vector2f(0,0)));
 }
 
 void MainScene::Draw()

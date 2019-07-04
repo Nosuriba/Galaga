@@ -23,10 +23,10 @@ public:
 	const key_pair state(INPUT_ID id) const;
 	// ｷｰ入力の情報取得用
 	bool state(INPUT_ID id, int data);
-	// 前に入力したｷｰ情報取得用
-	void SetOld(void);
 
 protected:
+	// 前に入力したｷｰ情報取得用
+	void SetOld(void);
 	virtual void RefKeyData() = 0;
 	virtual void ResetKeyData() = 0;
 	virtual void SetKeyData() = 0;

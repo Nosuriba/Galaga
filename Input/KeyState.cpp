@@ -133,7 +133,7 @@ void KeyState::SetKeyData()
 			_lastKeyID = id;
 			_keyID[static_cast<int>(_confID)] = id;
 			++_confID;
-			TRACE("ê›íËÇµÇΩ∑∞ : " "%d\n", _confID);
+			TRACE("ê›íËÇµÇΩ∑∞ : " "%d\n∑∞ÇÃID :%d\n",_confID, id);
 			break;
 		}
 	}

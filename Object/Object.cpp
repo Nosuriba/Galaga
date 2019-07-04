@@ -55,14 +55,15 @@ void Object::Draw()
 
 	/// debug用の描画で色々遊んでいる
 	_dbgDrawBox(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0x00ff00, true);
-	_dbgDrawCircle(_rect.center.x, _rect.center.y, _charSize.width / 2, 0xff0000, true);
+	_dbgDrawCircle(_rect.center.x, _rect.center.y, _charSize.width / 2, 0x0000ff, true);
 	_dbgDrawLine(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0xddddaa, 2);
 	_dbgDrawLine(_rect.Right(), _rect.Top(), _rect.Left(), _rect.Bottom(), 0xddddaa, 2);
-	//for (int i = 0; i < 300; ++i)
-	//{/// 後で見る
-	//	_dbgDrawPixel(_rect.Left() + (i % _charSize.width), _rect.Right() + (i / _charSize.height), 0xffffff);
-	//}
-	
+	for (int i = 0; i < 300; ++i)
+	{
+		_dbgDrawPixel(_rect.Left() + (i % _charSize.width), _rect.Top() + (i / _charSize.height), 0xffffff);
+	}
+	_dbgDrawString(0, 5, "＼(゜ロ＼)ココハドコ? (／ロ゜)／アタシハダアレ?", 0xffffff);
+	_dbgDrawFormatString(0, 40, 0xfffffff, "X座標 : %f, Y座標 : %f", _pos.x, _pos.y);
 
 	DrawGraph(_pos.x, _pos.y, _animMap[_animKey][_animID].first, true);
 }
