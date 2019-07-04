@@ -52,7 +52,18 @@ void Object::Draw()
 	}
 
 	AnimUpdate();
+
+	/// debugópÇÃï`âÊÇ≈êFÅXóVÇÒÇ≈Ç¢ÇÈ
 	_dbgDrawBox(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0x00ff00, true);
+	_dbgDrawCircle(_rect.center.x, _rect.center.y, _charSize.width / 2, 0xff0000, true);
+	_dbgDrawLine(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0xddddaa, 2);
+	_dbgDrawLine(_rect.Right(), _rect.Top(), _rect.Left(), _rect.Bottom(), 0xddddaa, 2);
+	//for (int i = 0; i < 300; ++i)
+	//{/// å„Ç≈å©ÇÈ
+	//	_dbgDrawPixel(_rect.Left() + (i % _charSize.width), _rect.Right() + (i / _charSize.height), 0xffffff);
+	//}
+	
+
 	DrawGraph(_pos.x, _pos.y, _animMap[_animKey][_animID].first, true);
 }
 

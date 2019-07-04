@@ -64,7 +64,6 @@ int DebugDisp::DrawBox(int x1, int y1, int x2, int y2, unsigned int Color, int F
 
 	SetDrawScreen(_ghBefor);
 	return rtnFlag;
-	return 0;
 }
 
 int DebugDisp::DrawGraph(int x, int y, int GrHandle, int TransFlag)
@@ -72,14 +71,24 @@ int DebugDisp::DrawGraph(int x, int y, int GrHandle, int TransFlag)
 	int _ghBefor = GetDrawScreen();
 	SetDrawScreen(_dbgScreen);
 
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
+	int rtnFlag = DxLib::DrawGraph(x + LpGame.gameScreenPos.x, y + LpGame.gameScreenPos.y, GrHandle, TransFlag);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	SetDrawScreen(_ghBefor);
-	return 0;
+	return rtnFlag;
 }
 
 int DebugDisp::DrawLine(int x1, int y1, int x2, int y2, unsigned int Color, int Thickness)
 {
-	return 0;
+	int _ghBefor = GetDrawScreen();
+	SetDrawScreen(_dbgScreen);
+	/// Ç∆ÇËÇ†Ç¶Ç∏ìßâﬂÇ»Çµ
+	int rtnFlag = DxLib::DrawLine(x1 + LpGame.gameScreenPos.x, y1 + LpGame.gameScreenPos.y,
+								  x2 + LpGame.gameScreenPos.x, y2 + LpGame.gameScreenPos.y,
+								  Color, Thickness);
+	SetDrawScreen(_ghBefor);
+	return rtnFlag;
 }
 
 int DebugDisp::DrawCircle(int x, int y, int r, unsigned int Color, int FillFlag, int LineThickness)
@@ -87,9 +96,13 @@ int DebugDisp::DrawCircle(int x, int y, int r, unsigned int Color, int FillFlag,
 	int _ghBefor = GetDrawScreen();
 	SetDrawScreen(_dbgScreen);
 
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
+	int rtnFlag = DxLib::DrawCircle(x + LpGame.gameScreenPos.x, y + LpGame.gameScreenPos.y, r,
+									Color, FillFlag, LineThickness);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	SetDrawScreen(_ghBefor);
-	return 0;
+	return rtnFlag;
 }
 
 int DebugDisp::DrawPixel(int x, int y, unsigned int Color)
@@ -97,6 +110,9 @@ int DebugDisp::DrawPixel(int x, int y, unsigned int Color)
 	int _ghBefor = GetDrawScreen();
 	SetDrawScreen(_dbgScreen);
 
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, _alpha);
+	int rtnFlag = DxLib::DrawPixel(x + LpGame.gameScreenPos.x, y + LpGame.gameScreenPos.y, Color);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	SetDrawScreen(_ghBefor);
 	return 0;
@@ -107,6 +123,7 @@ int DebugDisp::DrawString(int x, int y, const TCHAR * String, unsigned int Color
 	int _ghBefor = GetDrawScreen();
 	SetDrawScreen(_dbgScreen);
 
+	int rtnFlag = DxLib::DrawString(x, y, String, Color, EdgeColor);
 
 	SetDrawScreen(_ghBefor);
 	return 0;
@@ -117,6 +134,7 @@ int DebugDisp::DrawFormatString(int x, int y, unsigned int Color, const TCHAR * 
 	int _ghBefor = GetDrawScreen();
 	SetDrawScreen(_dbgScreen);
 
+	/// å„Ç≈èëÇ≠
 
 	SetDrawScreen(_ghBefor);
 	return 0;
