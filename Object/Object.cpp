@@ -54,6 +54,7 @@ void Object::Draw()
 	AnimUpdate();
 
 	/// debug—p‚Ì•`‰æ‚ÅFX—V‚ñ‚Å‚¢‚é
+	_dbgDrawGraph(100, 0, _animMap[_animKey][_animID].first, true);
 	_dbgDrawBox(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0x00ff00, true);
 	_dbgDrawCircle(_rect.center.x, _rect.center.y, _charSize.width / 2, 0x0000ff, true);
 	_dbgDrawLine(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0xddddaa, 2);
@@ -62,7 +63,7 @@ void Object::Draw()
 	{
 		_dbgDrawPixel(_rect.Left() + (i % _charSize.width), _rect.Top() + (i / _charSize.height), 0xffffff);
 	}
-	_dbgDrawString(0, 5, "_(Kƒ_)ƒRƒRƒnƒhƒR? (^ƒK)^ƒAƒ^ƒVƒnƒ_ƒAƒŒ?", 0xffffff);
+	_dbgDrawString(0, 5, "_(Kƒ_)ººÊÄŞº? (^ƒK)^·ĞÊÀŞÚ?", 0xffffff);
 	_dbgDrawFormatString(0, 40, 0xfffffff, "XÀ•W : %f, YÀ•W : %f", _pos.x, _pos.y);
 
 	DrawGraph(_pos.x, _pos.y, _animMap[_animKey][_animID].first, true);

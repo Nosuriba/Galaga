@@ -2,6 +2,7 @@
 #include <DxLib.h>
 #include "DebugDisp.h"
 
+#ifdef _DEBUG
 std::unique_ptr<DebugDisp, DebugDisp::DispDeleter> DebugDisp::s_Instance(new DebugDisp());
 
 DebugDisp::DebugDisp()
@@ -50,6 +51,17 @@ void DebugDisp::AddDraw()
 	{
 		LpGame.AddDrawQue({ _dbgScreen, 0, 0 });
 	}
+}
+
+void DebugDisp::SetScreen()
+{
+	_beforScr = GetDrawScreen();
+	SetDrawScreen(_dbgScreen);
+}
+
+void DebugDisp::RevScreen()
+{
+	SetDrawScreen(_beforScr);
 }
 
 int DebugDisp::DrawBox(int x1, int y1, int x2, int y2, unsigned int Color, int FillFlag)
@@ -129,17 +141,4 @@ int DebugDisp::DrawString(int x, int y, const TCHAR * String, unsigned int Color
 	SetDrawScreen(_ghBefor);
 	return rtnFlag;
 }
-
-int DebugDisp::DrawFormatString(int x, int y, unsigned int Color, const TCHAR * FormatString, ...)
-{
-	int _ghBefor = GetDrawScreen();
-	SetDrawScreen(_dbgScreen);
-	
-	va_list arg_list;
-	va_start(arg_list, FormatString);
-	int rtnFlag = DxLib::DrawFormatString(x, y, Color, FormatString, va_arg(arg_list, char*));
-	va_end(arg_list);
-
-	SetDrawScreen(_ghBefor);
-	return rtnFlag;
-}
+#endif

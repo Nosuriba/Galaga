@@ -15,7 +15,11 @@
 #define _dbgDrawCircle(fmt, ...)		(DebugDisp::GetInstance().DrawCircle(fmt, __VA_ARGS__))
 #define _dbgDrawPixel(fmt, ...)			(DebugDisp::GetInstance().DrawPixel(fmt, __VA_ARGS__))
 #define _dbgDrawString(fmt, ...)		(DebugDisp::GetInstance().DrawString(fmt, __VA_ARGS__))
-#define _dbgDrawFormatString(fmt, ...)	(DebugDisp::GetInstance().DrawFormatString(fmt, __VA_ARGS__))
+#define _dbgDrawFormatString(fmt, ...)	{\
+										DebugDisp::GetInstance().SetScreen();\
+										DxLib::DrawFormatString(fmt, __VA_ARGS__);\
+										DebugDisp::GetInstance().RevScreen();\
+										}
 
 class DebugDisp
 {
@@ -32,13 +36,15 @@ public:
 	void StartUp();
 	void AddDraw();
 
+	void SetScreen();
+	void RevScreen();
+
 	int	DrawBox(int x1, int y1, int x2, int y2, unsigned int Color, int FillFlag);
 	int	DrawGraph(int x, int y, int GrHandle, int TransFlag);
 	int	DrawLine(int x1, int y1, int x2, int y2, unsigned int Color, int Thickness = 1);
 	int	DrawCircle(int x, int y, int r, unsigned int Color, int FillFlag = true, int LineThickness = 1);
 	int	DrawPixel(int x, int y, unsigned int Color);
 	int	DrawString(int x, int y, const TCHAR *String, unsigned int Color, unsigned int EdgeColor = 0);
-	int	DrawFormatString(int x, int y, unsigned int Color, const TCHAR *FormatString, ...);
 private:
 	DebugDisp();
 	~DebugDisp();
@@ -55,20 +61,21 @@ private:
 
 	int _alpha;
 	int _dbgScreen;
+	int _beforScr;
 	bool _dispFlag;
 };
 
 #else
-#define _dbgSetUp(A)					()
-#define _dbgStartUp						()
-#define _dbgAddDraw						()
-#define _dbgDrawBox(fmt, ...)			()
-#define _dbgDrawGraph(fmt, ...)			()
-#define _dbgDrawLine(fmt, ...)			()
-#define _dbgDrawCircle(fmt, ...)		()
-#define _dbgDrawPixel(fmt, ...)			(DebugDisp::GetInstance().DrawPixel(fmt, ...))
-#define _dbgDrawString(fmt, ...)		(DebugDisp::GetInstance().DrawString(fmt, ...))
-#define _dbgDrawFormatString(fmt, ...)	(DebugDisp::GetInstance().DrawFormatString(fmt, ...))
+#define _dbgSetUp(A)					
+#define _dbgStartUp					
+#define _dbgAddDraw						
+#define _dbgDrawBox(fmt, ...)			
+#define _dbgDrawGraph(fmt, ...)			
+#define _dbgDrawLine(fmt, ...)			
+#define _dbgDrawCircle(fmt, ...)		
+#define _dbgDrawPixel(fmt, ...)			
+#define _dbgDrawString(fmt, ...)		
+#define _dbgDrawFormatString(fmt, ...)	
 
 
 #endif

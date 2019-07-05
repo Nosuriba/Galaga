@@ -59,7 +59,9 @@ void Player::IdleUpdate()
 	/*if (_input->IsPressing(INPUT_ID::RIGHT) ||
 		  _input->IsPressing(INPUT_ID::LEFT))*/
 	if (_input->state(INPUT_ID::RIGHT).first ||
-		_input->state(INPUT_ID::LEFT).first)
+		_input->state(INPUT_ID::LEFT).first	 ||
+		_input->state(INPUT_ID::UP).first	 ||
+		_input->state(INPUT_ID::DOWN).first) 
 	{
 		Move();
 	}
@@ -76,6 +78,14 @@ void Player::MoveUpdate()
 	else if (_input->state(INPUT_ID::LEFT).first)
 	{
 		_pos.x -= 5.f;
+	}
+	else if (_input->state(INPUT_ID::UP).first)
+	{
+		_pos.y -= 5.f;
+	}
+	else if (_input->state(INPUT_ID::DOWN).first)
+	{
+		_pos.y += 5.f;
 	}
 	else
 	{
