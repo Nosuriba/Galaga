@@ -5,6 +5,7 @@
 #include <map>
 #include "../Vector2.h"
 #include "../Input.h"
+#include "../DebugDisp.h"
 
 // ±ÆÒ°¼®İŠÇ——p‚Ì‰Â•Ï’·”z—ñ
 using anim_vec = std::vector<std::pair<int, int>>;
@@ -33,10 +34,9 @@ public:
 	virtual const Obj GetObjID() const = 0;
 
 	/// Vector2‚É‘ã‚í‚é‚©‚à‚µ‚ê‚È‚¢
-	const Vector2f& pos() const;
+	const Vector2& pos() const;
 protected:
-	Vector2f _pos;
-	Vector2f _vel;
+	Vector2 _pos;
 	Rect _rect;
 
 	// ±ÆÒ°¼®İ‚Ì“o˜^

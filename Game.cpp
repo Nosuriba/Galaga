@@ -39,7 +39,6 @@ void Game::Init()
 void Game::Run()
 {
 	Input input;			/// ‚±‚¢‚Â‚ªInputState‚Ì¸×½‚É•Ï‚í‚è‚»‚¤...
-	
 	while (!ProcessMessage() && !CheckHitKey(KEY_INPUT_ESCAPE))
 	{
  		_dbgStartUp;
@@ -83,5 +82,4 @@ void Game::Draw()
 				  std::get<static_cast<int>(DRAW_QUE::IMAGE)>(dQue),
 				  true);
 	}
-
 }

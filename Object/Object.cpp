@@ -54,22 +54,13 @@ void Object::Draw()
 	AnimUpdate();
 
 	/// debugópÇÃï`âÊÇ≈êFÅXóVÇÒÇ≈Ç¢ÇÈ
-	_dbgDrawGraph(100, 0, _animMap[_animKey][_animID].first, true);
 	_dbgDrawBox(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0x00ff00, true);
-	_dbgDrawCircle(_rect.center.x, _rect.center.y, _charSize.width / 2, 0x0000ff, true);
-	_dbgDrawLine(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0xddddaa, 2);
-	_dbgDrawLine(_rect.Right(), _rect.Top(), _rect.Left(), _rect.Bottom(), 0xddddaa, 2);
-	for (int i = 0; i < 300; ++i)
-	{
-		_dbgDrawPixel(_rect.Left() + (i % _charSize.width), _rect.Top() + (i / _charSize.height), 0xffffff);
-	}
-	_dbgDrawString(0, 5, "Å_(ÅKÉçÅ_)∫∫ ƒﬁ∫? (Å^ÉçÅK)Å^∑– ¿ﬁ⁄?", 0xffffff);
-	_dbgDrawFormatString(0, 40, 0xfffffff, "Xç¿ïW : %f, Yç¿ïW : %f", _pos.x, _pos.y);
+	_dbgDrawFormatString(0, 40, 0xffffff, "Xç¿ïW : %d, Yç¿ïW : %d", _pos.x, _pos.y);
 
 	DrawGraph(_pos.x, _pos.y, _animMap[_animKey][_animID].first, true);
 }
 
-const Vector2f & Object::pos() const
+const Vector2 & Object::pos() const
 {
 	return _pos;
 }

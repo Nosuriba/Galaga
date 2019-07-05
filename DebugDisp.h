@@ -20,7 +20,6 @@
 										DxLib::DrawFormatString(fmt, __VA_ARGS__);\
 										DebugDisp::GetInstance().RevScreen();\
 										}
-
 class DebugDisp
 {
 public:
@@ -36,8 +35,11 @@ public:
 	void StartUp();
 	void AddDraw();
 
+	/// ‚±‚¢‚Â‚ç–â‘è‚ ‚è
 	void SetScreen();
 	void RevScreen();
+
+	
 
 	int	DrawBox(int x1, int y1, int x2, int y2, unsigned int Color, int FillFlag);
 	int	DrawGraph(int x, int y, int GrHandle, int TransFlag);

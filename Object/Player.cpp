@@ -9,10 +9,9 @@ Player::Player()
 {
 }
 
-Player::Player(const Vector2f & pos, const Vector2f & vel)
+Player::Player(const Vector2 & pos)
 {
 	_pos = pos;
-	_vel = vel;
 
 	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
 	auto size = _charSize;
@@ -72,20 +71,20 @@ void Player::MoveUpdate()
 	/*if (_input->IsPressing(INPUT_ID::RIGHT))*/
 	if (_input->state(INPUT_ID::RIGHT).first)
 	{
-		_pos.x += 5.f;
+		_pos.x += 5;
 	}
 	/*else if (_input->IsPressing(INPUT_ID::LEFT))*/
 	else if (_input->state(INPUT_ID::LEFT).first)
 	{
-		_pos.x -= 5.f;
+		_pos.x -= 5;
 	}
 	else if (_input->state(INPUT_ID::UP).first)
 	{
-		_pos.y -= 5.f;
+		_pos.y -= 5;
 	}
 	else if (_input->state(INPUT_ID::DOWN).first)
 	{
-		_pos.y += 5.f;
+		_pos.y += 5;
 	}
 	else
 	{
@@ -130,8 +129,9 @@ void Player::Update()
 	if (_input->state(INPUT_ID::BTN_1).first &&
 		!(_input->state(INPUT_ID::BTN_1).second))
 	{
-		_shots.push_back(std::make_shared<Shot>(_pos, Vector2f(0, -2.f)));
+		_shots.push_back(std::make_shared<Shot>(_pos));
 	}
+
 	/// 仮のショット
 	for (auto& shot : _shots)
 	{
@@ -140,7 +140,7 @@ void Player::Update()
 	}
 
 	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
-	auto size = _charSize;
+	auto size   = _charSize;
 	_rect = Rect(center, size);
 }
 

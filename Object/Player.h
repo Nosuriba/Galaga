@@ -13,7 +13,7 @@ class Player :
 {
 public:
 	Player();
-	Player(const Vector2f& pos, const Vector2f& vel);
+	Player(const Vector2& pos);
 	~Player();
 
 	void Idle();

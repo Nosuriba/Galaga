@@ -5,7 +5,7 @@ class Enemy :
 {
 public:
 	Enemy();
-	Enemy(const Vector2f & pos, const Vector2f & vel);
+	Enemy(const Vector2 & pos);
 	~Enemy();
 	
 	void Rotation();

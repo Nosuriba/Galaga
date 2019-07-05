@@ -21,8 +21,8 @@ void MainScene::Init()
 	_ghGameScreen = MakeScreen(LpGame.gameScreenSize.x, LpGame.gameScreenSize.y, true);
 
 	/// âºÇÃê∂ê¨
-	objList.emplace_back(std::make_shared<Player>(Vector2f(100, 200), Vector2f(0,0)));
-	//objList.emplace_back(std::make_shared<Enemy>(Vector2f(20, 20), Vector2f(0,0)));
+	objList.emplace_back(std::make_shared<Player>(Vector2(100, 200)));
+	objList.emplace_back(std::make_shared<Enemy>(Vector2(20, 20)));
 }
 
 void MainScene::Draw()
