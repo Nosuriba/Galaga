@@ -81,9 +81,16 @@ void DebugDisp::SetWait()
 		}
 	}
 
+	if (CheckHitKey(KEY_INPUT_SUBTRACT))
+	{
+		/// ここのボタンに入ってねーぞボケ
+		_waitTime = 0;
+	}
+
 	if (_waitTime)
 	{
-		_startTime = _endTime = std::chrono::system_clock::now();
+		_dbgDrawString(400, 5, "スロウモード発動中", 0xffff00);
+		_startTime = std::chrono::system_clock::now();
 		while (std::chrono::duration_cast<std::chrono::milliseconds>(_endTime - _startTime).count() < _waitTime)
 		{
 			_endTime = std::chrono::system_clock::now();
