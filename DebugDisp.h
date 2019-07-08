@@ -21,6 +21,10 @@
 										DxLib::DrawFormatString(fmt, __VA_ARGS__);\
 										DebugDisp::GetInstance().RevScreen();\
 										}
+
+/// 時間計測用
+using TimePoint = std::chrono::system_clock::time_point;
+
 class DebugDisp
 {
 public:
@@ -36,11 +40,12 @@ public:
 	void StartUp();
 	void AddDraw();
 
+	/// ｹﾞｰﾑ中の待機時間の設定
+	void SetWait();
+
 	/// 外部で使ったら問題があるので、修正を考える
 	void SetScreen();
 	void RevScreen();
-
-	void SetWait();
 
 	int	DrawBox(int x1, int y1, int x2, int y2, unsigned int Color, int FillFlag);
 	int	DrawGraph(int x, int y, int GrHandle, int TransFlag);
@@ -66,6 +71,12 @@ private:
 	int _dbgScreen;
 	int _beforScr;
 	bool _dispFlag;
+
+	/// 時間計測用
+	TimePoint _startTime;
+	TimePoint _endTime;
+
+	double _waitTime;
 };
 
 #else

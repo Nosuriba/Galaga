@@ -8,6 +8,7 @@ std::unique_ptr<DebugDisp, DebugDisp::DispDeleter> DebugDisp::s_Instance(new Deb
 DebugDisp::DebugDisp()
 {
 	_alpha = 0;
+	_waitTime = 0;
 	_dbgScreen = -1;
 	_dispFlag = true;
 }
@@ -47,6 +48,8 @@ void DebugDisp::AddDraw()
 		_dispFlag = false;
 	}
 
+	SetWait();
+
 	if (_dispFlag)
 	{
 		LpGame.AddDrawQue({ _dbgScreen, 0, 0 });
@@ -66,6 +69,30 @@ void DebugDisp::RevScreen()
 
 void DebugDisp::SetWait()
 {
+	if (CheckHitKey(KEY_INPUT_ADD))
+	{
+		if (CheckHitKey(KEY_INPUT_MULTIPLY))
+		{
+			_waitTime += 100;
+		}
+		else
+		{
+			++_waitTime;
+		}
+	}
+
+	if (_waitTime)
+	{
+		_startTime = _endTime = std::chrono::system_clock::now();
+		while (std::chrono::duration_cast<std::chrono::milliseconds>(_endTime - _startTime).count() < _waitTime)
+		{
+			_endTime = std::chrono::system_clock::now();
+			if (!ProcessMessage() && CheckHitKey(KEY_INPUT_ESCAPE))
+			{
+				break;
+			}
+		}
+	}
 }
 
 int DebugDisp::DrawBox(int x1, int y1, int x2, int y2, unsigned int Color, int FillFlag)
