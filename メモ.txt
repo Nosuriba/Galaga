@@ -18,17 +18,15 @@
 
 書くこと
 ・debug用のｸﾗｽにAST()を書いておく, InputStateにも	(アサートは後でやる)
-・描画周りを作っていく
-・SceneMng(Game)にDraw関数を作る
+・スロウ機能
+  一回当たりの移動するフレームと移動量を可変になる
+　chrono タイムポイントを使う(using) start と　endを使う　waittimeはdouble
+  ＋記と※記号を同時におすと掛け算
+　waittimeよりstartとendの差が低かったとき処理を抜ける
+　(処理を途中で終わりたい時があるので、ProcessMessage() != 1 || CheckHitKey(KEY_INPUT_ESCAPE)
+　で抜けるようにする)
+　chronoの機能でnowがあるので、endとstartの差分を求めてから使うように
+・
+・
 
-・DebugConOutのｸﾗｽを参考にDebugDispOutというｸﾗｽを作って、Debug情報を描画するように実装してみる
-・DebugDispOutをシングルトンにする
-・DrawGraph, DrawLine, DrawBox, DrawCircleのラッパー関数を用意する
-・_dbgの後ろにDrawGraphなどの関数をつけるようにする
-
-
-・ｽｸﾘｰﾝに対して描画を行うようにする
-・Queに対しての登録はtupleというものを使う
-
-※SceneのUpdateを返り値uniqur_ptrで返してループするような仕組みを実装しておく
 ※constで書いている変数を初期化

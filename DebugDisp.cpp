@@ -64,6 +64,10 @@ void DebugDisp::RevScreen()
 	SetDrawScreen(_beforScr);
 }
 
+void DebugDisp::SetWait()
+{
+}
+
 int DebugDisp::DrawBox(int x1, int y1, int x2, int y2, unsigned int Color, int FillFlag)
 {
 	int _ghBefor = GetDrawScreen();

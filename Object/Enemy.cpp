@@ -81,6 +81,9 @@ void Enemy::Update()
 	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
 	auto size = _charSize;
 	_rect = Rect(center, size);
+
+	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
+	_dbgDrawBox(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0xff0000, true);
 }
 
 void Enemy::Draw()

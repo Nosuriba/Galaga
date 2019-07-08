@@ -28,6 +28,7 @@ KeyState::KeyState()
 		if (_keyID[static_cast<int>(id)] <= 0)
 		{
 			TRACE("ˆê•”·°‚Ì“Ç‚Ýž‚Ý‚ÉŽ¸”s‚µ‚Ü‚µ‚½B\n");
+			TRACE("ÃÞÌ«ÙÄ‚Ì·°‚É–ß‚µ‚Ü‚·\n");
 			ResetKeyData();
 			break;
 		}

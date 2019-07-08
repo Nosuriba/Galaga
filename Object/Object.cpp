@@ -52,11 +52,6 @@ void Object::Draw()
 	}
 
 	AnimUpdate();
-
-	/// debug用の描画で色々遊んでいる
-	_dbgDrawBox(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0x00ff00, true);
-	_dbgDrawFormatString(0, 40, 0xffffff, "X座標 : %d, Y座標 : %d", _pos.x, _pos.y);
-
 	DrawGraph(_pos.x, _pos.y, _animMap[_animKey][_animID].first, true);
 }
 

@@ -141,7 +141,11 @@ void Player::Update()
 
 	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
 	auto size   = _charSize;
-	_rect = Rect(center, size);
+	_rect	    = Rect(center, size);
+
+	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
+	_dbgDrawBox(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0x00ff00, true);
+	_dbgDrawFormatString(0, 0, 0xffffff, "(player) X座標 : %d, Y座標 : %d", _pos.x, _pos.y);
 }
 
 void Player::Draw()

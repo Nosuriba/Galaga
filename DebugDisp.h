@@ -4,6 +4,7 @@
 #ifdef _DEBUG
 
 #include <windows.h>
+#include <chrono>			///
 #include "Game.h"
 
 #define _dbgSetUp(A)					(DebugDisp::GetInstance().SetUp(A))
@@ -35,11 +36,11 @@ public:
 	void StartUp();
 	void AddDraw();
 
-	/// こいつら問題あり
+	/// 外部で使ったら問題があるので、修正を考える
 	void SetScreen();
 	void RevScreen();
 
-	
+	void SetWait();
 
 	int	DrawBox(int x1, int y1, int x2, int y2, unsigned int Color, int FillFlag);
 	int	DrawGraph(int x, int y, int GrHandle, int TransFlag);
