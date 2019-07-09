@@ -69,6 +69,7 @@ void DebugDisp::RevScreen()
 
 void DebugDisp::WaitMode()
 {
+	/// 時間の加算
 	if (CheckHitKey(KEY_INPUT_ADD))
 	{
 		if (CheckHitKey(KEY_INPUT_MULTIPLY))
@@ -80,10 +81,23 @@ void DebugDisp::WaitMode()
 			++_waitTime;
 		}
 	}
-	/// 値の減算処理を追加しておく
+
+	/// 時間の減算
 	if (CheckHitKey(KEY_INPUT_SUBTRACT))
 	{
-		/// [/]の記号をﾘｾｯﾄﾎﾞﾀﾝにしておく
+		if (CheckHitKey(KEY_INPUT_MULTIPLY))
+		{
+			_waitTime = (_waitTime <= 0.0 ? 0 : _waitTime - 100);
+		}
+		else
+		{
+			_waitTime = (_waitTime <= 0.0 ? 0 : _waitTime - 1);
+		}
+	}
+
+	/// 時間のﾘｾｯﾄ
+	if (CheckHitKey(KEY_INPUT_DIVIDE))
+	{
 		_waitTime = 0;
 	}
 
@@ -91,7 +105,7 @@ void DebugDisp::WaitMode()
 	{
 		_dbgDrawString(LpGame.gameScreenPos.x + 100, LpGame.gameScreenPos.y, "スロウモード発動中", 0xffff00);
 		_startTime = std::chrono::system_clock::now();
-		while (std::chrono::duration_cast<std::chrono::milliseconds>(_endTime - _startTime).count() < _waitTime)
+		do 
 		{
 			_endTime = std::chrono::system_clock::now();
 			if (!ProcessMessage() && CheckHitKey(KEY_INPUT_ESCAPE))
@@ -99,7 +113,7 @@ void DebugDisp::WaitMode()
 				/// do～whileの条件で書いておく
 				break;
 			}
-		}
+		} while (std::chrono::duration_cast<std::chrono::milliseconds>(_endTime - _startTime).count() < _waitTime);
 	}
 }
 

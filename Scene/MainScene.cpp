@@ -11,6 +11,17 @@
 MainScene::MainScene()
 {
 	Init();
+
+	_dbgKeyTbl[0] = KEY_INPUT_NUMPAD0;
+	_dbgKeyTbl[1] = KEY_INPUT_NUMPAD1;
+	_dbgKeyTbl[2] = KEY_INPUT_NUMPAD2;
+	_dbgKeyTbl[3] = KEY_INPUT_NUMPAD3;
+	_dbgKeyTbl[4] = KEY_INPUT_NUMPAD4;
+	_dbgKeyTbl[5] = KEY_INPUT_NUMPAD5;
+	_dbgKeyTbl[6] = KEY_INPUT_NUMPAD6;
+	_dbgKeyTbl[7] = KEY_INPUT_NUMPAD7;
+	_dbgKeyTbl[8] = KEY_INPUT_NUMPAD8;
+	_dbgKeyTbl[9] = KEY_INPUT_NUMPAD9;
 }
 
 MainScene::~MainScene()
@@ -48,7 +59,11 @@ void MainScene::Draw()
 	/// ƒvƒŒƒCƒ„[‚Æ“G‚Ì‰¼•`‰æ
 	for (auto obj : _objVector)
 	{
-		obj->Object::Draw();
+		if (obj != nullptr)
+		{
+			obj->Object::Draw();
+		}
+		
 
 	}
 	LpGame.AddDrawQue({ _ghGameScreen, LpGame.gameScreenPos.x, LpGame.gameScreenPos.y });
@@ -59,7 +74,11 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	/// ƒvƒŒƒCƒ„[‚Æ“G‚Ì‰¼•`‰æ
 	for (auto obj : _objVector)
 	{
-		obj->Update();
+		if (obj != nullptr)
+		{
+			obj->Update();
+		}
+		
 	}
 
 	Draw();
@@ -74,21 +93,32 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	/// ƒeƒ“ƒL[‚Å‰Ÿ‚µ‚½ˆÊ’u‚Ì“G‚ðíœ‚·‚éˆ—‚Í‚Ç‚¤‚µ‚æ‚¤‚©‚È
 	/// ÎÞÀÝ‚ÌÝ’è‚ðŠÈ’P‚É‚Ü‚Æ‚ß‚ç‚ê‚½‚ç‚¢‚¢‚¯‚Ç‚È
 	/// 
-	if (CheckHitKey(KEY_INPUT_NUMPAD2))
-	{
-		_objVector[2]->SetAlive(false);
-	}
 
-	auto obj = _objVector.begin();
-	for (;obj != _objVector.end();)
+	auto obj = _objVector.begin() + 1;
+	for (; obj != _objVector.end(); ++obj)
 	{
-		auto cnt = obj - _objVector.begin();
-		if (!(*obj)->GetAlive())
+		auto cnt = obj - _objVector.begin() - 1;
+		if ((*obj) == nullptr)
 		{
-			obj = _objVector.erase(obj);
 			continue;
 		}
-		++obj;
+		(*obj)->SetAlive(!CheckHitKey(_dbgKeyTbl[cnt]));
+	}
+
+	/// vector‚Ì’†g‚ð‹ó‚É‚·‚é‚©‚Ìˆ—
+	obj = _objVector.begin() + 1;
+	for (;obj != _objVector.end(); ++obj)
+	{
+		if ((*obj) == nullptr)
+		{
+			continue;
+		}
+
+		/// “G‚ªŽ€–S‚µ‚Ä‚¢‚½ŽžA’†g‚ð‹ó‚É‚·‚é
+		if (!(*obj)->GetAlive())
+		{
+			(*obj) = nullptr;
+		}
 	}
 	
 

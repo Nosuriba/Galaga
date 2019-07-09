@@ -21,5 +21,7 @@ private:
 	void SetEnemy();
 
 	int _ghGameScreen;		// ¹Þ°Ñ½¸Ø°Ý‚Ì‰æ‘œÊÝÄÞÙ
+
+	int _dbgKeyTbl[10];
 };
 
