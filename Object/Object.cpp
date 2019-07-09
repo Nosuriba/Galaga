@@ -55,9 +55,9 @@ void Object::Draw()
 	DrawGraph(_pos.x, _pos.y, _animMap[_animKey][_animID].first, true);
 }
 
-void Object::SetAlive(bool flag)
+void Object::SetKey(int key)
 {
-	_isAlive = flag;
+	_dbgKey = key;
 }
 
 const Vector2 & Object::pos() const

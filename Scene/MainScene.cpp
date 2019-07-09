@@ -10,8 +10,6 @@
 
 MainScene::MainScene()
 {
-	Init();
-
 	_dbgKeyTbl[0] = KEY_INPUT_NUMPAD0;
 	_dbgKeyTbl[1] = KEY_INPUT_NUMPAD1;
 	_dbgKeyTbl[2] = KEY_INPUT_NUMPAD2;
@@ -22,6 +20,9 @@ MainScene::MainScene()
 	_dbgKeyTbl[7] = KEY_INPUT_NUMPAD7;
 	_dbgKeyTbl[8] = KEY_INPUT_NUMPAD8;
 	_dbgKeyTbl[9] = KEY_INPUT_NUMPAD9;
+
+	Init();
+
 }
 
 MainScene::~MainScene()
@@ -42,11 +43,12 @@ void MainScene::SetEnemy()
 	int offset = 100;
 	TRACE("%dëÃñ⁄ÇÃìGÇê∂ê¨\n", _objVector.size());
 	_objVector.emplace_back(std::make_shared<Enemy>(Vector2(offset + 120, 200)));
-
+	_objVector[1]->SetKey(_dbgKeyTbl[0]);
 	for (int i = 0; i < 9; ++i)
 	{
 		TRACE("%dëÃñ⁄ÇÃìGÇê∂ê¨\n", _objVector.size());
 		_objVector.emplace_back(std::make_shared<Enemy>(Vector2(offset + 80 + (40 * (i % 3)), 160 - (40 * (i / 3)))));
+		_objVector[i + 2]->SetKey(_dbgKeyTbl[i + 1]);
 	}
 
 }
@@ -94,31 +96,18 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	/// Œﬁ¿›ÇÃê›íËÇä»íPÇ…Ç‹Ç∆ÇﬂÇÁÇÍÇΩÇÁÇ¢Ç¢ÇØÇ«Ç»
 	/// 
 
-	auto obj = _objVector.begin() + 1;
-	for (; obj != _objVector.end(); ++obj)
-	{
-		auto cnt = obj - _objVector.begin() - 1;
-		if ((*obj) == nullptr)
-		{
-			continue;
-		}
-		(*obj)->SetAlive(!CheckHitKey(_dbgKeyTbl[cnt]));
-	}
-
 	/// vectorÇÃíÜêgÇãÛÇ…Ç∑ÇÈÇ©ÇÃèàóù
-	obj = _objVector.begin() + 1;
-	for (;obj != _objVector.end(); ++obj)
+	auto obj = _objVector.begin();
+	for (;obj != _objVector.end();)
 	{
-		if ((*obj) == nullptr)
-		{
-			continue;
-		}
 
 		/// ìGÇ™éÄñSÇµÇƒÇ¢ÇΩéûÅAíÜêgÇãÛÇ…Ç∑ÇÈ
 		if (!(*obj)->GetAlive())
 		{
-			(*obj) = nullptr;
+			obj = _objVector.erase(obj);
+			continue;
 		}
+		++obj;
 	}
 	
 

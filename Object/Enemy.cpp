@@ -82,6 +82,8 @@ void Enemy::Update()
 	auto size = _charSize;
 	_rect = Rect(center, size);
 
+	_isAlive = !(CheckHitKey(_dbgKey));
+
 	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
 	_dbgDrawBox(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0xff0000, true);
 }

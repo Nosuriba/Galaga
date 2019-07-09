@@ -33,9 +33,8 @@ public:
 	virtual void Draw();
 	virtual const Obj GetObjID() const = 0;
 	virtual bool GetAlive() const = 0;
-	
-	// テスト用で作ったので、後で消す可能性あり
-	virtual void SetAlive(bool flag);
+
+	void SetKey(int key);
 
 	/// Vector2に代わるかもしれない
 	const Vector2& pos() const;
@@ -49,6 +48,8 @@ protected:
 
 	bool animKey(const ANIM key);
 	const ANIM& animKey() const;
+
+	int _dbgKey;
 	
 	const Size _charSize = Size(30, 32);
 private:
