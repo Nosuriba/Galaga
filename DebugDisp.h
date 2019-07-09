@@ -10,6 +10,7 @@
 #define _dbgSetUp(A)					(DebugDisp::GetInstance().SetUp(A))
 #define _dbgStartUp						(DebugDisp::GetInstance().StartUp())
 #define _dbgAddDraw						(DebugDisp::GetInstance().AddDraw())
+#define _dbgWait						(DebugDisp::GetInstance().SetWait())
 #define _dbgDrawBox(fmt, ...)			(DebugDisp::GetInstance().DrawBox(fmt, __VA_ARGS__))
 #define _dbgDrawGraph(fmt, ...)			(DebugDisp::GetInstance().DrawGraph(fmt, __VA_ARGS__))
 #define _dbgDrawLine(fmt, ...)			(DebugDisp::GetInstance().DrawLine(fmt, __VA_ARGS__))
@@ -21,6 +22,7 @@
 										DxLib::DrawFormatString(fmt, __VA_ARGS__);\
 										DebugDisp::GetInstance().RevScreen();\
 										}
+
 
 /// ŽžŠÔŒv‘ª—p
 using TimePoint = std::chrono::system_clock::time_point;

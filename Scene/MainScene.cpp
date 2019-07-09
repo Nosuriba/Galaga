@@ -40,6 +40,7 @@ void MainScene::Draw()
 
 unique_scene MainScene::Update(unique_scene scene, const Input & p)
 {
+	_dbgWait;
 	/// ÉvÉåÉCÉÑÅ[Ç∆ìGÇÃâºï`âÊ
 	for (auto obj : objList)
 	{
@@ -47,7 +48,6 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	}
 
 	Draw();
-
 	DrawString(0, 0, "Main", 0xffffff);
 
 	/*if (p.IsKeyTrigger(KEY_INPUT_SPACE))

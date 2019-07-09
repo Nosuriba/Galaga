@@ -7,10 +7,10 @@ std::unique_ptr<DebugDisp, DebugDisp::DispDeleter> DebugDisp::s_Instance(new Deb
 
 DebugDisp::DebugDisp()
 {
-	_alpha = 0;
-	_waitTime = 0;
+	_alpha	   = 0;
+	_waitTime  = 0;
 	_dbgScreen = -1;
-	_dispFlag = true;
+	_dispFlag  = true;
 }
 
 DebugDisp::~DebugDisp()
@@ -48,8 +48,6 @@ void DebugDisp::AddDraw()
 		_dispFlag = false;
 	}
 
-	SetWait();
-
 	if (_dispFlag)
 	{
 		LpGame.AddDrawQue({ _dbgScreen, 0, 0 });
@@ -83,13 +81,12 @@ void DebugDisp::SetWait()
 
 	if (CheckHitKey(KEY_INPUT_SUBTRACT))
 	{
-		/// ここのボタンに入ってねーぞボケ
 		_waitTime = 0;
 	}
 
 	if (_waitTime)
 	{
-		_dbgDrawString(400, 5, "スロウモード発動中", 0xffff00);
+		_dbgDrawString(LpGame.gameScreenPos.x + 100, LpGame.gameScreenPos.y, "スロウモード発動中", 0xffff00);
 		_startTime = std::chrono::system_clock::now();
 		while (std::chrono::duration_cast<std::chrono::milliseconds>(_endTime - _startTime).count() < _waitTime)
 		{
