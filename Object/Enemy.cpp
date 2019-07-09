@@ -76,6 +76,7 @@ void Enemy::Init()
 
 void Enemy::Update()
 {
+
 	(this->*_updater)();
 
 	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);

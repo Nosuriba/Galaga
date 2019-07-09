@@ -4,7 +4,7 @@
 #ifdef _DEBUG
 
 #include <windows.h>
-#include <chrono>			///
+#include <chrono>			
 #include "Game.h"
 
 #define _dbgSetUp(A)					(DebugDisp::GetInstance().SetUp(A))
@@ -21,7 +21,6 @@
 										DxLib::DrawFormatString(fmt, __VA_ARGS__);\
 										DebugDisp::GetInstance().RevScreen();\
 										}
-
 
 /// ŽžŠÔŒv‘ª—p
 using TimePoint = std::chrono::system_clock::time_point;
