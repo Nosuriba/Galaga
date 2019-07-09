@@ -10,7 +10,6 @@
 #define _dbgSetUp(A)					(DebugDisp::GetInstance().SetUp(A))
 #define _dbgStartUp						(DebugDisp::GetInstance().StartUp())
 #define _dbgAddDraw						(DebugDisp::GetInstance().AddDraw())
-#define _dbgWait						(DebugDisp::GetInstance().SetWait())
 #define _dbgDrawBox(fmt, ...)			(DebugDisp::GetInstance().DrawBox(fmt, __VA_ARGS__))
 #define _dbgDrawGraph(fmt, ...)			(DebugDisp::GetInstance().DrawGraph(fmt, __VA_ARGS__))
 #define _dbgDrawLine(fmt, ...)			(DebugDisp::GetInstance().DrawLine(fmt, __VA_ARGS__))
@@ -41,9 +40,7 @@ public:
 	// ｽｸﾘｰﾝの初期化
 	void StartUp();
 	void AddDraw();
-
-	/// ｹﾞｰﾑ中の待機時間の設定
-	void SetWait();
+	/// SetWaitを作っておく？
 
 	/// 外部で使ったら問題があるので、修正を考える
 	void SetScreen();
@@ -66,6 +63,9 @@ private:
 			delete disp;
 		}
 	};
+
+	/// ｹﾞｰﾑ中の待機時間の設定
+	void WaitMode();
 
 	static std::unique_ptr<DebugDisp, DispDeleter> s_Instance;
 

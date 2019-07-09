@@ -8,6 +8,12 @@ public:
 	Enemy(const Vector2 & pos);
 	~Enemy();
 	
+
+	void Update() override;
+	void Draw() override;
+	const Obj GetObjID() const override;
+	bool GetAlive() const  override;
+private:
 	void Rotation();
 	void Move();
 	void Shot();
@@ -19,10 +25,6 @@ public:
 	void ShotUpdate();
 	void DieUpdate();
 
-	void Update() override;
-	void Draw() override;
-	const Obj GetObjID() const override;
-private:
 	void Init();
 	void (Enemy::*_updater)();
 };

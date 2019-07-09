@@ -32,17 +32,21 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw();
 	virtual const Obj GetObjID() const = 0;
+	virtual bool GetAlive() const = 0;
+	
+	// テスト用で作ったので、後で消す可能性あり
+	virtual void SetAlive(bool flag);
 
 	/// Vector2に代わるかもしれない
 	const Vector2& pos() const;
 protected:
 	Vector2 _pos;
 	Rect _rect;
+	bool _isAlive = true;
 
 	// ｱﾆﾒｰｼｮﾝの登録
 	bool SetAnim(ANIM key, anim_vec& data);
 
-	/// 
 	bool animKey(const ANIM key);
 	const ANIM& animKey() const;
 	

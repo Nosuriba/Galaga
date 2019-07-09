@@ -30,10 +30,10 @@ void DebugDisp::SetUp(int alpha)
 
 void DebugDisp::StartUp()
 {
-	int _ghBefor = GetDrawScreen();
+	_beforScr = GetDrawScreen();
 	SetDrawScreen(_dbgScreen);
 	ClsDrawScreen();
-	SetDrawScreen(_ghBefor);	
+	SetDrawScreen(_beforScr);
 }
 
 void DebugDisp::AddDraw()
@@ -52,6 +52,8 @@ void DebugDisp::AddDraw()
 	{
 		LpGame.AddDrawQue({ _dbgScreen, 0, 0 });
 	}
+
+	WaitMode();
 }
 
 void DebugDisp::SetScreen()
@@ -65,7 +67,7 @@ void DebugDisp::RevScreen()
 	SetDrawScreen(_beforScr);
 }
 
-void DebugDisp::SetWait()
+void DebugDisp::WaitMode()
 {
 	if (CheckHitKey(KEY_INPUT_ADD))
 	{
@@ -78,9 +80,10 @@ void DebugDisp::SetWait()
 			++_waitTime;
 		}
 	}
-
+	/// ’l‚ÌŒ¸Zˆ—‚ğ’Ç‰Á‚µ‚Ä‚¨‚­
 	if (CheckHitKey(KEY_INPUT_SUBTRACT))
 	{
+		/// [/]‚Ì‹L†‚ğØ¾¯ÄÎŞÀİ‚É‚µ‚Ä‚¨‚­
 		_waitTime = 0;
 	}
 
@@ -93,6 +96,7 @@ void DebugDisp::SetWait()
 			_endTime = std::chrono::system_clock::now();
 			if (!ProcessMessage() && CheckHitKey(KEY_INPUT_ESCAPE))
 			{
+				/// do`while‚ÌğŒ‚Å‘‚¢‚Ä‚¨‚­
 				break;
 			}
 		}

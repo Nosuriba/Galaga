@@ -16,6 +16,14 @@ public:
 	Player(const Vector2& pos);
 	~Player();
 
+
+	void Update() override;
+	void Draw() override;
+	const Obj GetObjID() const override;
+	bool GetAlive() const override;
+private:
+	void Init();
+
 	void Idle();
 	void Die();
 	void Move();
@@ -23,12 +31,6 @@ public:
 	void IdleUpdate();
 	void MoveUpdate();
 	void DieUpdate();
-
-	void Update() override;
-	void Draw() override;
-	const Obj GetObjID() const override;
-private:
-	void Init();
 
 	void (Player::*_updater)();
 

@@ -94,3 +94,8 @@ const Obj Enemy::GetObjID() const
 {
 	return Obj::ENEMY;
 }
+
+bool Enemy::GetAlive() const
+{
+	return _isAlive;
+}

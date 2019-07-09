@@ -156,3 +156,8 @@ const Obj Player::GetObjID() const
 {
 	return Obj::PLAYER;
 }
+
+bool Player::GetAlive() const
+{
+	return _isAlive;
+}
