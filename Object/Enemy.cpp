@@ -74,29 +74,30 @@ void Enemy::Init()
 	data.emplace_back(IMAGE_ID("enemy")[1], 30);
 	SetAnim(ANIM::NORMAL, data);
 
-	data.emplace_back(IMAGE_ID("en_blast")[0], 10);
+	data.emplace_back(IMAGE_ID("en_blast")[0], 15);
  	for (int i = 1; i < 5; ++i)
 	{
 		data.emplace_back(IMAGE_ID("en_blast")[i], 5);
 	}
 	/// ｱﾆﾒｰｼｮﾝの終了位置を設定している
-	data.emplace_back(-1, 0);
+	data.emplace_back(-1, 10);
 
-	SetAnim(ANIM::BLAST, data);
+	SetAnim(ANIM::DEATH, data);
 }
 
 void Enemy::Update()
 {
 	(this->*_updater)();
 
-	if (!_isAlive)
+	if (DestryCheck())
 	{
 		return;
 	}
 
+	/// 仮の死亡処理
 	if (rand() % 1200 == 0)
 	{
-		animKey(ANIM::BLAST);
+		animKey(ANIM::DEATH);
 		_isAlive = false;
 		ResetInvCnt();
 	}

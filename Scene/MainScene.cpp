@@ -78,12 +78,13 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		return std::make_unique<ResultScene>();
 	}*/
 
-	/// deathというstatusを持たせる
-	/// deathがtrueの時にﾘｽﾄから削除するようにしておく
-	_objVector.erase(remove_if(_objVector.begin(),		// 開始位置
-							   _objVector.end(),		// 終了位置
-								[](std::shared_ptr<Object>& obj) {return (*obj).GetDeath(); }),	// 判定部
-							   _objVector.end());
+	/// vectorの削除する範囲の指定
+	auto eraseBegin = remove_if(_objVector.begin(),				// 開始位置
+								_objVector.end(),				// 終了位置
+							    [](std::shared_ptr<Object>& obj) {return (*obj).GetDeath(); });		// moveするかの判定部
+
+	/// 指定した範囲のvectorを削除している
+	_objVector.erase(eraseBegin, _objVector.end());
 
 	return std::move(scene);
 }

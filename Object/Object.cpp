@@ -13,6 +13,20 @@ bool Object::SetAnim(ANIM key, anim_vec& data)
 	return _animMap.try_emplace(key, std::move(data)).second;
 }
 
+bool Object::DestryCheck()
+{
+	if (_isAlive)
+	{
+		return false;
+	}
+
+	if (_animKey == ANIM::DEATH)
+	{
+		_isDeath = (_animMap[_animKey][_animID].first == -1);
+	}
+	return true;
+}
+
 void Object::ResetInvCnt()
 {
 	_invCnt = 0;
@@ -41,17 +55,6 @@ void Object::AnimUpdate()
 	{
 		_invCnt = 0;
 		_animID = (_animID + 1) % _animMap[_animKey].size();
-	}
-	++_invCnt;
-	DeathUpdate();
-}
-
-void Object::DeathUpdate()
-{
-	if (!_isAlive && _animKey == ANIM::BLAST)
-	{
-		/// å„Ç≈èCê≥
-		_isDeath = (_animMap[_animKey][_animID].first == -1);
 	}
 }
 

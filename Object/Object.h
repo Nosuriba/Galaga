@@ -13,7 +13,7 @@ using anim_vec = std::vector<std::pair<int, int>>;
 enum class ANIM
 {
 	NORMAL,		// ’Êí
-	BLAST,		// ”š”j
+	DEATH,		// €–S
 	EX,			// “Áê
 	MAX
 };
@@ -35,7 +35,6 @@ public:
 
 	bool GetDeath() const;
 
-	/// Vector2‚É‘ã‚í‚é‚©‚à‚µ‚ê‚È‚¢
 	const Vector2& pos() const;
 protected:
 	Vector2 _pos;
@@ -46,6 +45,8 @@ protected:
 	// ±ÆÒ°¼®İ‚Ì“o˜^
 	bool SetAnim(ANIM key, anim_vec& data);
 
+	bool DestryCheck();
+
 	void ResetInvCnt();
 
 	// key‚Ìó‘Ô‚ğ•ÏX‚µ‚Ä‚¢‚é
@@ -55,7 +56,6 @@ protected:
 	const Size _charSize = Size(30, 32);
 private:
 	void AnimUpdate();
-	void DeathUpdate();
 	
 	// pair‚Ì—v‘f(first : ID, second : frame)
 	std::map<ANIM, anim_vec> _animMap;

@@ -34,7 +34,7 @@ void Player::Idle()
 
 void Player::Die()
 {
-	animKey(ANIM::BLAST);
+	animKey(ANIM::DEATH);
 	_updater = &Player::DieUpdate;
 }
 
@@ -106,24 +106,29 @@ void Player::Init()
 	SetAnim(ANIM::EX, data);
 
 	/// 爆破ｱﾆﾒｰｼｮﾝの登録
-	data.emplace_back(IMAGE_ID("pl_blast")[0], 10);
+	data.emplace_back(IMAGE_ID("pl_blast")[0], 15);
 	for (int i = 1; i < 4; ++i)
 	{
-		data.emplace_back(IMAGE_ID("pl_blast")[i], 10);
+		data.emplace_back(IMAGE_ID("pl_blast")[i], 5);
 	}
 	/// ｱﾆﾒｰｼｮﾝの終了位置を設定している
-	data.emplace_back(-1, 0);
-	SetAnim(ANIM::BLAST, data);
+	data.emplace_back(-1, 10);
+	SetAnim(ANIM::DEATH, data);
 }
 
 void Player::Update()
 {
 	_input->Update();
 	(this->*_updater)();
+	if (DestryCheck())
+	{
+		return;
+	}
 
+	/// 仮の死亡処理
 	if (_input->IsTrigger(INPUT_ID::BTN_1))
 	{
-		animKey(ANIM::BLAST);
+		animKey(ANIM::DEATH);
 		_isAlive = false;
 		ResetInvCnt();
 	}
