@@ -13,6 +13,11 @@ bool Object::SetAnim(ANIM key, anim_vec& data)
 	return _animMap.try_emplace(key, std::move(data)).second;
 }
 
+void Object::ResetInvCnt()
+{
+	_invCnt = 0;
+}
+
 bool Object::animKey(const ANIM key)
 {
 	/// ó·äOèàóù
@@ -38,6 +43,16 @@ void Object::AnimUpdate()
 		_animID = (_animID + 1) % _animMap[_animKey].size();
 	}
 	++_invCnt;
+	DeathUpdate();
+}
+
+void Object::DeathUpdate()
+{
+	if (!_isAlive && _animKey == ANIM::BLAST)
+	{
+		/// å„Ç≈èCê≥
+		_isDeath = (_animMap[_animKey][_animID].first == -1);
+	}
 }
 
 void Object::Draw()
@@ -52,12 +67,14 @@ void Object::Draw()
 	}
 
 	AnimUpdate();
-	DrawGraph(_pos.x, _pos.y, _animMap[_animKey][_animID].first, true);
+	//DrawGraph(_pos.x, _pos.y, _animMap[_animKey][_animID].first, true);
+
+	DrawRotaGraph(_pos.x, _pos.y, 1.0, 0, _animMap[_animKey][_animID].first, true);
 }
 
-void Object::SetKey(int key)
+bool Object::GetDeath() const
 {
-	_dbgKey = key;
+	return _isDeath;
 }
 
 const Vector2 & Object::pos() const

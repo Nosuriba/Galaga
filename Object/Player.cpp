@@ -16,10 +16,6 @@ Player::Player(const Vector2 & pos)
 	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
 	auto size = _charSize;
 	_rect = Rect(center, size);
-
-	SET_IMAGE_ID("player", "image/player.png", Vector2(3, 1), Vector2(_charSize.width, _charSize.height));
-	SET_IMAGE_ID("blast", "image/pl_blast.png", Vector2(4, 1), Vector2(_charSize.width * 2, _charSize.height * 2));
-
 	Init();
 	animKey(ANIM::NORMAL);
 	_input = std::make_unique<KeyState>();
@@ -109,14 +105,14 @@ void Player::Init()
 	data.emplace_back(IMAGE_ID("player")[2], 30);
 	SetAnim(ANIM::EX, data);
 
-	/// 爆破ｱﾆﾒｰｼｮﾝの登録(仮)
-	data.resize(4);
-	auto id = data.begin();
-	for (; id != data.end(); ++id)
+	/// 爆破ｱﾆﾒｰｼｮﾝの登録
+	data.emplace_back(IMAGE_ID("pl_blast")[0], 10);
+	for (int i = 1; i < 4; ++i)
 	{
-		auto cnt = id - data.begin();
-		data[cnt] = std::make_pair(IMAGE_ID("blast")[cnt], 10);
+		data.emplace_back(IMAGE_ID("pl_blast")[i], 10);
 	}
+	/// ｱﾆﾒｰｼｮﾝの終了位置を設定している
+	data.emplace_back(-1, 0);
 	SetAnim(ANIM::BLAST, data);
 }
 
@@ -125,18 +121,11 @@ void Player::Update()
 	_input->Update();
 	(this->*_updater)();
 
-	/*if (_input->IsTrigger(INPUT_ID::BTN_1))*/
-	if (_input->state(INPUT_ID::BTN_1).first &&
-		!(_input->state(INPUT_ID::BTN_1).second))
+	if (_input->IsTrigger(INPUT_ID::BTN_1))
 	{
-		_shots.push_back(std::make_shared<Shot>(_pos));
-	}
-
-	/// 仮のショット
-	for (auto& shot : _shots)
-	{
-		shot->Update();
-		shot->Draw();
+		animKey(ANIM::BLAST);
+		_isAlive = false;
+		ResetInvCnt();
 	}
 
 	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
@@ -146,6 +135,22 @@ void Player::Update()
 	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
 	_dbgDrawBox(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0x00ff00, true);
 	_dbgDrawFormatString(0, 0, 0xffffff, "(player) X座標 : %d, Y座標 : %d", _pos.x, _pos.y);
+
+
+	/// とりあえず今は無視しておこう
+	///*if (_input->IsTrigger(INPUT_ID::BTN_1))*/
+	//if (_input->state(INPUT_ID::BTN_1).first &&
+	//  !(_input->state(INPUT_ID::BTN_1).second))
+	//{
+	//	_shots.push_back(std::make_shared<Shot>(_pos));
+	//}
+
+	///// 仮のショット
+	//for (auto& shot : _shots)
+	//{
+	//	shot->Update();
+	//	shot->Draw();
+	//}
 }
 
 void Player::Draw()
@@ -155,9 +160,4 @@ void Player::Draw()
 const Obj Player::GetObjID() const
 {
 	return Obj::PLAYER;
-}
-
-bool Player::GetAlive() const
-{
-	return _isAlive;
 }

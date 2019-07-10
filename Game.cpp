@@ -33,6 +33,12 @@ void Game::Init()
 	SET_IMAGE_ID("˜g", "image/frame.png");
 	_dbgSetUp(200);
 
+	/// ‰æ‘œID‚Ì‰Šúİ’è
+	SET_IMAGE_ID("player", "image/player.png", Vector2(3, 1), Vector2(30, 32));
+	SET_IMAGE_ID("pl_blast", "image/pl_blast.png", Vector2(4, 1), Vector2(64, 64));
+	SET_IMAGE_ID("enemy", "image/enemy.png", Vector2(10, 3), Vector2(30, 32));
+	SET_IMAGE_ID("en_blast", "image/en_blast.png", Vector2(5, 1), Vector2(64, 64));
+
 	_scene = std::make_unique<MainScene>();
 }
 

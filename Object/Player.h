@@ -20,7 +20,6 @@ public:
 	void Update() override;
 	void Draw() override;
 	const Obj GetObjID() const override;
-	bool GetAlive() const override;
 private:
 	void Init();
 

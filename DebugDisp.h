@@ -7,6 +7,7 @@
 #include <chrono>			
 #include "Game.h"
 
+/// ‚±‚ê‚ð—˜—p‚µ‚â‚·‚¢Œ`‚É‚Å‚«‚é‚æ‚¤‚É‚µ‚Ä‚¨‚±‚¤‚©...
 #define _dbgSetUp(A)					(DebugDisp::GetInstance().SetUp(A))
 #define _dbgStartUp						(DebugDisp::GetInstance().StartUp())
 #define _dbgAddDraw						(DebugDisp::GetInstance().AddDraw())
