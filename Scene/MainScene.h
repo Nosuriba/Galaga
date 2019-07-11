@@ -20,12 +20,16 @@ private:
 	std::vector<std::shared_ptr<Object>> _objs;
 
 	void SetEnemy();
-	void AddEnemy(const Vector2& pos, EN_TYPE type);
+	void AddEnemy(EnemyState state);
 
 	int _ghGameScreen;		// ¹Ş°Ñ½¸Ø°İ‚Ì‰æ‘œÊİÄŞÙ
 
 	char _dbgKey;
 	char _dbgKeyOld;
+
+	Vector2 _defPos;
+
+	int _enCnt;
 
 	/// “G‚Ì‰Šú”z’u—p‚Ìİ’è
 	std::array<Vector2, 6> _initPos; 

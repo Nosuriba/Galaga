@@ -11,18 +11,18 @@
 
 MainScene::MainScene()
 {
-	//// å„Ç≈à íuÇÕèCê≥Ç∑ÇÈÇÊÇ§Ç…ÇµÇƒÇ®Ç≠
+	/// ìG∑¨◊ÇÃª≤Ωﬁï™Ç∏ÇÁÇµÇƒÇ¢ÇÈïîï™Ç‡Ç†ÇÈ
 	/// ç∂í[
 	_initPos[0] = Vector2(-LpGame.gameScreenPos.x, -LpGame.gameScreenPos.y);
 	_initPos[1] = Vector2(-LpGame.gameScreenPos.x, LpGame.gameScreenSize.y / 2);
-	_initPos[2] = Vector2(-LpGame.gameScreenPos.x, LpGame.gameScreenSize.y + LpGame.gameScreenPos.y / 2);
+	_initPos[2] = Vector2(-LpGame.gameScreenPos.x, LpGame.gameScreenSize.y + LpGame.gameScreenPos.y - 32);
 	
 	/// âEí[
-	_initPos[3] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x / 2 , -LpGame.gameScreenPos.y);
-	_initPos[4] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x / 2, 
+	_initPos[3] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x - 30, -LpGame.gameScreenPos.y);
+	_initPos[4] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x - 30, 
 						  LpGame.gameScreenSize.y / 2);
-	_initPos[5] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x / 2,
-						  LpGame.gameScreenSize.y + LpGame.gameScreenPos.y / 2);
+	_initPos[5] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x - 30,
+						  LpGame.gameScreenSize.y + LpGame.gameScreenPos.y - 32);
 	Init();
 }
 
@@ -42,18 +42,18 @@ void MainScene::Init()
 void MainScene::SetEnemy()
 {
 	int offset = 100;
-	AddEnemy(Vector2(offset + 120, 200), EN_TYPE::BOSS);
+	AddEnemy({ Vector2(offset + 120, 200), EN_TYPE::BOSS, LpGame.gameScreenSize / 2 });
 	TRACE("%dëÃñ⁄ÇÃìGÇê∂ê¨\n", (int)_objs.size() - 1);
 	for (int i = 0; i < 9; ++i)
 	{
-		AddEnemy(Vector2(offset + 80 + (40 * (i % 3)), 160 - (40 * (i / 3))), EN_TYPE::BONUS);
+		AddEnemy({ Vector2(offset + 80 + (40 * (i % 3)), 160 - (40 * (i / 3))), EN_TYPE::BONUS , LpGame.gameScreenSize / 2});
 		TRACE("%dëÃñ⁄ÇÃìGÇê∂ê¨\n", (int)_objs.size() - 1);
 	}
 }
 
-void MainScene::AddEnemy(const Vector2& pos, EN_TYPE type)
+void MainScene::AddEnemy(EnemyState state)
 {
-	_objs.emplace_back(std::make_shared<Enemy>(pos, type));
+	_objs.emplace_back(std::make_shared<Enemy>(state));
 }
 
 void MainScene::Draw()
@@ -68,23 +68,17 @@ void MainScene::Draw()
 			obj->Object::Draw();
 		}
 	}
-	LpGame.AddDrawQue({ _ghGameScreen, LpGame.gameScreenPos.x, LpGame.gameScreenPos.y });
+	LpGame.AddDrawQue({ _ghGameScreen, LpGame.gameScreenPos.x, LpGame.gameScreenPos.y});
 }
 
 unique_scene MainScene::Update(unique_scene scene, const Input & p)
 {
-	static int dbgCnt = 0;
 	_dbgKeyOld = _dbgKey;
 	_dbgKey    = CheckHitKey(KEY_INPUT_SPACE);
 
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		if (dbgCnt <= 5)
-		{
-			AddEnemy(_initPos[dbgCnt], EN_TYPE::NORMAL);
-			dbgCnt++;
-		}
-		
+		AddEnemy({ _initPos[rand() % 6], EN_TYPE::NORMAL, LpGame.gameScreenSize / 2});
 	}
 
 	/// ÉvÉåÉCÉÑÅ[Ç∆ìGÇÃâºï`âÊ
