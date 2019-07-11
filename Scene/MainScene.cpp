@@ -7,7 +7,6 @@
 
 #include "../Object/Object.h"
 #include "../Object/Player.h"
-#include "../Object/Enemy.h"
 #include "../Common/ImageMng.h"
 
 MainScene::MainScene()
@@ -31,17 +30,19 @@ void MainScene::Init()
 void MainScene::SetEnemy()
 {
 	int offset = 100;
-	_objVector.emplace_back(std::make_shared<Enemy>(Vector2(offset + 120, 200)));
-	TRACE("%d‘Ì–Ú‚Ì“G‚ğ¶¬\n", _objVector.size() - 1);
+	AddEnemy(Vector2(offset + 120, 200), EN_TYPE::BOSS);
+	TRACE("%d‘Ì–Ú‚Ì“G‚ğ¶¬\n", (int)_objVector.size() - 1);
 	for (int i = 0; i < 9; ++i)
 	{
-		
-		_objVector.emplace_back(std::make_shared<Enemy>(Vector2(offset + 80 + (40 * (i % 3)), 160 - (40 * (i / 3)))));
-		TRACE("%d‘Ì–Ú‚Ì“G‚ğ¶¬\n", _objVector.size() - 1);
+		AddEnemy(Vector2(offset + 80 + (40 * (i % 3)), 160 - (40 * (i / 3))), EN_TYPE::BONUS);
+		TRACE("%d‘Ì–Ú‚Ì“G‚ğ¶¬\n", (int)_objVector.size() - 1);
 	}
-
 }
 
+void MainScene::AddEnemy(const Vector2& pos, EN_TYPE type)
+{
+	_objVector.emplace_back(std::make_shared<Enemy>(pos, type));
+}
 
 void MainScene::Draw()
 {

@@ -1,6 +1,7 @@
 #pragma once
 #include <list>
 #include "Scene.h"
+#include "../Object/Enemy.h"
 
 class Object;
 
@@ -17,8 +18,9 @@ public:
 private:
 	std::vector<std::shared_ptr<Object>> _objVector;
 
-	/// ˆø”‚É‰½‘Ì¶¬‚Å‚«‚é‚©‚Ìİ’è‚à‘z’è‚µ‚Ä‚¨‚¢‚½•û‚ª‚¢‚¢‚©‚à‚µ‚ê‚È‚¢
+	
 	void SetEnemy();
+	void AddEnemy(const Vector2& pos, EN_TYPE type);
 
 	int _ghGameScreen;		// ¹Ş°Ñ½¸Ø°İ‚Ì‰æ‘œÊİÄŞÙ
 };

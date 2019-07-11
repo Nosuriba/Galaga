@@ -9,14 +9,14 @@ Enemy::Enemy()
 {
 }
 
-Enemy::Enemy(const Vector2& pos)
+Enemy::Enemy(const Vector2 & pos, EN_TYPE type)
 {
 	_pos = pos;
 
 	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
 	auto size = _charSize;
 	_rect = Rect(center, size);
-	Init();
+	Init(static_cast<int>(type) * 2);
 	animKey(ANIM::NORMAL);
 	_updater = &Enemy::MoveUpdate;
 }
@@ -66,12 +66,12 @@ void Enemy::DieUpdate()
 {
 }
 
-void Enemy::Init()
+void Enemy::Init(const int& id)
 {
 	anim_vec data;
 
-	data.emplace_back(IMAGE_ID("enemy")[0], 30);
-	data.emplace_back(IMAGE_ID("enemy")[1], 30);
+	data.emplace_back(IMAGE_ID("enemy")[0 + id], 30);
+	data.emplace_back(IMAGE_ID("enemy")[1 + id], 30);
 	SetAnim(ANIM::NORMAL, data);
 
 	data.emplace_back(IMAGE_ID("en_blast")[0], 15);
@@ -95,20 +95,20 @@ void Enemy::Update()
 	}
 
 	/// 仮の死亡処理
-	if (rand() % 1200 == 0)
+	/*if (rand() % 1200 == 0)
 	{
 		animKey(ANIM::DEATH);
 		_isAlive = false;
 		ResetInvCnt();
-	}
+	}*/
 
 	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
 	auto size = _charSize;
 	_rect = Rect(center, size);
 
 	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
-	_dbgDrawBox(_rect.Left() - _charSize.width / 2, _rect.Top() - _charSize.height / 2,
-				_rect.Right() - _charSize.width / 2, _rect.Bottom() - _charSize.height / 2, 0xff0000, true);
+	/*_dbgDrawBox(_rect.Left() - _charSize.width / 2, _rect.Top() - _charSize.height / 2,
+				_rect.Right() - _charSize.width / 2, _rect.Bottom() - _charSize.height / 2, 0xff0000, true);*/
 }
 
 void Enemy::Draw()
