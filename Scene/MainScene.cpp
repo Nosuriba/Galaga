@@ -80,8 +80,10 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		auto pos = Vector2(LpGame.gameScreenPos.x + ((_enCnt % 7) * 30), 
-						   LpGame.gameScreenPos.y + ((_enCnt / 7) * 32));
+		/// “G‚ÌŠÔŠu‚ğ‹ó‚¯‚éˆ—‚ğ‘‚¢‚Ä‚¨‚­
+		auto invPos = (_enCnt / 7) * 10;
+		auto pos = Vector2(LpGame.gameScreenPos.x + ((_enCnt % 7) * 30) + 10, 
+						   LpGame.gameScreenPos.y + ((_enCnt / 7) * 32) + invPos);
 		//AddEnemy({ _initPos[rand() % 6], EN_TYPE::NORMAL, pos});
 		AddEnemy({ _initPos[num % 6], EN_TYPE::NORMAL, pos});
 		++num;
