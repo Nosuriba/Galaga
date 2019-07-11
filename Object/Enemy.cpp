@@ -28,6 +28,11 @@ Enemy::Enemy(EnemyState state)
 
 	_vel = Vector2(3 * cost, 3 * sint);
 
+	if (_vel.y == 0)
+	{
+		_vel.y = (sint >= 0.0 ? 1 : -1);
+	}
+
 	/// 平方根を使った移動方向の計算
 	/*auto distance = Vector2(_aimPos.x - _pos.x, _aimPos.y - _pos.y);
 	auto sq = sqrt(pow(distance.x, 2) + pow(distance.y, 2));*/

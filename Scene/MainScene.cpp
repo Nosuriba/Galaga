@@ -11,6 +11,7 @@
 
 MainScene::MainScene()
 {
+	_enCnt = 0;
 	/// ìG∑¨◊ÇÃª≤Ωﬁï™Ç∏ÇÁÇµÇƒÇ¢ÇÈïîï™Ç‡Ç†ÇÈ
 	/// ç∂í[
 	_initPos[0] = Vector2(-LpGame.gameScreenPos.x, -LpGame.gameScreenPos.y);
@@ -73,12 +74,19 @@ void MainScene::Draw()
 
 unique_scene MainScene::Update(unique_scene scene, const Input & p)
 {
+	static int num = 0;
 	_dbgKeyOld = _dbgKey;
 	_dbgKey    = CheckHitKey(KEY_INPUT_SPACE);
 
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		AddEnemy({ _initPos[rand() % 6], EN_TYPE::NORMAL, LpGame.gameScreenSize / 2});
+		auto pos = Vector2(LpGame.gameScreenPos.x + ((_enCnt % 7) * 30), 
+						   LpGame.gameScreenPos.y + ((_enCnt / 7) * 32));
+		//AddEnemy({ _initPos[rand() % 6], EN_TYPE::NORMAL, pos});
+		AddEnemy({ _initPos[num % 6], EN_TYPE::NORMAL, pos});
+		++num;
+		++_enCnt;
+		_enCnt = (_enCnt <= 20 ? _enCnt : 0);
 	}
 
 	/// ÉvÉåÉCÉÑÅ[Ç∆ìGÇÃâºï`âÊ
