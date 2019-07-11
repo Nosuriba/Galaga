@@ -1,6 +1,6 @@
 #include "Object.h"
 #include "../DebugDisp.h"
-Object::Object()
+Object::Object() : _charSize(30, 32)
 {
 }
 

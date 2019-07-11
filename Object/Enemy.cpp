@@ -107,7 +107,8 @@ void Enemy::Update()
 	_rect = Rect(center, size);
 
 	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
-	_dbgDrawBox(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0xff0000, true);
+	_dbgDrawBox(_rect.Left() - _charSize.width / 2, _rect.Top() - _charSize.height / 2,
+				_rect.Right() - _charSize.width / 2, _rect.Bottom() - _charSize.height / 2, 0xff0000, true);
 }
 
 void Enemy::Draw()

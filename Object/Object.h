@@ -53,7 +53,7 @@ protected:
 	bool animKey(const ANIM key);
 	// key‚Ìî•ñ‚ğæ“¾‚µ‚Ä‚¢‚é
 	const ANIM& animKey() const;
-	const Size _charSize = Size(30, 32);
+	const Size _charSize;
 private:
 	void AnimUpdate();
 	
