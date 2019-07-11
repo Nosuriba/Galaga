@@ -1,4 +1,14 @@
+#include <tuple>
 #include "Object.h"
+
+enum class EN_STATE
+{
+	POS,
+	TYPE,
+	SIZE,
+	AIM,
+	MAX
+};
 
 enum class EN_TYPE
 {
@@ -7,6 +17,9 @@ enum class EN_TYPE
 	BOSS,
 	MAX
 };
+
+// 0 : pos, 1 : type, 2 : size, 3 : aimPoint
+using EnemyState = std::tuple<Vector2, EN_TYPE, Vector2, Vector2>;
 
 class Enemy :
 	public Object

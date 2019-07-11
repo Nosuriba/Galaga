@@ -11,6 +11,18 @@
 
 MainScene::MainScene()
 {
+	//// 後で位置は修正するようにしておく
+	/// 左端
+	_initPos[0] = Vector2(-LpGame.gameScreenPos.x, -LpGame.gameScreenPos.y);
+	_initPos[1] = Vector2(-LpGame.gameScreenPos.x, LpGame.gameScreenSize.y / 2);
+	_initPos[2] = Vector2(-LpGame.gameScreenPos.x, LpGame.gameScreenSize.y + LpGame.gameScreenPos.y / 2);
+	
+	/// 右端
+	_initPos[3] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x / 2 , -LpGame.gameScreenPos.y);
+	_initPos[4] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x / 2, 
+						  LpGame.gameScreenSize.y / 2);
+	_initPos[5] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x / 2,
+						  LpGame.gameScreenSize.y + LpGame.gameScreenPos.y / 2);
 	Init();
 }
 
@@ -23,25 +35,25 @@ void MainScene::Init()
 	_ghGameScreen = MakeScreen(LpGame.gameScreenSize.x, LpGame.gameScreenSize.y, true);
 
 	/// 仮の生成
-	_objVector.emplace_back(std::make_shared<Player>(Vector2(100, 200)));
-	SetEnemy();
+	_objs.emplace_back(std::make_shared<Player>(Vector2(100, 200)));
+	// SetEnemy();
 }
 
 void MainScene::SetEnemy()
 {
 	int offset = 100;
 	AddEnemy(Vector2(offset + 120, 200), EN_TYPE::BOSS);
-	TRACE("%d体目の敵を生成\n", (int)_objVector.size() - 1);
+	TRACE("%d体目の敵を生成\n", (int)_objs.size() - 1);
 	for (int i = 0; i < 9; ++i)
 	{
 		AddEnemy(Vector2(offset + 80 + (40 * (i % 3)), 160 - (40 * (i / 3))), EN_TYPE::BONUS);
-		TRACE("%d体目の敵を生成\n", (int)_objVector.size() - 1);
+		TRACE("%d体目の敵を生成\n", (int)_objs.size() - 1);
 	}
 }
 
 void MainScene::AddEnemy(const Vector2& pos, EN_TYPE type)
 {
-	_objVector.emplace_back(std::make_shared<Enemy>(pos, type));
+	_objs.emplace_back(std::make_shared<Enemy>(pos, type));
 }
 
 void MainScene::Draw()
@@ -49,7 +61,7 @@ void MainScene::Draw()
 	SetDrawScreen(_ghGameScreen);
 	ClsDrawScreen();
 	/// プレイヤーと敵の仮描画
-	for (auto obj : _objVector)
+	for (auto obj : _objs)
 	{
 		if (obj != nullptr)
 		{
@@ -61,10 +73,23 @@ void MainScene::Draw()
 
 unique_scene MainScene::Update(unique_scene scene, const Input & p)
 {
-	/// プレイヤーと敵の仮描画
-	for (auto obj : _objVector)
+	static int dbgCnt = 0;
+	_dbgKeyOld = _dbgKey;
+	_dbgKey    = CheckHitKey(KEY_INPUT_SPACE);
+
+	if (_dbgKey && !_dbgKeyOld)
 	{
-		unsigned int num;
+		if (dbgCnt <= 5)
+		{
+			AddEnemy(_initPos[dbgCnt], EN_TYPE::NORMAL);
+			dbgCnt++;
+		}
+		
+	}
+
+	/// プレイヤーと敵の仮描画
+	for (auto obj : _objs)
+	{
 		if (obj != nullptr)
 		{
 			obj->Update();
@@ -80,13 +105,12 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	}*/
 
 	/// vectorの削除する範囲の指定
-	auto eraseBegin = remove_if(_objVector.begin(),				// 開始位置
-								_objVector.end(),				// 終了位置
+	auto eraseBegin = remove_if(_objs.begin(),				// 開始位置
+								_objs.end(),				// 終了位置
 							    [](std::shared_ptr<Object>& obj) {return (*obj).GetDeath(); });		// moveするかの判定部
 
 	/// 指定した範囲のvectorを削除している
-	_objVector.erase(eraseBegin, _objVector.end());
-
+	_objs.erase(eraseBegin, _objs.end());
 	return std::move(scene);
 }
 
