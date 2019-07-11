@@ -45,12 +45,6 @@ void Player::Move()
 
 void Player::IdleUpdate()
 {
-	/// 仮の死亡処理
-	/*if (_input->IsTrigger(INPUT_ID::BTN_1))
-	{
-		Die();
-	}
-*/
 	/*if (_input->IsPressing(INPUT_ID::RIGHT) ||
 		  _input->IsPressing(INPUT_ID::LEFT))*/
 	if (_input->state(INPUT_ID::RIGHT).first ||
@@ -132,13 +126,13 @@ void Player::Update()
 		_isAlive = false;
 		ResetInvCnt();
 	}
-
 	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
 	auto size   = _charSize;
 	_rect	    = Rect(center, size);
 
 	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
-	_dbgDrawBox(_rect.Left(), _rect.Top(), _rect.Right(), _rect.Bottom(), 0x00ff00, true);
+	_dbgDrawBox(_rect.Left() - _charSize.width / 2, _rect.Top() - _charSize.height / 2,
+				_rect.Right() - _charSize.width / 2, _rect.Bottom() - _charSize.height / 2, 0x00ff00, true);
 	_dbgDrawFormatString(0, 0, 0xffffff, "(player) X座標 : %d, Y座標 : %d", _pos.x, _pos.y);
 
 
