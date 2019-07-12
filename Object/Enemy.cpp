@@ -23,7 +23,6 @@ Enemy::Enemy(EnemyState state)
 	animKey(ANIM::NORMAL);
 
 	MidMove();
-	// Target();
 }
 
 Enemy::~Enemy()
@@ -140,9 +139,10 @@ void Enemy::Init(EN_TYPE type)
 {
 	anim_vec data;
 	auto id = static_cast<int>(type) * 2;
+	auto enID = (rand() % 3) * 10;
 
-	data.emplace_back(IMAGE_ID("enemy")[0 + id], 30);
-	data.emplace_back(IMAGE_ID("enemy")[1 + id], 30);
+	data.emplace_back(IMAGE_ID("enemy")[0 + enID + id], 30);
+	data.emplace_back(IMAGE_ID("enemy")[1 + enID + id], 30);
 	SetAnim(ANIM::NORMAL, data);
 
 	data.emplace_back(IMAGE_ID("en_blast")[0], 15);

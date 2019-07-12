@@ -42,19 +42,6 @@ void MainScene::Init()
 
 	/// âºÇÃê∂ê¨
 	_objs.emplace_back(std::make_shared<Player>(Vector2(100, 200), _charSize));
-	// SetEnemy();
-}
-
-void MainScene::SetEnemy()
-{
-	/*int offset = 100;
-	AddEnemy({ Vector2(offset + 120, 200), EN_TYPE::BOSS, LpGame.gameScreenSize / 2 });
-	TRACE("%dëÃñ⁄ÇÃìGÇê∂ê¨\n", (int)_objs.size() - 1);
-	for (int i = 0; i < 9; ++i)
-	{
-		AddEnemy({ Vector2(offset + 80 + (40 * (i % 3)), 160 - (40 * (i / 3))), EN_TYPE::BONUS , LpGame.gameScreenSize / 2});
-		TRACE("%dëÃñ⁄ÇÃìGÇê∂ê¨\n", (int)_objs.size() - 1);
-	}*/
 }
 
 void MainScene::AddEnemy(EnemyState state)
@@ -82,13 +69,16 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	static int num = 0;
 	_dbgKeyOld = _dbgKey;
 	_dbgKey    = CheckHitKey(KEY_INPUT_SPACE);
+	auto randNum = rand();
 
 	if (_dbgKey && !_dbgKeyOld)
 	{
 		auto invPos = Vector2((_enCnt % 7) * 10, (_enCnt / 7) * 10);
 		auto pos = Vector2(LpGame.gameScreenPos.x + ((_enCnt % 7) * 30) + invPos.x, 
 						   LpGame.gameScreenPos.y + ((_enCnt / 7) * 32) + invPos.y);
-		AddEnemy({ _initPos[rand() % 6], EN_TYPE::NORMAL, _charSize, pos});
+		auto type = (EN_TYPE)(randNum % static_cast<int>(EN_TYPE::MAX));
+		auto id   = (EN_ID)(randNum % static_cast<int>(EN_ID::MAX));
+		AddEnemy({ _initPos[randNum % 6], _charSize, type, id, pos});
 		++num;
 		++_enCnt;
 		_enCnt = (_enCnt <= 20 ? _enCnt : 0);

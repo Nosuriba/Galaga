@@ -4,12 +4,14 @@
 enum class EN_STATE
 {
 	POS,
-	TYPE,
 	SIZE,
+	TYPE,
+	ID,
 	AIM,
 	MAX
 };
 
+/// “G‚ÌŽí—Þ
 enum class EN_TYPE
 {
 	NORMAL,
@@ -18,8 +20,17 @@ enum class EN_TYPE
 	MAX
 };
 
+/// “G‚ÌID
+enum class EN_ID
+{
+	BEE,
+	BUTTERFLY,
+	SCORPION,
+	MAX
+};
+
 // 0 : pos, 1 : type, 2 : aimPos
-using EnemyState = std::tuple<Vector2, EN_TYPE, Size, Vector2>;
+using EnemyState = std::tuple<Vector2, Size, EN_TYPE, EN_ID, Vector2>;
 
 class Enemy :
 	public Object
