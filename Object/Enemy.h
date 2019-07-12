@@ -29,7 +29,7 @@ enum class EN_ID
 	MAX
 };
 
-// 0 : pos, 1 : type, 2 : aimPos
+// 0 : pos, 1 : size  2 : type, 3 : id, 4 : aimPos
 using EnemyState = std::tuple<Vector2, Size, EN_TYPE, EN_ID, Vector2>;
 
 class Enemy :
@@ -62,6 +62,6 @@ private:
 	Vector2 _aimPos;	// 目標座標
 	Vector2 _midPos;	// 中間座標
 
-	int _midCnt;		// 中間座標まで移動する時間		
+	int _midCnt;		// 中間座標まで移動する時間
 };
 

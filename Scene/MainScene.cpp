@@ -76,6 +76,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		auto invPos = Vector2((_enCnt % 7) * 10, (_enCnt / 7) * 10);
 		auto pos = Vector2(LpGame.gameScreenPos.x + ((_enCnt % 7) * 30) + invPos.x, 
 						   LpGame.gameScreenPos.y + ((_enCnt / 7) * 32) + invPos.y);
+		/// ◊›¿ﬁ—Ç≈ìGÇèoåªÇ≥ÇπÇÈÇÊÇ§Ç…ÇµÇƒÇ¢ÇÈ
 		auto type = (EN_TYPE)(randNum % static_cast<int>(EN_TYPE::MAX));
 		auto id   = (EN_ID)(randNum % static_cast<int>(EN_ID::MAX));
 		AddEnemy({ _initPos[randNum % 6], _charSize, type, id, pos});

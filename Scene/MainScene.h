@@ -19,7 +19,6 @@ public:
 private:
 	std::vector<std::shared_ptr<Object>> _objs;
 
-	void SetEnemy();
 	void AddEnemy(EnemyState state);
 
 	int _ghGameScreen;		// ｹﾞｰﾑｽｸﾘｰﾝの画像ﾊﾝﾄﾞﾙ
@@ -27,10 +26,8 @@ private:
 	char _dbgKey;
 	char _dbgKeyOld;
 
-	Vector2 _defPos;
-
+	///// こいつらをtable用のｸﾗｽに持っていく予定
 	int _enCnt;			  // 出現している敵のｶｳﾝﾄ
-
 	/// 敵の初期配置用の設定
 	std::array<Vector2, 6> _initPos; 
 

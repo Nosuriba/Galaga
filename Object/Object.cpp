@@ -71,6 +71,8 @@ void Object::Draw()
 	}
 
 	AnimUpdate();
+	
+	auto theta = atan2((_pos.y + _vel.y) - _pos.y, (_pos.x + _vel.x) - _pos.x);
 
 	DrawRotaGraph(_pos.x, _pos.y, 1.0, 0, _animMap[_animKey][_animID].first, true);
 }
