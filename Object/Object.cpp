@@ -1,6 +1,6 @@
 #include "Object.h"
 #include "../DebugDisp.h"
-Object::Object() : _charSize(30, 32)
+Object::Object()
 {
 }
 
@@ -71,7 +71,6 @@ void Object::Draw()
 	}
 
 	AnimUpdate();
-	//DrawGraph(_pos.x, _pos.y, _animMap[_animKey][_animID].first, true);
 
 	DrawRotaGraph(_pos.x, _pos.y, 1.0, 0, _animMap[_animKey][_animID].first, true);
 }

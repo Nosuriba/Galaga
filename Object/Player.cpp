@@ -9,13 +9,14 @@ Player::Player()
 {
 }
 
-Player::Player(const Vector2 & pos)
+Player::Player(const Vector2 & pos, const Size& size)
 {
-	_pos = pos;
+	_size = size;
+	auto center = Vector2(pos.x + _size.width / 2, pos.y + _size.height / 2);
+	_pos = center;
+	
 
-	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
-	auto size = _charSize;
-	_rect = Rect(center, size);
+	_rect = Rect(center, _size);
 	Init();
 	animKey(ANIM::NORMAL);
 	_input = std::make_unique<KeyState>();
@@ -126,13 +127,12 @@ void Player::Update()
 		_isAlive = false;
 		ResetInvCnt();
 	}
-	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
-	auto size   = _charSize;
-	_rect	    = Rect(center, size);
+	auto center = Vector2(_pos.x + _size.width / 2, _pos.y + _size.height / 2);
+	_rect	    = Rect(center, _size);
 
 	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
-	_dbgDrawBox(_rect.Left() - _charSize.width / 2, _rect.Top() - _charSize.height / 2,
-				_rect.Right() - _charSize.width / 2, _rect.Bottom() - _charSize.height / 2, 0x00ff00, true);
+	_dbgDrawBox(_rect.Left()  - _size.width / 2, _rect.Top()	- _size.height / 2,
+				_rect.Right() - _size.width / 2, _rect.Bottom() - _size.height / 2, 0x00ff00, true);
 	_dbgDrawFormatString(0, 0, 0xffffff, "(player) X座標 : %d, Y座標 : %d", _pos.x, _pos.y);
 
 

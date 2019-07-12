@@ -38,6 +38,7 @@ public:
 	const Vector2& pos() const;
 protected:
 	Vector2 _pos;
+	Size _size;
 	Rect _rect;
 	bool _isAlive = true;		// true : ¶‘¶, false : €–S
 	bool _isDeath = false;		// true : “G‚Ìíœ, false : €–Sˆ—’†
@@ -53,7 +54,6 @@ protected:
 	bool animKey(const ANIM key);
 	// key‚Ìî•ñ‚ğæ“¾‚µ‚Ä‚¢‚é
 	const ANIM& animKey() const;
-	const Size _charSize;
 private:
 	void AnimUpdate();
 	

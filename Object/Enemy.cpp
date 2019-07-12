@@ -11,11 +11,11 @@ Enemy::Enemy()
 
 Enemy::Enemy(EnemyState state)
 {
-	auto center = Vector2(std::get<static_cast<int>(EN_STATE::POS)>(state).x + _charSize.width / 2,
-						  std::get<static_cast<int>(EN_STATE::POS)>(state).y + _charSize.height / 2);
+	_size = std::get<static_cast<int>(EN_STATE::SIZE)>(state);
+	auto center = Vector2(std::get<static_cast<int>(EN_STATE::POS)>(state).x + _size.width / 2,
+						  std::get<static_cast<int>(EN_STATE::POS)>(state).y + _size.height / 2);
 	_pos = center;
-	auto size = _charSize;
-	_rect = Rect(center, size);
+	_rect = Rect(center, _size);
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
@@ -28,15 +28,11 @@ Enemy::Enemy(EnemyState state)
 
 	_vel = Vector2(3 * cost, 3 * sint);
 
+	///	速度がなかった時に最低速度を渡すようにしている
 	if (_vel.y == 0)
 	{
 		_vel.y = (sint >= 0.0 ? 1 : -1);
 	}
-
-	/// 平方根を使った移動方向の計算
-	/*auto distance = Vector2(_aimPos.x - _pos.x, _aimPos.y - _pos.y);
-	auto sq = sqrt(pow(distance.x, 2) + pow(distance.y, 2));*/
-	//_vel = Vector2(distance.x / sq * 3, distance.y / sq * 3);
 
 	_updater = &Enemy::TargetUpdate;
 }
@@ -146,28 +142,27 @@ void Enemy::Update()
 {
 	(this->*_updater)();
 
-	 _pos += _vel;
-
 	if (DestryCheck())
 	{
 		return;
 	}
 
 	/// 仮の死亡処理
-	/*if (rand() % 1200 == 0)
+	if (rand() % 1200 == 0)
 	{
 		animKey(ANIM::DEATH);
 		_isAlive = false;
 		ResetInvCnt();
-	}*/
+	}
 
-	auto center = Vector2(_pos.x + _charSize.width / 2, _pos.y + _charSize.height / 2);
-	auto size = _charSize;
-	_rect = Rect(center, size);
+	_pos += _vel;
+
+	auto center = Vector2(_pos.x + _size.width / 2, _pos.y + _size.height / 2);
+	_rect = Rect(center, _size);
 
 	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
-	_dbgDrawBox(_rect.Left() - _charSize.width / 2, _rect.Top() - _charSize.height / 2,
-				_rect.Right() - _charSize.width / 2, _rect.Bottom() - _charSize.height / 2, 0xff0000, true);
+	_dbgDrawBox(_rect.Left()  - _size.width / 2, _rect.Top()	- _size.height / 2,
+				_rect.Right() - _size.width / 2, _rect.Bottom() - _size.height / 2, 0xff0000, true);
 }
 
 void Enemy::Draw()

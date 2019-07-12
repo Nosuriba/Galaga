@@ -29,10 +29,12 @@ private:
 
 	Vector2 _defPos;
 
-	int _enCnt;
+	int _enCnt;			  // 出現している敵のｶｳﾝﾄ
 
 	/// 敵の初期配置用の設定
 	std::array<Vector2, 6> _initPos; 
+
+	const Size _charSize;
 
 };
 

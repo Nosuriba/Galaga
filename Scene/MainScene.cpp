@@ -9,21 +9,23 @@
 #include "../Object/Player.h"
 #include "../Common/ImageMng.h"
 
-MainScene::MainScene()
+MainScene::MainScene() : _charSize(30,32)
 {
 	_enCnt = 0;
-	/// ìG∑¨◊ÇÃª≤Ωﬁï™Ç∏ÇÁÇµÇƒÇ¢ÇÈïîï™Ç‡Ç†ÇÈ
+
 	/// ç∂í[
 	_initPos[0] = Vector2(-LpGame.gameScreenPos.x, -LpGame.gameScreenPos.y);
 	_initPos[1] = Vector2(-LpGame.gameScreenPos.x, LpGame.gameScreenSize.y / 2);
-	_initPos[2] = Vector2(-LpGame.gameScreenPos.x, LpGame.gameScreenSize.y + LpGame.gameScreenPos.y - 32);
+	_initPos[2] = Vector2(-LpGame.gameScreenPos.x, 
+						   LpGame.gameScreenSize.y + LpGame.gameScreenPos.y - _charSize.height);
 	
 	/// âEí[
-	_initPos[3] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x - 30, -LpGame.gameScreenPos.y);
-	_initPos[4] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x - 30, 
+	_initPos[3] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x - _charSize.width,
+						 -LpGame.gameScreenPos.y);
+	_initPos[4] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x - _charSize.width, 
 						  LpGame.gameScreenSize.y / 2);
-	_initPos[5] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x - 30,
-						  LpGame.gameScreenSize.y + LpGame.gameScreenPos.y - 32);
+	_initPos[5] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x - _charSize.width,
+						  LpGame.gameScreenSize.y + LpGame.gameScreenPos.y - _charSize.height);
 	Init();
 }
 
@@ -36,20 +38,20 @@ void MainScene::Init()
 	_ghGameScreen = MakeScreen(LpGame.gameScreenSize.x, LpGame.gameScreenSize.y, true);
 
 	/// âºÇÃê∂ê¨
-	_objs.emplace_back(std::make_shared<Player>(Vector2(100, 200)));
+	_objs.emplace_back(std::make_shared<Player>(Vector2(100, 200), _charSize));
 	// SetEnemy();
 }
 
 void MainScene::SetEnemy()
 {
-	int offset = 100;
+	/*int offset = 100;
 	AddEnemy({ Vector2(offset + 120, 200), EN_TYPE::BOSS, LpGame.gameScreenSize / 2 });
 	TRACE("%dëÃñ⁄ÇÃìGÇê∂ê¨\n", (int)_objs.size() - 1);
 	for (int i = 0; i < 9; ++i)
 	{
 		AddEnemy({ Vector2(offset + 80 + (40 * (i % 3)), 160 - (40 * (i / 3))), EN_TYPE::BONUS , LpGame.gameScreenSize / 2});
 		TRACE("%dëÃñ⁄ÇÃìGÇê∂ê¨\n", (int)_objs.size() - 1);
-	}
+	}*/
 }
 
 void MainScene::AddEnemy(EnemyState state)
@@ -84,8 +86,8 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		auto invPos = (_enCnt / 7) * 10;
 		auto pos = Vector2(LpGame.gameScreenPos.x + ((_enCnt % 7) * 30) + 10, 
 						   LpGame.gameScreenPos.y + ((_enCnt / 7) * 32) + invPos);
-		//AddEnemy({ _initPos[rand() % 6], EN_TYPE::NORMAL, pos});
-		AddEnemy({ _initPos[num % 6], EN_TYPE::NORMAL, pos});
+		//AddEnemy({ _initPos[rand() % 6], EN_TYPE::NORMAL, _charSize, pos});
+		AddEnemy({ _initPos[num % 6], EN_TYPE::NORMAL, _charSize,  pos});
 		++num;
 		++_enCnt;
 		_enCnt = (_enCnt <= 20 ? _enCnt : 0);
