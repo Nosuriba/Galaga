@@ -38,6 +38,7 @@ public:
 	const Vector2& pos() const;
 protected:
 	Vector2 _pos;
+	Vector2 _vel;
 	Size _size;
 	Rect _rect;
 	bool _isAlive = true;		// true : ê∂ë∂, false : éÄñS

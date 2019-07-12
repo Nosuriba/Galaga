@@ -17,24 +17,13 @@ Enemy::Enemy(EnemyState state)
 	_pos = center;
 	_rect = Rect(center, _size);
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
+	_midPos = LpGame.screenSize / 2;
 
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
 	animKey(ANIM::NORMAL);
 
-	/// 三角関数を使った移動方向の計算
-	auto theta = atan2(_aimPos.y - _pos.y, _aimPos.x - _pos.x);
-	auto cost = cos(theta);
-	auto sint = sin(theta);
-
-	_vel = Vector2(3 * cost, 3 * sint);
-
-	///	速度がなかった時に最低速度を渡すようにしている
-	if (_vel.y == 0)
-	{
-		_vel.y = (sint >= 0.0 ? 1 : -1);
-	}
-
-	_updater = &Enemy::TargetUpdate;
+	MidMove();
+	// Target();
 }
 
 Enemy::~Enemy()
@@ -42,13 +31,43 @@ Enemy::~Enemy()
 	TRACE("敵の死亡\n");
 }
 
-void Enemy::Idle()
+void Enemy::MidMove()
 {
-	_updater = &Enemy::IdleUpdate;
+	_midCnt = 120;
+	auto theta = atan2(_midPos.y - _pos.y, _midPos.x - _pos.x);
+	auto cost = cos(theta);
+	auto sint = sin(theta);
+
+	_vel = Vector2(3 * cost, 3 * sint);
+
+	if (_vel.x == 0)
+	{
+		_vel.x = (cost >= 0.0 ? 1 : -1);
+	}
+	if (_vel.y == 0)
+	{
+		_vel.y = (sint >= 0.0 ? 1 : -1);
+	}
+	_updater = &Enemy::MidMoveUpdate;
 }
 
 void Enemy::Target()
 {
+	auto theta = atan2(_aimPos.y - _pos.y, _aimPos.x - _pos.x);
+	auto cost = cos(theta);
+	auto sint = sin(theta);
+
+	_vel = Vector2(3 * cost, 5 * sint);
+
+	if (_vel.x == 0)
+	{
+		_vel.x = (cost >= 0.0 ? 1 : -1);
+	}
+	if (_vel.y == 0)
+	{
+		_vel.y = (sint >= 0.0 ? 1 : -1);
+	}
+
 	_updater = &Enemy::TargetUpdate;
 }
 
@@ -67,13 +86,14 @@ void Enemy::Shot()
 	_updater = &Enemy::ShotUpdate;
 }
 
-void Enemy::Die()
+void Enemy::MidMoveUpdate()
 {
-	_updater = &Enemy::DieUpdate;
-}
-
-void Enemy::IdleUpdate()
-{
+	/// ｶｳﾝﾀｰが一定値
+	if (_midCnt < 0)
+	{
+		Target();
+	}
+	--_midCnt;
 }
 
 void Enemy::TargetUpdate()
@@ -96,9 +116,11 @@ void Enemy::TargetUpdate()
 		_vel.y = (_pos.y <= _aimPos.y ? 0 : _vel.y);
 	}
 
-	if (_vel == Vector2(0, 0))
+	if (_vel == Vector2(0,0))
 	{
-		Idle();
+		/// 配置時のずれを補正している
+		_pos = _aimPos;
+		Move();
 	}
 }
 
@@ -111,10 +133,6 @@ void Enemy::MoveUpdate()
 }
 
 void Enemy::ShotUpdate()
-{
-}
-
-void Enemy::DieUpdate()
 {
 }
 
@@ -148,12 +166,12 @@ void Enemy::Update()
 	}
 
 	/// 仮の死亡処理
-	if (rand() % 1200 == 0)
+	/*if (rand() % 1200 == 0)
 	{
 		animKey(ANIM::DEATH);
 		_isAlive = false;
 		ResetInvCnt();
-	}
+	}*/
 
 	_pos += _vel;
 

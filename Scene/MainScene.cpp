@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <stdlib.h>	
+#include <time.h>
 #include "../Game.h"
 #include "../DebugConOut.h"
 #include "MainScene.h"
@@ -35,6 +36,8 @@ MainScene::~MainScene()
 
 void MainScene::Init()
 {
+	srand((unsigned int)time(0));
+
 	_ghGameScreen = MakeScreen(LpGame.gameScreenSize.x, LpGame.gameScreenSize.y, true);
 
 	/// âºÇÃê∂ê¨
@@ -82,12 +85,10 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		/// ìGÇÃä‘äuÇãÛÇØÇÈèàóùÇèëÇ¢ÇƒÇ®Ç≠
-		auto invPos = (_enCnt / 7) * 10;
-		auto pos = Vector2(LpGame.gameScreenPos.x + ((_enCnt % 7) * 30) + 10, 
-						   LpGame.gameScreenPos.y + ((_enCnt / 7) * 32) + invPos);
-		//AddEnemy({ _initPos[rand() % 6], EN_TYPE::NORMAL, _charSize, pos});
-		AddEnemy({ _initPos[num % 6], EN_TYPE::NORMAL, _charSize,  pos});
+		auto invPos = Vector2((_enCnt % 7) * 10, (_enCnt / 7) * 10);
+		auto pos = Vector2(LpGame.gameScreenPos.x + ((_enCnt % 7) * 30) + invPos.x, 
+						   LpGame.gameScreenPos.y + ((_enCnt / 7) * 32) + invPos.y);
+		AddEnemy({ _initPos[rand() % 6], EN_TYPE::NORMAL, _charSize, pos});
 		++num;
 		++_enCnt;
 		_enCnt = (_enCnt <= 20 ? _enCnt : 0);

@@ -33,24 +33,24 @@ public:
 	void Draw() override;
 	const Obj GetObjID() const override;
 private:
-	void Idle();
+	void MidMove();
 	void Target();
 	void Rotation();
 	void Move();
 	void Shot();
-	void Die();
 
-	void IdleUpdate();
+	void MidMoveUpdate();
 	void TargetUpdate();
 	void RotationUpdate();
 	void MoveUpdate();
 	void ShotUpdate();
-	void DieUpdate();
 
 	void Init(EN_TYPE type);
 	void (Enemy::*_updater)();
 
-	Vector2 _vel;
-	Vector2 _aimPos;			// 目標位置
+	Vector2 _aimPos;	// 目標座標
+	Vector2 _midPos;	// 中間座標
+
+	int _midCnt;		// 中間座標まで移動する時間		
 };
 
