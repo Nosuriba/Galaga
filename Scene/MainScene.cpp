@@ -19,7 +19,6 @@ MainScene::MainScene() : _charSize(30,32)
 	_initPos[1] = Vector2(-LpGame.gameScreenPos.x, LpGame.gameScreenSize.y / 2);
 	_initPos[2] = Vector2(-LpGame.gameScreenPos.x, 
 						   LpGame.gameScreenSize.y + LpGame.gameScreenPos.y - _charSize.height);
-	
 	/// 右端
 	_initPos[3] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x - _charSize.width,
 						 -LpGame.gameScreenPos.y);
@@ -27,6 +26,15 @@ MainScene::MainScene() : _charSize(30,32)
 						  LpGame.gameScreenSize.y / 2);
 	_initPos[5] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x - _charSize.width,
 						  LpGame.gameScreenSize.y + LpGame.gameScreenPos.y - _charSize.height);
+
+	/// 左端
+	_enSpace[0] = Vector2(-_charSize.width, -_charSize.height);
+	_enSpace[1] = Vector2(-_charSize.width, 0);
+	_enSpace[2] = Vector2(-_charSize.width, _charSize.height);
+	/// 右端
+	_enSpace[3] = Vector2(_charSize.width, -_charSize.height);
+	_enSpace[4] = Vector2(_charSize.width, 0);
+	_enSpace[5] = Vector2(_charSize.width, _charSize.height);
 	Init();
 }
 
@@ -53,7 +61,6 @@ void MainScene::Draw()
 {
 	SetDrawScreen(_ghGameScreen);
 	ClsDrawScreen();
-	/// プレイヤーと敵の仮描画
 	for (auto obj : _objs)
 	{
 		if (obj != nullptr)
@@ -66,26 +73,33 @@ void MainScene::Draw()
 
 unique_scene MainScene::Update(unique_scene scene, const Input & p)
 {
-	static int num = 0;
 	_dbgKeyOld = _dbgKey;
 	_dbgKey    = CheckHitKey(KEY_INPUT_SPACE);
 	auto randNum = rand();
+	auto enMax = randNum % 3;
 
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		auto invPos = Vector2((_enCnt % 7) * 10, (_enCnt / 7) * 10);
-		auto pos = Vector2(LpGame.gameScreenPos.x + ((_enCnt % 7) * 30) + invPos.x, 
-						   LpGame.gameScreenPos.y + ((_enCnt / 7) * 32) + invPos.y);
-		/// ﾗﾝﾀﾞﾑで敵を出現させるようにしている
-		auto type = (EN_TYPE)(randNum % static_cast<int>(EN_TYPE::MAX));
-		auto id   = (EN_ID)(randNum % static_cast<int>(EN_ID::MAX));
-		AddEnemy({ _initPos[randNum % 6], _charSize, type, id, pos});
-		++num;
-		++_enCnt;
-		_enCnt = (_enCnt <= 20 ? _enCnt : 0);
+		
+		for (int i = 0; i < enMax; ++i)
+		{
+			auto invPos = Vector2((_enCnt % 7) * 10, (_enCnt / 7) * 10);
+			auto aimPos	= Vector2(LpGame.gameScreenPos.x + ((_enCnt % 7) * 30) + invPos.x,
+								  LpGame.gameScreenPos.y + ((_enCnt / 7) * 32) + invPos.y);
+
+			auto space = _enSpace[randNum % 6] + (_enSpace[randNum % 6] * i);
+			/// ﾗﾝﾀﾞﾑで敵を出現させるようにしている
+			auto type = (EN_TYPE)(randNum % static_cast<int>(EN_TYPE::MAX));
+			auto id	  = (EN_ID)(randNum % static_cast<int>(EN_ID::MAX));
+
+			AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, id, aimPos });
+
+			++_enCnt;
+			_enCnt = (_enCnt <= 20 ? _enCnt : 0);
+		}
+	
 	}
 
-	/// プレイヤーと敵の仮描画
 	for (auto obj : _objs)
 	{
 		if (obj != nullptr)

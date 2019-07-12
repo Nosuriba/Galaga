@@ -164,19 +164,24 @@ void Enemy::Update()
 	{
 		return;
 	}
-
-	/// 仮の死亡処理
-	/*if (rand() % 1200 == 0)
-	{
-		animKey(ANIM::DEATH);
-		_isAlive = false;
-		ResetInvCnt();
-	}*/
-
 	_pos += _vel;
 
 	auto center = Vector2(_pos.x + _size.width / 2, _pos.y + _size.height / 2);
 	_rect = Rect(center, _size);
+
+
+	/// debug用で敵を削除している
+	static char now;
+	static char old;
+	old = now;
+	now = CheckHitKey(KEY_INPUT_C);
+
+	if (now && !old)
+	{
+		animKey(ANIM::DEATH);
+		_isAlive = false;
+		ResetInvCnt();
+	}
 
 	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
 	_dbgDrawBox(_rect.Left()  - _size.width / 2, _rect.Top()	- _size.height / 2,

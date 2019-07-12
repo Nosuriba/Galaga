@@ -26,10 +26,10 @@ private:
 	char _dbgKey;
 	char _dbgKeyOld;
 
-	///// こいつらをtable用のｸﾗｽに持っていく予定
 	int _enCnt;			  // 出現している敵のｶｳﾝﾄ
-	/// 敵の初期配置用の設定
-	std::array<Vector2, 6> _initPos; 
+	
+	std::array<Vector2, 6> _initPos;	// 敵の初期配置保存用
+	std::array<Vector2, 6> _enSpace;	// 敵の間隔用
 
 	const Size _charSize;
 
