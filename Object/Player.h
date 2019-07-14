@@ -16,7 +16,6 @@ public:
 	Player(const Vector2& pos, const Size& size);
 	~Player();
 
-
 	void Update() override;
 	void Draw() override;
 	const Obj GetObjID() const override;

@@ -14,10 +14,11 @@ Enemy::Enemy(EnemyState state)
 	_size = std::get<static_cast<int>(EN_STATE::SIZE)>(state);
 	auto center = Vector2(std::get<static_cast<int>(EN_STATE::POS)>(state).x + _size.width / 2,
 						  std::get<static_cast<int>(EN_STATE::POS)>(state).y + _size.height / 2);
-	_pos = center;
-	_rect = Rect(center, _size);
+	_pos	= center;
+	_rect	= Rect(center, _size);
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_midPos = LpGame.screenSize / 2;
+	_angle	= 0.0;
 
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
 	animKey(ANIM::NORMAL);
@@ -156,6 +157,17 @@ void Enemy::Init(EN_TYPE type)
 	SetAnim(ANIM::DEATH, data);
 }
 
+void Enemy::CalAngle()
+{
+	auto r = atan2((_pos.y + _vel.y) - _pos.y, (_pos.x + _vel.x) - _pos.x);
+	
+	if (r < 0)
+	{
+		r = r + (2 * DX_PI);
+	}
+	_angle = (r * 360 / (2 * DX_PI));
+}
+
 void Enemy::Update()
 {
 	(this->*_updater)();
@@ -166,9 +178,9 @@ void Enemy::Update()
 	}
 	_pos += _vel;
 
+	CalAngle();
 	auto center = Vector2(_pos.x + _size.width / 2, _pos.y + _size.height / 2);
 	_rect = Rect(center, _size);
-
 
 	/// debug用で敵を削除している
 	static char now;

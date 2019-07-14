@@ -41,6 +41,7 @@ protected:
 	Vector2 _vel;
 	Size _size;
 	Rect _rect;
+	double _angle;
 	bool _isAlive = true;		// true : ¶‘¶, false : €–S
 	bool _isDeath = false;		// true : “G‚Ìíœ, false : €–Sˆ—’†
 

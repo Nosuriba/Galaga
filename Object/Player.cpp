@@ -11,15 +11,15 @@ Player::Player()
 
 Player::Player(const Vector2 & pos, const Size& size)
 {
-	_size = size;
+	_size	= size;
 	auto center = Vector2(pos.x + _size.width / 2, pos.y + _size.height / 2);
-	_pos = center;
+	_pos	= center;
+	_angle	= 0.0;
+	_rect   = Rect(center, _size);
 	
-
-	_rect = Rect(center, _size);
 	Init();
 	animKey(ANIM::NORMAL);
-	_input = std::make_unique<KeyState>();
+	_input	 = std::make_unique<KeyState>();
 
 	_updater = &Player::IdleUpdate;
 }

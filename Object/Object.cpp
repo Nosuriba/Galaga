@@ -72,7 +72,7 @@ void Object::Draw()
 
 	AnimUpdate();
 
-	DrawRotaGraph(_pos.x, _pos.y, 1.0, 0, _animMap[_animKey][_animID].first, true);
+	DrawRotaGraph(_pos.x, _pos.y, 1.0, _angle, _animMap[_animKey][_animID].first, true);
 }
 
 bool Object::GetDeath() const
