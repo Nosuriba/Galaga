@@ -56,7 +56,7 @@ private:
 	void MoveUpdate();
 	void ShotUpdate();
 
-	void Init(EN_TYPE type);
+	void Init(EN_TYPE type, EN_ID id);
 	void CalAngle();			// äpìxåvéZóp
 	void (Enemy::*_updater)();
 

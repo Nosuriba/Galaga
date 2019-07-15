@@ -90,14 +90,24 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			auto space = _enSpace[randNum % 6] + (_enSpace[randNum % 6] * i);
 			/// ◊›¿ﬁ—Ç≈ìGÇèoåªÇ≥ÇπÇÈÇÊÇ§Ç…ÇµÇƒÇ¢ÇÈ
 			auto type = (EN_TYPE)(randNum % static_cast<int>(EN_TYPE::MAX));
-			auto id	  = (EN_ID)(randNum % static_cast<int>(EN_ID::MAX));
+			// auto id	  = (EN_ID)(randNum % static_cast<int>(EN_ID::MAX));
 
-			AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, id, aimPos });
+			AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, EN_ID::BEE, aimPos });
 
 			++_enCnt;
 			_enCnt = (_enCnt <= 20 ? _enCnt : 0);
 		}
 	
+	}
+
+	for (auto obj : _objs)
+	{
+		/// ç≈èâÇ…ìoò^Ç≥ÇÍÇΩìGÇÃ±∆“∞ºÆ›∂≥›ƒÇâ¡éZÇ∑ÇÈèàóù
+		if (obj->GetObjID() == Obj::ENEMY)
+		{
+			obj->LeadUpdate();
+			break;
+		}
 	}
 
 	for (auto obj : _objs)

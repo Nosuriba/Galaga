@@ -33,10 +33,25 @@ public:
 	virtual void Draw();
 	virtual const Obj GetObjID() const = 0;
 
+	void LeadUpdate();
+
 	bool GetDeath() const;
 
 	const Vector2& pos() const;
 protected:
+	// ±ÆÒ°¼®İ‚Ì“o˜^
+	bool SetAnim(ANIM key, anim_vec& data);
+
+	bool DestryCheck();
+
+	void SetInvCnt(const int& leadCnt);
+	void ResetInvCnt();
+
+	// key‚Ìó‘Ô‚ğ•ÏX‚µ‚Ä‚¢‚é
+	bool animKey(const ANIM key);
+	// key‚Ìî•ñ‚ğæ“¾‚µ‚Ä‚¢‚é
+	const ANIM& animKey() const;
+
 	Vector2 _pos;
 	Vector2 _vel;
 	Size _size;
@@ -45,17 +60,7 @@ protected:
 	bool _isAlive = true;		// true : ¶‘¶, false : €–S
 	bool _isDeath = false;		// true : “G‚Ìíœ, false : €–Sˆ—’†
 
-	// ±ÆÒ°¼®İ‚Ì“o˜^
-	bool SetAnim(ANIM key, anim_vec& data);
-
-	bool DestryCheck();
-
-	void ResetInvCnt();
-
-	// key‚Ìó‘Ô‚ğ•ÏX‚µ‚Ä‚¢‚é
-	bool animKey(const ANIM key);
-	// key‚Ìî•ñ‚ğæ“¾‚µ‚Ä‚¢‚é
-	const ANIM& animKey() const;
+	static int _leadCnt;
 private:
 	void AnimUpdate();
 	

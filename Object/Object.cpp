@@ -1,5 +1,8 @@
 #include "Object.h"
 #include "../DebugDisp.h"
+
+int Object::_leadCnt = 0;
+
 Object::Object()
 {
 }
@@ -25,6 +28,11 @@ bool Object::DestryCheck()
 		_isDeath = (_animMap[_animKey][_animID].first == -1);
 	}
 	return true;
+}
+
+void Object::SetInvCnt(const int & leadCnt)
+{
+	_invCnt = leadCnt;
 }
 
 void Object::ResetInvCnt()
@@ -53,9 +61,13 @@ void Object::AnimUpdate()
 {
 	if (_invCnt >= _animMap[_animKey][_animID].second)
 	{
-		_invCnt = 0;
+		auto debug = _animMap[_animKey][_animMap[_animKey].size() - 1].second;
 		_animID = (_animID + 1) % _animMap[_animKey].size();
+		_invCnt = (_invCnt < _animMap[_animKey][_animMap[_animKey].size() - 1].second
+				  ?_invCnt : 0);
 	}
+	_leadCnt = (_leadCnt < _animMap[_animKey][_animMap[_animKey].size() - 1].second
+			   ? _leadCnt : 0);
 	++_invCnt;
 }
 
@@ -73,6 +85,11 @@ void Object::Draw()
 	AnimUpdate();
 
 	DrawRotaGraph(_pos.x, _pos.y, 1.0, _angle, _animMap[_animKey][_animID].first, true);
+}
+
+void Object::LeadUpdate()
+{
+	++_leadCnt;
 }
 
 bool Object::GetDeath() const

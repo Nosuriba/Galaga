@@ -93,7 +93,7 @@ void Player::Init()
 
 	/// ﾃﾞﾌｫﾙﾄｱﾆﾒｰｼｮﾝの登録
 	data.emplace_back(IMAGE_ID("player")[0], 30);
-	data.emplace_back(IMAGE_ID("player")[1], 30);
+	data.emplace_back(IMAGE_ID("player")[1], 60);
 	SetAnim(ANIM::NORMAL, data);
 
 	/// 捕獲時ｱﾆﾒｰｼｮﾝの登録
@@ -104,10 +104,10 @@ void Player::Init()
 	data.emplace_back(IMAGE_ID("pl_blast")[0], 15);
 	for (int i = 1; i < 4; ++i)
 	{
-		data.emplace_back(IMAGE_ID("pl_blast")[i], 5);
+		data.emplace_back(IMAGE_ID("pl_blast")[i], 15 + (5 * i));
 	}
 	/// ｱﾆﾒｰｼｮﾝの終了位置を設定している
-	data.emplace_back(-1, 10);
+	data.emplace_back(-1, 60);
 	SetAnim(ANIM::DEATH, data);
 }
 

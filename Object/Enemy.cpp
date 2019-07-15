@@ -20,7 +20,9 @@ Enemy::Enemy(EnemyState state)
 	_midPos = LpGame.screenSize / 2;
 	_angle	= 0.0;
 
-	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
+	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state),
+		 std::get<static_cast<int>(EN_STATE::ID)>(state));
+
 	animKey(ANIM::NORMAL);
 
 	MidMove();
@@ -130,29 +132,32 @@ void Enemy::RotationUpdate()
 
 void Enemy::MoveUpdate()
 {
+	/// 最初に登録した敵と同じｱﾆﾒｰｼｮﾝをするようにしたが、
+	/// 処理の修正をした方がいいと思う
+	SetInvCnt(_leadCnt);
 }
 
 void Enemy::ShotUpdate()
 {
 }
 
-void Enemy::Init(EN_TYPE type)
+void Enemy::Init(EN_TYPE type, EN_ID id)
 {
 	anim_vec data;
-	auto id = static_cast<int>(type) * 2;
-	auto enID = (rand() % 3) * 10;
+	auto enType = static_cast<int>(type) * 2;
+	auto enID   = static_cast<int>(id) * 10;
 
-	data.emplace_back(IMAGE_ID("enemy")[0 + enID + id], 30);
-	data.emplace_back(IMAGE_ID("enemy")[1 + enID + id], 30);
+	data.emplace_back(IMAGE_ID("enemy")[0 + enType + enID], 30);
+	data.emplace_back(IMAGE_ID("enemy")[1 + enType + enID], 60);
 	SetAnim(ANIM::NORMAL, data);
 
 	data.emplace_back(IMAGE_ID("en_blast")[0], 15);
  	for (int i = 1; i < 5; ++i)
 	{
-		data.emplace_back(IMAGE_ID("en_blast")[i], 5);
+		data.emplace_back(IMAGE_ID("en_blast")[i], 15 + (5 * i));
 	}
 	/// ｱﾆﾒｰｼｮﾝの終了位置を設定している
-	data.emplace_back(-1, 10);
+	data.emplace_back(-1, 60);
 
 	SetAnim(ANIM::DEATH, data);
 }
@@ -170,12 +175,11 @@ void Enemy::CalAngle()
 
 void Enemy::Update()
 {
-	(this->*_updater)();
-
 	if (DestryCheck())
 	{
 		return;
 	}
+	(this->*_updater)();
 	_pos += _vel;
 
 	CalAngle();
