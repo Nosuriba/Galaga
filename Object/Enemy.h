@@ -59,6 +59,7 @@ private:
 
 	void Init(EN_TYPE type, EN_ID id);
 	void CalAngle();			// 角度計算用
+	double Sigmoid(const double& gain, const double& x);	
 	void (Enemy::*_updater)();
 
 	Vector2 _aimPos;	// 目標座標

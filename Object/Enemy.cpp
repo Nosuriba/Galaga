@@ -175,6 +175,11 @@ void Enemy::CalAngle()
 	_angle = (r * 360 / (2 * DX_PI));
 }
 
+double Enemy::Sigmoid(const double & gain, const double & x)
+{
+	return 1.0 / (1.0 + exp(-gain * x));
+}
+
 void Enemy::Update()
 {
 	if (DestryCheck())
