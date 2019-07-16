@@ -8,6 +8,7 @@ enum class EN_STATE
 	TYPE,
 	ID,
 	AIM,
+	NUM,
 	MAX
 };
 
@@ -29,8 +30,8 @@ enum class EN_ID
 	MAX
 };
 
-//	0 : pos, 1 : size  2 : type, 3 : id, 4 : aimPos
-using EnemyState = std::tuple<Vector2, Size, EN_TYPE, EN_ID, Vector2>;
+//	0 : pos, 1 : size  2 : type, 3 : id, 4 : aimPos, 5 : num
+using EnemyState = std::tuple<Vector2, Size, EN_TYPE, EN_ID, Vector2, int>;
 
 class Enemy :
 	public Object

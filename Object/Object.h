@@ -34,6 +34,8 @@ public:
 	virtual const Obj GetObjID() const = 0;
 
 	void LeadUpdate();
+	int GetEnemyNum() const;
+
 
 	bool GetDeath() const;
 
@@ -41,6 +43,7 @@ public:
 protected:
 	// ±ÆÒ°¼®Ý‚Ì“o˜^
 	bool SetAnim(ANIM key, anim_vec& data);
+	void SetEnemyNum(const int& num);
 
 	bool DestryCheck();
 
@@ -70,6 +73,8 @@ private:
 	ANIM _animKey;
 	int _invCnt = 0;
 	int _animID = 0;
+
+	int _enNum;
 
 };
 

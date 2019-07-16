@@ -23,6 +23,7 @@ Enemy::Enemy(const EnemyState& state)
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state),
 		 std::get<static_cast<int>(EN_STATE::ID)>(state));
 
+	SetEnemyNum(std::get<static_cast<int>(EN_STATE::NUM)>(state));
 	animKey(ANIM::NORMAL);
 
 	MidMove();

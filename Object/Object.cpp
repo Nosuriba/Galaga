@@ -92,6 +92,16 @@ void Object::LeadUpdate()
 	++_leadCnt;
 }
 
+void Object::SetEnemyNum(const int & num)
+{
+	_enNum = num;
+}
+
+int Object::GetEnemyNum() const
+{
+	return _enNum;
+}
+
 bool Object::GetDeath() const
 {
 	return _isDeath;

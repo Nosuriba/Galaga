@@ -10,9 +10,15 @@
 #include "../Object/Player.h"
 #include "../Common/ImageMng.h"
 
-MainScene::MainScene() : _charSize(30,32)
+MainScene::MainScene() : _charSize(30,32), _enMax(7, 3)
 {
 	_enCnt = 0;
+
+	_enTblInfo.reserve(_enMax.x * _enMax.y);
+	for (int i = 0; i < (_enMax.x * _enMax.y); ++i)
+	{
+		_enTblInfo.emplace_back(0);
+	}
 
 	/// 左端
 	_initPos[0] = Vector2(-LpGame.gameScreenPos.x, -LpGame.gameScreenPos.y);
@@ -76,29 +82,35 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	_dbgKeyOld = _dbgKey;
 	_dbgKey    = CheckHitKey(KEY_INPUT_SPACE);
 	auto randNum = rand();
-	auto enMax = (randNum % 3) + 1;
 
 
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		for (int i = 0; i < enMax; ++i)
+		for (int cnt = 0; cnt < 5;)
 		{
-			/// 敵を格納するIDを作成する
-			auto invPos = Vector2((_enCnt % 7) * 10, (_enCnt / 7) * 10);
-			auto aimPos	= Vector2(LpGame.gameScreenPos.x + ((_enCnt % 7) * 30) + invPos.x,
-								  LpGame.gameScreenPos.y + ((_enCnt / 7) * 32) + invPos.y);
+			/// 出現している敵が最大数を超えている時、処理を抜ける
+			if (_enCnt >= (_enMax.x * _enMax.y))
+			{
+				break;
+			}
+			auto num = rand() % (_enMax.x * _enMax.y);
+			if (!_enTblInfo[num])
+			{
+				auto invPos = Vector2((num % _enMax.x) * 10, (num / _enMax.x) * 10);
+				auto aimPos = Vector2(LpGame.gameScreenPos.x + ((num % _enMax.x) * _charSize.width) + invPos.x,
+									  LpGame.gameScreenPos.y + ((num / _enMax.x) * _charSize.height) + invPos.y);
+				auto space = _enSpace[randNum % 6] + (_enSpace[randNum % 6] * cnt);
+				
+				/// ﾗﾝﾀﾞﾑで敵を出現させるようにしている
+				auto type = (EN_TYPE)(randNum % static_cast<int>(EN_TYPE::MAX));
+				auto id	  = (EN_ID)(randNum % static_cast<int>(EN_ID::MAX));
 
-			auto space = _enSpace[randNum % 6] + (_enSpace[randNum % 6] * i);
-			/// ﾗﾝﾀﾞﾑで敵を出現させるようにしている
-			auto type = (EN_TYPE)(randNum % static_cast<int>(EN_TYPE::MAX));
-			 auto id  = (EN_ID)(randNum % static_cast<int>(EN_ID::MAX));
-
-			AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, id, aimPos });
-
-			++_enCnt;
-			_enCnt = (_enCnt <= 20 ? _enCnt : 0);
+				AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, id, aimPos, num });
+				++cnt;
+				++_enCnt;
+				_enTblInfo[num] = 1;
+			}
 		}
-	
 	}
 
 	for (auto obj : _objs)
@@ -113,9 +125,11 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 
 	for (auto obj : _objs)
 	{
-		if (obj != nullptr)
+		obj->Update();
+		if (obj->GetDeath())
 		{
-			obj->Update();
+			--_enCnt;
+			_enTblInfo[obj->GetEnemyNum()] = 0;
 		}
 	}
 
@@ -126,7 +140,6 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	{
 		return std::make_unique<ResultScene>();
 	}*/
-
 	/// vectorの削除する範囲の指定
 	auto eraseBegin = remove_if(_objs.begin(),				// 開始位置
 								_objs.end(),				// 終了位置
