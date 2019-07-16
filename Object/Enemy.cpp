@@ -9,7 +9,7 @@ Enemy::Enemy()
 {
 }
 
-Enemy::Enemy(EnemyState state)
+Enemy::Enemy(const EnemyState& state)
 {
 	_size = std::get<static_cast<int>(EN_STATE::SIZE)>(state);
 	auto center = Vector2(std::get<static_cast<int>(EN_STATE::POS)>(state).x + _size.width / 2,

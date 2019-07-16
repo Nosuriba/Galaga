@@ -37,7 +37,7 @@ class Enemy :
 {
 public:
 	Enemy();
-	Enemy(EnemyState state);
+	Enemy(const EnemyState& state);
 	~Enemy();
 	
 	void Update() override;
