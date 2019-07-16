@@ -76,11 +76,11 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	_dbgKeyOld = _dbgKey;
 	_dbgKey    = CheckHitKey(KEY_INPUT_SPACE);
 	auto randNum = rand();
-	auto enMax = randNum % 3;
+	auto enMax = (randNum % 3) + 1;
+
 
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		
 		for (int i = 0; i < enMax; ++i)
 		{
 			auto invPos = Vector2((_enCnt % 7) * 10, (_enCnt / 7) * 10);
@@ -90,9 +90,9 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			auto space = _enSpace[randNum % 6] + (_enSpace[randNum % 6] * i);
 			/// ×ÝÀÞÑ‚Å“G‚ðoŒ»‚³‚¹‚é‚æ‚¤‚É‚µ‚Ä‚¢‚é
 			auto type = (EN_TYPE)(randNum % static_cast<int>(EN_TYPE::MAX));
-			// auto id	  = (EN_ID)(randNum % static_cast<int>(EN_ID::MAX));
+			 auto id  = (EN_ID)(randNum % static_cast<int>(EN_ID::MAX));
 
-			AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, EN_ID::BEE, aimPos });
+			AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, id, aimPos });
 
 			++_enCnt;
 			_enCnt = (_enCnt <= 20 ? _enCnt : 0);
