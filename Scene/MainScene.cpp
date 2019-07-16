@@ -83,6 +83,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	{
 		for (int i = 0; i < enMax; ++i)
 		{
+			/// “G‚ðŠi”[‚·‚éID‚ðì¬‚·‚é
 			auto invPos = Vector2((_enCnt % 7) * 10, (_enCnt / 7) * 10);
 			auto aimPos	= Vector2(LpGame.gameScreenPos.x + ((_enCnt % 7) * 30) + invPos.x,
 								  LpGame.gameScreenPos.y + ((_enCnt / 7) * 32) + invPos.y);

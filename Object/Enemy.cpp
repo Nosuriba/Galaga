@@ -162,6 +162,7 @@ void Enemy::Init(EN_TYPE type, EN_ID id)
 	SetAnim(ANIM::DEATH, data);
 }
 
+/// 引数に、始点と終点の情報を渡すようにしてみる
 void Enemy::CalAngle()
 {
 	auto r = atan2((_pos.y + _vel.y) - _pos.y, (_pos.x + _vel.x) - _pos.x);
