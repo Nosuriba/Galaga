@@ -58,7 +58,7 @@ void MainScene::Init()
 	_objs.emplace_back(std::make_shared<Player>(Vector2(100, 200), _charSize));
 }
 
-void MainScene::AddEnemy(EnemyState state)
+void MainScene::AddEnemy(const EnemyState& state)
 {
 	_objs.emplace_back(std::make_shared<Enemy>(state));
 }
@@ -98,7 +98,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			if (!_enTblInfo[num])
 			{
 				auto invPos = Vector2((num % _enMax.x) * 10, (num / _enMax.x) * 10);
-				auto aimPos = Vector2(LpGame.gameScreenPos.x + ((num % _enMax.x) * _charSize.width) + invPos.x,
+				auto aimPos = Vector2d(LpGame.gameScreenPos.x + ((num % _enMax.x) * _charSize.width) + invPos.x,
 									  LpGame.gameScreenPos.y + ((num / _enMax.x) * _charSize.height) + invPos.y);
 				auto space = _enSpace[randNum % 6] + (_enSpace[randNum % 6] * cnt);
 				

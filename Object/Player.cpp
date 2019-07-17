@@ -14,7 +14,7 @@ Player::Player(const Vector2 & pos, const Size& size)
 	_size	= size;
 	auto center = Vector2(pos.x + _size.width / 2, pos.y + _size.height / 2);
 	_pos	= Vector2d(center.x, center.y);
-	_angle	= 0.0;
+	_rad	= 0.0;
 	_rect   = Rect(center, _size);
 	
 	Init();
@@ -26,6 +26,30 @@ Player::Player(const Vector2 & pos, const Size& size)
 
 Player::~Player()
 {
+}
+
+void Player::Init()
+{
+	anim_vec data;
+
+	/// ﾃﾞﾌｫﾙﾄｱﾆﾒｰｼｮﾝの登録
+	data.emplace_back(IMAGE_ID("player")[0], 30);
+	data.emplace_back(IMAGE_ID("player")[1], 60);
+	SetAnim(ANIM::NORMAL, data);
+
+	/// 捕獲時ｱﾆﾒｰｼｮﾝの登録
+	data.emplace_back(IMAGE_ID("player")[2], 30);
+	SetAnim(ANIM::EX, data);
+
+	/// 爆破ｱﾆﾒｰｼｮﾝの登録
+	data.emplace_back(IMAGE_ID("pl_blast")[0], 15);
+	for (int i = 1; i < 4; ++i)
+	{
+		data.emplace_back(IMAGE_ID("pl_blast")[i], 15 + (5 * i));
+	}
+	/// ｱﾆﾒｰｼｮﾝの終了位置を設定している
+	data.emplace_back(-1, 60);
+	SetAnim(ANIM::DEATH, data);
 }
 
 void Player::Idle()
@@ -85,30 +109,6 @@ void Player::MoveUpdate()
 
 void Player::DieUpdate()
 {
-}
-
-void Player::Init()
-{
-	anim_vec data;
-
-	/// ﾃﾞﾌｫﾙﾄｱﾆﾒｰｼｮﾝの登録
-	data.emplace_back(IMAGE_ID("player")[0], 30);
-	data.emplace_back(IMAGE_ID("player")[1], 60);
-	SetAnim(ANIM::NORMAL, data);
-
-	/// 捕獲時ｱﾆﾒｰｼｮﾝの登録
-	data.emplace_back(IMAGE_ID("player")[2], 30);
-	SetAnim(ANIM::EX, data);
-
-	/// 爆破ｱﾆﾒｰｼｮﾝの登録
-	data.emplace_back(IMAGE_ID("pl_blast")[0], 15);
-	for (int i = 1; i < 4; ++i)
-	{
-		data.emplace_back(IMAGE_ID("pl_blast")[i], 15 + (5 * i));
-	}
-	/// ｱﾆﾒｰｼｮﾝの終了位置を設定している
-	data.emplace_back(-1, 60);
-	SetAnim(ANIM::DEATH, data);
 }
 
 void Player::Update()

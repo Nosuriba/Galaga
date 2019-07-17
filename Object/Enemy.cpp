@@ -14,12 +14,12 @@ Enemy::Enemy(const EnemyState& state)
 	_size = std::get<static_cast<int>(EN_STATE::SIZE)>(state);
 	auto center = Vector2(std::get<static_cast<int>(EN_STATE::POS)>(state).x + _size.width / 2,
 						  std::get<static_cast<int>(EN_STATE::POS)>(state).y + _size.height / 2);
-	_pos	= Vector2d(center.x, center.y);
-	_vel	= Vector2d();
-	_rect	= Rect(center, _size);
+	_pos	 = Vector2d(center.x, center.y);
+	_vel	 = Vector2d();
+	_rect	 = Rect(center, _size);
 	_nextPos = _pos;
-	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
-	_angle	= 0.0;
+	_aimPos  = std::get<static_cast<int>(EN_STATE::AIM)>(state);
+	_rad	 = 0.0;
 
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state),
 		 std::get<static_cast<int>(EN_STATE::ID)>(state));
@@ -115,12 +115,13 @@ void Enemy::CurveUpdate()
 	CalAngle(_pos, _nextPos);
 	sigCnt += 1.0;
 
-	//auto vec = atan2f(_nextPos.y - _pos.y, _nextPos.x - _pos.x);
+	// auto vec = atan2f(_nextPos.y - _pos.y, _nextPos.x - _pos.x);
 	//_dbgDrawLine(_pos.x, _pos.y, _pos.x + (50 * vec), _pos.y + (50 * vec), 0xffffff, 2.0);
 }
 
 void Enemy::TargetUpdate()
 {
+	CalAngle(_pos, _aimPos);
 	if (_vel.x >= 0)
 	{
 		_vel.x = (_pos.x >= _aimPos.x ? 0 : _vel.x);
@@ -155,6 +156,7 @@ void Enemy::MoveUpdate()
 {
 	/// 最初に登録した敵と同じｱﾆﾒｰｼｮﾝをするようにしたが、
 	/// 処理の修正をした方がいいと思う
+	_rad = 0;
 	SetInvCnt(_leadCnt);
 }
 
@@ -164,14 +166,15 @@ void Enemy::ShotUpdate()
 
 void Enemy::CalAngle(const Vector2d & sPos, const Vector2d & ePos)
 {
-	auto r = atan2f(ePos.y - sPos.y, ePos.x - sPos.x);
+	auto r = atan2(ePos.y - sPos.y, ePos.x - sPos.x);
 
-	_angle = r * (180 / DX_PI);
-	/*if (r < 0)
+	if (r < 0)
 	{
 		r = r + (2 * DX_PI);
 	}
-	_angle = (r * 360 / (2 * DX_PI));*/
+	r = (r * 360 / (2 * DX_PI));
+
+	_rad = r * (DX_TWO_PI / 360);
 }
 
 double Enemy::Sigmoid(const double & gain, const double & x)

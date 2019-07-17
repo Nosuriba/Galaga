@@ -19,14 +19,14 @@ public:
 private:
 	std::vector<std::shared_ptr<Object>> _objs;
 
-	void AddEnemy(EnemyState state);
+	void AddEnemy(const EnemyState& state);
 
 	int _ghGameScreen;		// ｹﾞｰﾑｽｸﾘｰﾝの画像ﾊﾝﾄﾞﾙ
 
 	char _dbgKey;
 	char _dbgKeyOld;
 
-	int _enCnt;			  // 出現している敵のｶｳﾝﾄ
+	int _enCnt;				// 出現している敵のｶｳﾝﾄ
 	
 	std::vector<char> _enTblInfo;		// 敵の配置情報を確認するﾃｰﾌﾞﾙ
 	std::array<Vector2, 6> _initPos;	// 敵の初期配置保存用

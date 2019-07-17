@@ -36,7 +36,6 @@ public:
 	void LeadUpdate();
 	int GetEnemyNum() const;
 
-
 	bool GetDeath() const;
 
 	const Vector2d& pos() const;
@@ -59,7 +58,7 @@ protected:
 	Vector2d _vel;
 	Size _size;
 	Rect _rect;
-	double _angle;
+	double _rad;
 	bool _isAlive = true;		// true : ¶‘¶, false : €–S
 	bool _isDeath = false;		// true : “G‚Ìíœ, false : €–Sˆ—’†
 

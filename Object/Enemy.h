@@ -31,7 +31,7 @@ enum class EN_ID
 };
 
 //	0 : pos, 1 : size  2 : type, 3 : id, 4 : aimPos, 5 : num
-using EnemyState = std::tuple<Vector2, Size, EN_TYPE, EN_ID, Vector2, int>;
+using EnemyState = std::tuple<Vector2, Size, EN_TYPE, EN_ID, Vector2d, int>;
 
 class Enemy :
 	public Object
@@ -62,7 +62,7 @@ private:
 	double Sigmoid(const double& gain, const double& x);	
 	void (Enemy::*_updater)();
 
-	Vector2 _aimPos;	// 目標座標
+	Vector2d _aimPos;	// 目標座標
 	Vector2d _nextPos;
 
 	double sigCnt;		// ｼｸﾞﾓｲﾄﾞ関数の値
