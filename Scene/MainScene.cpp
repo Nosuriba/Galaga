@@ -106,7 +106,8 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 				auto type = (EN_TYPE)(randNum % static_cast<int>(EN_TYPE::MAX));
 				auto id	  = (EN_ID)(rand() % static_cast<int>(EN_ID::MAX));
 
-				AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, id, aimPos, num });
+				// AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, id, aimPos, num });
+				AddEnemy({ Vector2(300,200) + space, _charSize, type, id, aimPos, num });
 				++cnt;
 				++_enCnt;
 				_enTblInfo[num] = 1;
