@@ -107,7 +107,7 @@ bool Object::GetDeath() const
 	return _isDeath;
 }
 
-const Vector2 & Object::pos() const
+const Vector2d & Object::pos() const
 {
 	return _pos;
 }

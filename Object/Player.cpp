@@ -13,7 +13,7 @@ Player::Player(const Vector2 & pos, const Size& size)
 {
 	_size	= size;
 	auto center = Vector2(pos.x + _size.width / 2, pos.y + _size.height / 2);
-	_pos	= center;
+	_pos	= Vector2d(center.x, center.y);
 	_angle	= 0.0;
 	_rect   = Rect(center, _size);
 	

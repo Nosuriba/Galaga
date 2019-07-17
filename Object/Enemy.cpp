@@ -14,10 +14,9 @@ Enemy::Enemy(const EnemyState& state)
 	_size = std::get<static_cast<int>(EN_STATE::SIZE)>(state);
 	auto center = Vector2(std::get<static_cast<int>(EN_STATE::POS)>(state).x + _size.width / 2,
 						  std::get<static_cast<int>(EN_STATE::POS)>(state).y + _size.height / 2);
-	_pos	= center;
+	_pos	= Vector2d(center.x, center.y);
 	_rect	= Rect(center, _size);
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
-	_midPos = LpGame.screenSize / 2;
 	_angle	= 0.0;
 
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state),
@@ -36,21 +35,7 @@ Enemy::~Enemy()
 
 void Enemy::MidMove()
 {
-	_midCnt = 120;
-	auto theta = atan2(_midPos.y - _pos.y, _midPos.x - _pos.x);
-	auto cost = cos(theta);
-	auto sint = sin(theta);
-
-	_vel = Vector2(3 * cost, 3 * sint);
-
-	if (_vel.x == 0)
-	{
-		_vel.x = (cost >= 0.0 ? 1 : -1);
-	}
-	if (_vel.y == 0)
-	{
-		_vel.y = (sint >= 0.0 ? 1 : -1);
-	}
+	sigCnt = 0;
 	_updater = &Enemy::MidMoveUpdate;
 }
 
@@ -60,7 +45,7 @@ void Enemy::Target()
 	auto cost = cos(theta);
 	auto sint = sin(theta);
 
-	_vel = Vector2(3 * cost, 5 * sint);
+	_vel = Vector2d(3 * cost, 5 * sint);
 
 	if (_vel.x == 0)
 	{
@@ -91,12 +76,9 @@ void Enemy::Shot()
 
 void Enemy::MidMoveUpdate()
 {
-	/// ｶｳﾝﾀｰが一定値
-	if (_midCnt < 0)
-	{
-		Target();
-	}
-	--_midCnt;
+	sigCnt += 1.0;
+	_pos += Vector2d(Sigmoid(-1, sigCnt), Sigmoid(-1, sigCnt));
+
 }
 
 void Enemy::TargetUpdate()
@@ -119,10 +101,10 @@ void Enemy::TargetUpdate()
 		_vel.y = (_pos.y <= _aimPos.y ? 0 : _vel.y);
 	}
 
-	if (_vel == Vector2(0,0))
+	if (_vel == Vector2d(0,0))
 	{
 		/// 配置時のずれを補正している
-		_pos = _aimPos;
+		_pos = Vector2d(_aimPos.x, _aimPos.y);
 		Move();
 	}
 }

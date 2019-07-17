@@ -86,7 +86,8 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		for (int cnt = 0; cnt < 5;)
+		/// 仮で3体ずつ出すようにしている
+		for (int cnt = 0; cnt < 1;)
 		{
 			/// 出現している敵が最大数を超えている時、処理を抜ける
 			if (_enCnt >= (_enMax.x * _enMax.y))
@@ -103,7 +104,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 				
 				/// ﾗﾝﾀﾞﾑで敵を出現させるようにしている
 				auto type = (EN_TYPE)(randNum % static_cast<int>(EN_TYPE::MAX));
-				auto id	  = (EN_ID)(randNum % static_cast<int>(EN_ID::MAX));
+				auto id	  = (EN_ID)(rand() % static_cast<int>(EN_ID::MAX));
 
 				AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, id, aimPos, num });
 				++cnt;
@@ -126,10 +127,10 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	for (auto obj : _objs)
 	{
 		obj->Update();
-		if (obj->GetDeath())
+		if (obj->GetDeath() && obj->GetObjID() == Obj::ENEMY)
 		{
-			--_enCnt;
 			_enTblInfo[obj->GetEnemyNum()] = 0;
+			--_enCnt;
 		}
 	}
 

@@ -1,7 +1,9 @@
 #pragma once
 
+/// template<class T>‚ÌŒ`‚É’¼‚µ‚Ä‚¨‚­
+//template <class T>
 /// ÃİÌßÚ°ÄŒ^‚ğg‚Á‚½À‘•‚ğ‚µ‚Ä‚¢‚é
-template <typename T>
+template <class T>
 class Vector2D
 {
 public:
@@ -116,45 +118,45 @@ public:
 	}
 };
 // Vector2D“¯m‚Ì‰ÁZ
-template <typename T>
+template <class T>
 Vector2D<T> operator+(const Vector2D<T> & vec1, const Vector2D<T> & vec2)
 {
 	return Vector2D<T>(vec1.x + vec2.x, vec1.y + vec2.y);
 }
 
 // Vector2D‚ÆÃİÌßÚ°ÄŒ^‚Ì‰ÁZ
-template <typename T>
+template <class T>
 Vector2D<T> operator+(const Vector2D<T> & vec1, const T& i)
 {
 	return Vector2D<T>(vec1.x + i, vec1.y + i);
 }
 // Vector2D“¯m‚ÌŒ¸Z
-template <typename T>
+template <class T>
 Vector2D<T> operator-(const Vector2D<T> & vec1, const Vector2D<T> & vec2)
 {
 	return Vector2D<T>(vec1.x - vec2.x, vec1.y - vec2.y);
 }
 // Vector2D“¯m‚ÌæZ
-template <typename T>
+template <class T>
 Vector2D<T> operator*(const Vector2D<T> & vec1, const Vector2D<T> & vec2)
 {
 	return Vector2D<T>(vec1.x * vec2.x, vec1.y * vec2.y);
 }
 // Vector2D‚ÆÃİÌßÚ°ÄŒ^‚ÌæZ
-template <typename T>
+template <class T>
 Vector2D<T> operator*(const Vector2D<T>& vec, const T & k)
 {
 	return Vector2D<T>(vec.x * k, vec.y * k);
 }
 // Vector2D“¯m‚ÌœZ
-template <typename T>
+template <class T>
 Vector2D<T> operator/(const Vector2D<T> & vec1, const Vector2D<T> & vec2)
 {
 	 return Vector2D<T>(vec1.x / vec2.x, vec1.y / vec2.y);
 }
 
 // Vector2D‚ÆÃİÌßÚ°ÄŒ^‚ÌœZ
-template <typename T>
+template <class T>
 Vector2D<T> operator/(const Vector2D<T>& vec, const T & k)
 {
 	return Vector2D<T>(vec.x / k, vec.y / k);
@@ -162,6 +164,7 @@ Vector2D<T> operator/(const Vector2D<T>& vec, const T & k)
 
 using Vector2  = Vector2D<int>;
 using Vector2f = Vector2D<float>;
+using Vector2d = Vector2D<double>;
 
 struct Size
 {

@@ -63,8 +63,6 @@ private:
 	void (Enemy::*_updater)();
 
 	Vector2 _aimPos;	// 目標座標
-	Vector2 _midPos;	// 中間座標
-
-	int _midCnt;		// 中間座標まで移動する時間
+	double sigCnt;
 };
 

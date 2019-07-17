@@ -39,7 +39,7 @@ public:
 
 	bool GetDeath() const;
 
-	const Vector2& pos() const;
+	const Vector2d& pos() const;
 protected:
 	// ±ÆÒ°¼®İ‚Ì“o˜^
 	bool SetAnim(ANIM key, anim_vec& data);
@@ -55,8 +55,8 @@ protected:
 	// key‚Ìî•ñ‚ğæ“¾‚µ‚Ä‚¢‚é
 	const ANIM& animKey() const;
 
-	Vector2 _pos;
-	Vector2 _vel;
+	Vector2d _pos;
+	Vector2d _vel;
 	Size _size;
 	Rect _rect;
 	double _angle;
