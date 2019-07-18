@@ -74,7 +74,7 @@ void Enemy::Target()
 	auto cost = cos(theta);
 	auto sint = sin(theta);
 
-	//CalAngle(_pos, _aimPos);
+	CalRad(_pos, _aimPos);
 
 	_vel = Vector2d(3 * cost, 3 * sint);
 	_updater = &Enemy::TargetUpdate;
@@ -106,8 +106,8 @@ void Enemy::CurveUpdate()
 		if (_moveCnt == _moveDir.size())
 		{
 			dbgPoint.clear();
-			Rotation();
-			// Target();
+			// Rotation();
+			Target();
 			return;
 		}
 		else
@@ -118,11 +118,12 @@ void Enemy::CurveUpdate()
 	}
 	_vel.x = 1 * _moveDir[_moveCnt].x;
 	_vel.y = Sigmoid(1.0, _sigCnt) * _moveDir[_moveCnt].y;
-	_nextPos = _vel * Vector2d(1, 3);
-	//CalAngle(_pos, _nextPos);
+	_nextPos = _vel * Vector2d(10, 10);
+	
 	_sigCnt += 0.3;
 	if (abs((int)(_sigCnt)) % 10 == 0)
 	{
+		CalRad(_pos, _nextPos);
 		dbgPoint.push_back(_pos + _vel);
 	}
 	
@@ -181,17 +182,14 @@ void Enemy::ShotUpdate()
 
 void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos)
 {
-	static int debug;
 	auto r = atan2(ePos.y - sPos.y, ePos.x - sPos.x);
+	_rad = atan2(ePos.y - sPos.y, ePos.x - sPos.x);
 
-	/*if (r < 0)
-	{
-		r = r + (2 * DX_PI);
-	}*/
-	r = r * (360 / (2 * DX_PI));
-	debug = r;
-	_dbgDrawFormatString(0, 100, 0xffff00, "%d", debug);
-	_rad = r * (DX_TWO_PI / 360);
+	/*r = r * (180 / DX_PI);
+
+	_dbgDrawFormatString(0, 100, 0xffff00, "%d", r);
+
+	_rad = r * (DX_PI / 180);*/
 }
 
 double Enemy::Sigmoid(const double & gain, const double & x)
