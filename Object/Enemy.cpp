@@ -63,8 +63,8 @@ void Enemy::Init(EN_TYPE type, EN_ID id)
 void Enemy::Curve()
 {
 	/// ｼｸﾞﾓｲﾄﾞを使った移動範囲の設定
-	sigCnt = -30;
-	sigRange = abs(sigCnt);
+	_sigCnt = -30;
+	_sigRange = abs(_sigCnt);
 	_updater = &Enemy::CurveUpdate;
 }
 
@@ -77,21 +77,14 @@ void Enemy::Target()
 	//CalAngle(_pos, _aimPos);
 
 	_vel = Vector2d(3 * cost, 3 * sint);
-
-	if (_vel.x == 0)
-	{
-		_vel.x = (cost >= 0.0 ? 1 : -1);
-	}
-	if (_vel.y == 0)
-	{
-		_vel.y = (sint >= 0.0 ? 1 : -1);
-	}
-
 	_updater = &Enemy::TargetUpdate;
 }
 
 void Enemy::Rotation()
 {
+	auto theta = atan2(_pos.y - 40 - _pos.y, _pos.x - 40 - _pos.x);
+	_rotAngle = theta * (360 / (2 * DX_PI));
+
 	_updater = &Enemy::RotationUpdate;
 }
 
@@ -107,13 +100,14 @@ void Enemy::Shot()
 
 void Enemy::CurveUpdate()
 {
-	if (sigCnt >= sigRange)
+	if (_sigCnt >= _sigRange)
 	{
 		++_moveCnt;
 		if (_moveCnt == _moveDir.size())
 		{
 			dbgPoint.clear();
-			Target();
+			Rotation();
+			// Target();
 			return;
 		}
 		else
@@ -123,11 +117,11 @@ void Enemy::CurveUpdate()
 		}
 	}
 	_vel.x = 1 * _moveDir[_moveCnt].x;
-	_vel.y = Sigmoid(1.0, sigCnt) * _moveDir[_moveCnt].y;
+	_vel.y = Sigmoid(1.0, _sigCnt) * _moveDir[_moveCnt].y;
 	_nextPos = _vel * Vector2d(1, 3);
 	//CalAngle(_pos, _nextPos);
-	sigCnt += 0.3;
-	if (abs((int)(sigCnt)) % 10 == 0)
+	_sigCnt += 0.3;
+	if (abs((int)(_sigCnt)) % 10 == 0)
 	{
 		dbgPoint.push_back(_pos + _vel);
 	}
@@ -164,6 +158,13 @@ void Enemy::TargetUpdate()
 
 void Enemy::RotationUpdate()
 {
+	static Vector2d center = _pos - Vector2d(-40, -40);
+	_rotAngle = (_moveDir[0].x < 0 ? _rotAngle - 1 : _rotAngle + 1);
+
+	auto cost = cos(_rotAngle * (DX_TWO_PI / 360));
+	auto sint = sin(_rotAngle * (DX_TWO_PI / 360));
+	_pos = center + Vector2d(40 * cost + -40 * sint,
+							 40 * sint + 40 * cost);
 }
 
 void Enemy::MoveUpdate()
@@ -178,7 +179,7 @@ void Enemy::ShotUpdate()
 {
 }
 
-void Enemy::CalAngle(const Vector2d & sPos, const Vector2d & ePos)
+void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos)
 {
 	static int debug;
 	auto r = atan2(ePos.y - sPos.y, ePos.x - sPos.x);

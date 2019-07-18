@@ -169,27 +169,6 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 
 	Draw();
 
-	/// ‰ñ“]‚ÌÃŞÊŞ¯¸Ş—p
-	static const int dbgDistance = 40;
-	static int dbgrad = 0;
-	static int cnt = 0;
-	static Vector2d distance = {0,0};
-	static const Vector2d cPos = {200,200};
-	static Vector2d dbgPos;
-
-	auto cost = cos(dbgrad);
-	auto sint = sin(dbgrad);
-
-	dbgPos = cPos + Vector2d(dbgDistance * cost, dbgDistance * sint);
-	if (cnt > 10)
-	{
-		cnt = 0;
-		dbgrad = (dbgrad < 360 ? dbgrad + 1 : 0);
-	}
-	++cnt;
-
-	_dbgDrawLine(cPos.x, cPos.y, dbgPos.x, dbgPos.y, 0xffffff, 2.0);
-
 	/*if (p.IsKeyTrigger(KEY_INPUT_SPACE))
 	{
 		return std::make_unique<ResultScene>();

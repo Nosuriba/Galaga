@@ -59,7 +59,7 @@ private:
 	void ShotUpdate();
 
 	void Init(EN_TYPE type, EN_ID id);
-	void CalAngle(const Vector2d& sPos, const Vector2d& ePos);
+	void CalRad(const Vector2d& sPos, const Vector2d& ePos);
 	double Sigmoid(const double& gain, const double& x);	
 	void (Enemy::*_updater)();
 
@@ -71,7 +71,8 @@ private:
 	// int _moveDir;		// 移動方向
 	int _moveCnt;		// 移動する回数
 
-	double sigCnt;		// ｼｸﾞﾓｲﾄﾞ関数の値
-	double sigRange;	// ｼｸﾞﾓｲﾄﾞ関数の範囲
+	double _rotAngle;	// 回転用の角度
+	double _sigCnt;		// ｼｸﾞﾓｲﾄﾞ関数の値
+	double _sigRange;	// ｼｸﾞﾓｲﾄﾞ関数の範囲
 };
 
