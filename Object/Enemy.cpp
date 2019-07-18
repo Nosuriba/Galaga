@@ -112,6 +112,7 @@ void Enemy::CurveUpdate()
 		++_moveCnt;
 		if (_moveCnt == _moveDir.size())
 		{
+			dbgPoint.clear();
 			Target();
 			return;
 		}
@@ -126,9 +127,11 @@ void Enemy::CurveUpdate()
 	_nextPos = _vel * Vector2d(1, 3);
 	//CalAngle(_pos, _nextPos);
 	sigCnt += 0.3;
-
-	// auto vec = atan2f(_nextPos.y - _pos.y, _nextPos.x - _pos.x);
-	//_dbgDrawLine(_pos.x, _pos.y, _pos.x + (50 * vec), _pos.y + (50 * vec), 0xffffff, 2.0);
+	if (abs((int)(sigCnt)) % 10 == 0)
+	{
+		dbgPoint.push_back(_pos + _vel);
+	}
+	
 }
 
 void Enemy::TargetUpdate()
@@ -222,6 +225,10 @@ void Enemy::Update()
 	}
 
 	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
+	for (auto point : dbgPoint)
+	{
+		_dbgDrawCircle (point.x, point.y,3, 0xffffff);
+	}
 	_dbgDrawBox(_rect.Left()  - _size.width / 2, _rect.Top()	- _size.height / 2,
 				_rect.Right() - _size.width / 2, _rect.Bottom() - _size.height / 2, 0xff0000, true);
 }

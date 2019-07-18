@@ -66,6 +66,7 @@ private:
 	Vector2d _aimPos;	// –Ú•WÀ•W
 	Vector2d _nextPos;
 
+	std::vector<Vector2d> dbgPoint;
 	std::vector<Vector2> _moveDir;
 	// int _moveDir;		// ˆÚ“®•ûŒü
 	int _moveCnt;		// ˆÚ“®‚·‚é‰ñ”
