@@ -30,16 +30,16 @@ MainScene::MainScene() : _charSize(30,32), _enMax(7, 3)
 	DecideDir();
 
 	/// 左端
-	_initPos[0] = Vector2(-_charSize.width, 0);
+	_initPos[0] = Vector2(-_charSize.width, _charSize.height);
 	_initPos[1] = Vector2(-_charSize.width, LpGame.gameScreenSize.y / 2);
 	_initPos[2] = Vector2(-_charSize.width, 
-						   LpGame.gameScreenSize.y + _charSize.height);
+						   LpGame.gameScreenSize.y - _charSize.height * 2);
 	/// 右端
-	_initPos[3] = Vector2(LpGame.gameScreenSize.x +_charSize.width, 0);
+	_initPos[3] = Vector2(LpGame.gameScreenSize.x +_charSize.width, _charSize.height);
 	_initPos[4] = Vector2(LpGame.gameScreenSize.x +_charSize.width, 
 						  LpGame.gameScreenSize.y / 2);
 	_initPos[5] = Vector2(LpGame.gameScreenSize.x +_charSize.width,
-						  LpGame.gameScreenSize.y + _charSize.height);
+						  LpGame.gameScreenSize.y - _charSize.height * 2);
 
 	/// 左端
 	_enSpace[0] = Vector2(-_charSize.width, -_charSize.height);
@@ -116,7 +116,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		/// 仮で3体ずつ出すようにしている
+		/// 一体ずつ出しているので、for文を使わないような処理を書くようにする
 		for (int cnt = 0; cnt < 1;)
 		{
 			/// 出現している敵が最大数を超えている時、処理を抜ける
@@ -137,6 +137,9 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 				auto id	  = (EN_ID)(rand() % static_cast<int>(EN_ID::MAX));
 
 				AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, id, aimPos, num, _dirInfo[randNum % 6] });
+
+				/// 特定の位置から出ているかの確認用(疲れた時はたまに見て楽しもう)
+				// AddEnemy({ _initPos[2], _charSize, type, id, aimPos, num, _dirInfo[2] });
 				++cnt;
 				++_enCnt;
 				_enTblInfo[num] = 1;

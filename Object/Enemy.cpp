@@ -63,8 +63,8 @@ void Enemy::Init(EN_TYPE type, EN_ID id)
 void Enemy::Curve()
 {
 	/// ｼｸﾞﾓｲﾄﾞを使った移動範囲の設定
-	sigCnt = -10;
-	sigRange = 10;
+	sigCnt = -30;
+	sigRange = abs(sigCnt);
 	_updater = &Enemy::CurveUpdate;
 }
 
@@ -107,8 +107,6 @@ void Enemy::Shot()
 
 void Enemy::CurveUpdate()
 {
-	/// Yの値が一定値を以下、以上になった時
-	/// この中の処理に入るような仕組みを作っていく？
 	if (sigCnt >= sigRange)
 	{
 		++_moveCnt;
@@ -122,14 +120,12 @@ void Enemy::CurveUpdate()
 			Curve();
 			return;
 		}
-		
 	}
 	_vel.x = 1 * _moveDir[_moveCnt].x;
 	_vel.y = Sigmoid(1.0, sigCnt) * _moveDir[_moveCnt].y;
-	_nextPos += _vel;
+	_nextPos = _vel * Vector2d(1, 3);
 	//CalAngle(_pos, _nextPos);
-	//sigCnt += 1.0; 
-	sigCnt += 0.1;
+	sigCnt += 0.3;
 
 	// auto vec = atan2f(_nextPos.y - _pos.y, _nextPos.x - _pos.x);
 	//_dbgDrawLine(_pos.x, _pos.y, _pos.x + (50 * vec), _pos.y + (50 * vec), 0xffffff, 2.0);
