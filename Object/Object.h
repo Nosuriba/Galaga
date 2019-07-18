@@ -33,7 +33,8 @@ public:
 	virtual void Draw();
 	virtual const Obj GetObjID() const = 0;
 
-	void LeadUpdate();
+	// æ“ª‚É“o˜^‚³‚ê‚½“G‚Ì±ÆÒ°¼®İXV
+	void LeadAnimUpdate();
 	int GetEnemyNum() const;
 
 	bool GetDeath() const;

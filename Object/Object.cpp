@@ -87,7 +87,7 @@ void Object::Draw()
 	DrawRotaGraph(_pos.x, _pos.y, 1.0, _rad, _animMap[_animKey][_animID].first, true);
 }
 
-void Object::LeadUpdate()
+void Object::LeadAnimUpdate()
 {
 	++_leadCnt;
 }

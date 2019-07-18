@@ -14,24 +14,32 @@ MainScene::MainScene() : _charSize(30,32), _enMax(7, 3)
 {
 	_enCnt = 0;
 
+	/// ìGÇÃ√∞ÃﬁŸÇê∂ê¨ÇµÇƒÇ¢ÇÈ
 	_enTblInfo.reserve(_enMax.x * _enMax.y);
 	for (int i = 0; i < (_enMax.x * _enMax.y); ++i)
 	{
 		_enTblInfo.emplace_back(0);
 	}
 
+	/// ìGÇÃà⁄ìÆï˚å¸ÇÃê›íË
+	_dirInfo.resize(6);
+	for (int i = 0; i < _dirInfo.size(); ++i)
+	{
+		_dirInfo[i].resize(2);
+	}
+	DecideDir();
+
 	/// ç∂í[
-	_initPos[0] = Vector2(-LpGame.gameScreenPos.x, -LpGame.gameScreenPos.y);
-	_initPos[1] = Vector2(-LpGame.gameScreenPos.x, LpGame.gameScreenSize.y / 2);
-	_initPos[2] = Vector2(-LpGame.gameScreenPos.x, 
-						   LpGame.gameScreenSize.y + LpGame.gameScreenPos.y - _charSize.height);
+	_initPos[0] = Vector2(-_charSize.width, 0);
+	_initPos[1] = Vector2(-_charSize.width, LpGame.gameScreenSize.y / 2);
+	_initPos[2] = Vector2(-_charSize.width, 
+						   LpGame.gameScreenSize.y + _charSize.height);
 	/// âEí[
-	_initPos[3] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x - _charSize.width,
-						 -LpGame.gameScreenPos.y);
-	_initPos[4] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x - _charSize.width, 
+	_initPos[3] = Vector2(LpGame.gameScreenSize.x +_charSize.width, 0);
+	_initPos[4] = Vector2(LpGame.gameScreenSize.x +_charSize.width, 
 						  LpGame.gameScreenSize.y / 2);
-	_initPos[5] = Vector2(LpGame.gameScreenSize.x + LpGame.gameScreenPos.x - _charSize.width,
-						  LpGame.gameScreenSize.y + LpGame.gameScreenPos.y - _charSize.height);
+	_initPos[5] = Vector2(LpGame.gameScreenSize.x +_charSize.width,
+						  LpGame.gameScreenSize.y + _charSize.height);
 
 	/// ç∂í[
 	_enSpace[0] = Vector2(-_charSize.width, -_charSize.height);
@@ -61,6 +69,28 @@ void MainScene::Init()
 void MainScene::AddEnemy(const EnemyState& state)
 {
 	_objs.emplace_back(std::make_shared<Enemy>(state));
+}
+
+void MainScene::DecideDir()
+{
+	_dirInfo[0][0] = Vector2(1, 1);
+	_dirInfo[0][1] = Vector2(1, 1);
+
+	_dirInfo[1][0] = Vector2(1, 1);
+	_dirInfo[1][1] = Vector2(1, -1);
+
+	_dirInfo[2][0] = Vector2(1, -1);
+	_dirInfo[2][1] = Vector2(1, 1);
+
+	_dirInfo[3][0] = Vector2(-1, 1);
+	_dirInfo[3][1] = Vector2(-1, 1);
+
+	_dirInfo[4][0] = Vector2(-1, 1);
+	_dirInfo[4][1] = Vector2(-1, -1);
+
+	_dirInfo[5][0] = Vector2(-1, -1);
+	_dirInfo[5][1] = Vector2(-1, 1);
+	
 }
 
 void MainScene::Draw()
@@ -106,8 +136,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 				auto type = (EN_TYPE)(randNum % static_cast<int>(EN_TYPE::MAX));
 				auto id	  = (EN_ID)(rand() % static_cast<int>(EN_ID::MAX));
 
-				// AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, id, aimPos, num });
-				AddEnemy({ Vector2(300,200) + space, _charSize, type, id, aimPos, num });
+				AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, id, aimPos, num, _dirInfo[randNum % 6] });
 				++cnt;
 				++_enCnt;
 				_enTblInfo[num] = 1;
@@ -120,7 +149,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		/// ç≈èâÇ…ìoò^Ç≥ÇÍÇΩìGÇÃ±∆“∞ºÆ›∂≥›ƒÇâ¡éZÇ∑ÇÈèàóù
 		if (obj->GetObjID() == Obj::ENEMY)
 		{
-			obj->LeadUpdate();
+			obj->LeadAnimUpdate();
 			break;
 		}
 	}

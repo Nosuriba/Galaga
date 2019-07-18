@@ -20,6 +20,9 @@ Enemy::Enemy(const EnemyState& state)
 	_nextPos = _pos;
 	_aimPos  = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_rad	 = 0.0;
+	_moveDir = std::get<static_cast<int>(EN_STATE::MOVEINFO)>(state);
+	_moveCnt = 0;
+
 
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state),
 		 std::get<static_cast<int>(EN_STATE::ID)>(state));
@@ -59,8 +62,9 @@ void Enemy::Init(EN_TYPE type, EN_ID id)
 
 void Enemy::Curve()
 {
-	sigCnt = -80;
-	sigRange = 80;
+	/// ｼｸﾞﾓｲﾄﾞを使った移動範囲の設定
+	sigCnt = -10;
+	sigRange = 10;
 	_updater = &Enemy::CurveUpdate;
 }
 
@@ -70,7 +74,9 @@ void Enemy::Target()
 	auto cost = cos(theta);
 	auto sint = sin(theta);
 
-	_vel = Vector2d(3 * cost, 5 * sint);
+	//CalAngle(_pos, _aimPos);
+
+	_vel = Vector2d(3 * cost, 3 * sint);
 
 	if (_vel.x == 0)
 	{
@@ -101,19 +107,29 @@ void Enemy::Shot()
 
 void Enemy::CurveUpdate()
 {
+	/// Yの値が一定値を以下、以上になった時
+	/// この中の処理に入るような仕組みを作っていく？
 	if (sigCnt >= sigRange)
 	{
-		Target();
-		return;
+		++_moveCnt;
+		if (_moveCnt == _moveDir.size())
+		{
+			Target();
+			return;
+		}
+		else
+		{
+			Curve();
+			return;
+		}
+		
 	}
-	/// '-'負荷させたい時の処理も考えておく
-	/// 横の移動を仮で実装してみたが、滑らかな動きをしていないので
-	/// 修正を必ずする
-	_vel.x = -abs(sigCnt) / 30;
-	_vel.y = Sigmoid(1.0, sigCnt);
+	_vel.x = 1 * _moveDir[_moveCnt].x;
+	_vel.y = Sigmoid(1.0, sigCnt) * _moveDir[_moveCnt].y;
 	_nextPos += _vel;
-	CalAngle(_pos, _nextPos);
-	sigCnt += 1.0;
+	//CalAngle(_pos, _nextPos);
+	//sigCnt += 1.0; 
+	sigCnt += 0.1;
 
 	// auto vec = atan2f(_nextPos.y - _pos.y, _nextPos.x - _pos.x);
 	//_dbgDrawLine(_pos.x, _pos.y, _pos.x + (50 * vec), _pos.y + (50 * vec), 0xffffff, 2.0);
@@ -121,7 +137,6 @@ void Enemy::CurveUpdate()
 
 void Enemy::TargetUpdate()
 {
-	CalAngle(_pos, _aimPos);
 	if (_vel.x >= 0)
 	{
 		_vel.x = (_pos.x >= _aimPos.x ? 0 : _vel.x);
@@ -166,14 +181,16 @@ void Enemy::ShotUpdate()
 
 void Enemy::CalAngle(const Vector2d & sPos, const Vector2d & ePos)
 {
+	static int debug;
 	auto r = atan2(ePos.y - sPos.y, ePos.x - sPos.x);
 
-	if (r < 0)
+	/*if (r < 0)
 	{
 		r = r + (2 * DX_PI);
-	}
-	r = (r * 360 / (2 * DX_PI));
-
+	}*/
+	r = r * (360 / (2 * DX_PI));
+	debug = r;
+	_dbgDrawFormatString(0, 100, 0xffff00, "%d", debug);
 	_rad = r * (DX_TWO_PI / 360);
 }
 
