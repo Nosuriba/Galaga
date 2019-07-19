@@ -21,8 +21,12 @@ Enemy::Enemy(const EnemyState& state) : _sigMax(40) , _distance(30)
 	_aimPos  = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_rad	 = 0.0;
 	_moveDir = std::get<static_cast<int>(EN_STATE::MOVEINFO)>(state);
-	_moveCnt = 0;
 
+	/// 曲がる情報の設定
+	_curveInfo[0] = Vector2(1, 1);
+	_curveInfo[1] = Vector2(1, -1);
+	_curveInfo[2] = Vector2(-1, -1);
+	_curveInfo[3] = Vector2(-1, 1);
 
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state),
 		 std::get<static_cast<int>(EN_STATE::ID)>(state));
@@ -58,7 +62,6 @@ void Enemy::Init(EN_TYPE type, EN_ID id)
 
 	SetAnim(ANIM::DEATH, data);
 }
-
 
 void Enemy::Curve()
 {
@@ -108,11 +111,13 @@ void Enemy::CurveUpdate()
 		return 1.0 / (1.0 + exp(-gain * x));
 	};
 
+	auto dir = _moveDir[_moveDir.size() - 1];
+
 	/// ｶｳﾝﾄが一定値を超えた時の状態遷移
 	if (_sigCnt >= _sigRange)
 	{
-		++_moveCnt;
-		if (_moveCnt == _moveDir.size())
+		_moveDir.pop_back();
+		if (_moveDir.size() <= 0)
 		{
 			dbgPoint.clear();
 			Rotation();
@@ -124,10 +129,10 @@ void Enemy::CurveUpdate()
 			return;
 		}
 	}
-	_vel.x = 2 * _moveDir[_moveCnt].x;
+	_vel.x = 2 * _curveInfo[dir].x;
 	if (_sigCnt <= 0)
 	{
-		_vel.y += 2 * sigmoid(1.0, _sigCnt / (_sigMax / 10)) * _moveDir[_moveCnt].y;
+		_vel.y += 2 * sigmoid(1.0, _sigCnt / (_sigMax / 10)) * _curveInfo[dir].y;
 	}
 	else
 	{
@@ -175,7 +180,7 @@ void Enemy::RotationUpdate()
 	auto sint = sin(_rotAngle * (DX_PI / 180));
 	_pos = _rotCenter + Vector2d(_rotDistance * cost,
 								 _rotDistance * sint);
-	_rotAngle = (_moveDir[0].x < 0 ? _rotAngle - 4 : _rotAngle + 4);
+	_rotAngle = (_curveInfo[0].x < 0 ? _rotAngle - 4 : _rotAngle + 4);
 
 }
 
@@ -197,12 +202,11 @@ void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos)
 
 	_rad = r * (DX_PI / 180);*/
 }
-
 void Enemy::MakeRotaInfo(const double & distance)
 {
 	_rotDistance = distance;
-	_rotCenter = _pos + Vector2d(_distance * _moveDir[0].x,
-								 _distance * -_moveDir[_moveDir.size() - 1].y);
+	_rotCenter = _pos + Vector2d(_distance * _curveInfo[0].x,
+								 _distance * - _curveInfo[0].y);
 
 	auto theta = atan2(_pos.y - _rotCenter.y, _pos.x - _rotCenter.x);
 	_rotAngle  = theta * (180 / DX_PI);

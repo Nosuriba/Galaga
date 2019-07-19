@@ -73,23 +73,23 @@ void MainScene::AddEnemy(const EnemyState& state)
 
 void MainScene::DecideDir()
 {
-	_dirInfo[0][0] = Vector2(1, 1);
-	_dirInfo[0][1] = Vector2(1, 1);
+	_dirInfo[0][0] = 0;
+	_dirInfo[0][1] = 0;
 
-	_dirInfo[1][0] = Vector2(1, 1);
-	_dirInfo[1][1] = Vector2(1, -1);
+	_dirInfo[1][0] = 1;
+	_dirInfo[1][1] = 0;
 
-	_dirInfo[2][0] = Vector2(1, -1);
-	_dirInfo[2][1] = Vector2(1, 1);
+	_dirInfo[2][0] = 0;
+	_dirInfo[2][1] = 1;
 
-	_dirInfo[3][0] = Vector2(-1, 1);
-	_dirInfo[3][1] = Vector2(-1, 1);
+	_dirInfo[3][0] = 3;
+	_dirInfo[3][1] = 3;
 
-	_dirInfo[4][0] = Vector2(-1, 1);
-	_dirInfo[4][1] = Vector2(-1, -1);
+	_dirInfo[4][0] = 2;
+	_dirInfo[4][1] = 3;
 
-	_dirInfo[5][0] = Vector2(-1, -1);
-	_dirInfo[5][1] = Vector2(-1, 1);
+	_dirInfo[5][0] = 3;
+	_dirInfo[5][1] = 2;
 	
 }
 

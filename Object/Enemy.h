@@ -1,4 +1,5 @@
 #include <tuple>
+#include <array>
 #include "Object.h"
 
 enum class EN_STATE
@@ -32,7 +33,7 @@ enum class EN_ID
 };
 
 //	0 : 座標, 1 : ｻｲｽﾞ  2 : 種類, 3 : ID, 4 : 目標地点, 5 : 敵のﾃｰﾌﾞﾙの位置 6 : 移動方向の情報
-using EnemyState = std::tuple<Vector2, Size, EN_TYPE, EN_ID, Vector2d, int, std::vector<Vector2>>;
+using EnemyState = std::tuple<Vector2, Size, EN_TYPE, EN_ID, Vector2d, int, std::vector<int>>;
 
 class Enemy :
 	public Object
@@ -60,18 +61,18 @@ private:
 
 	void Init(EN_TYPE type, EN_ID id);
 	void CalRad(const Vector2d& sPos, const Vector2d& ePos);
-	void MakeRotaInfo(const double& distance);				// 回転するための情報を生成している
+	void MakeRotaInfo(const double& distance);		// 回転するための情報を生成している
 
 	void (Enemy::*_updater)();
 
+	Vector2 _rotDir;
 	Vector2d _aimPos;	// 目標座標
 	Vector2d _nextPos;
 	Vector2d _rotCenter;	// 回転するときの中心点
 
+	std::vector<int> _moveDir;
 	std::vector<Vector2d> dbgPoint;
-	std::vector<Vector2> _moveDir;
-	int _moveCnt;		// 移動する回数
-	
+	std::array<Vector2, 4> _curveInfo;
 	double _rotDistance;	// 回転幅の距離
 	double _rotAngle;		// 回転用の角度
 	
