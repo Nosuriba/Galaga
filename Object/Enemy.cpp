@@ -5,11 +5,11 @@
 #include "../DebugDisp.h"
 #include "../DebugConOut.h"
 
-Enemy::Enemy() : _sigMax(60)
+Enemy::Enemy() : _sigMax(0), _distance(0)
 {
 }
 
-Enemy::Enemy(const EnemyState& state) : _sigMax(40)
+Enemy::Enemy(const EnemyState& state) : _sigMax(40) , _distance(30)
 {
 	_size = std::get<static_cast<int>(EN_STATE::SIZE)>(state);
 	auto center = Vector2(std::get<static_cast<int>(EN_STATE::POS)>(state).x + _size.width / 2,
@@ -82,14 +82,16 @@ void Enemy::Target()
 
 void Enemy::Rotation()
 {
-	auto theta = atan2(_pos.y - 40 - _pos.y, _pos.x - 40 - _pos.x);
-	_rotAngle = theta * (360 / (2 * DX_PI));
-
+	MakeRotaInfo(_distance);
 	_updater = &Enemy::RotationUpdate;
 }
 
 void Enemy::Move()
 {
+	/// 最初に登録した敵と同じｱﾆﾒｰｼｮﾝをするようにしたが、
+	/// 処理の修正をした方がいいと思う
+	_rad = 0;
+	SetInvCnt(_leadCnt);
 	_updater = &Enemy::MoveUpdate;
 }
 
@@ -113,8 +115,7 @@ void Enemy::CurveUpdate()
 		if (_moveCnt == _moveDir.size())
 		{
 			dbgPoint.clear();
-			// Rotation();
-			Target();
+			Rotation();
 			return;
 		}
 		else
@@ -130,20 +131,12 @@ void Enemy::CurveUpdate()
 	}
 	else
 	{
-		// _vel.y = (_vel.y <= 0.001 || _vel.y >= 0.001 ? 0 : _vel.y);
-		_vel.y *= 0.8;
-		if ((int)(_vel.y) != 0)
-		{
-			// _vel.y -= 3 * sigmoid(1.0, _sigCnt / (_sigMax / 10)) * _moveDir[_moveCnt].y;
-		}
+		_vel.y *= 0.85;
 	}
-	
-	
 	++_sigCnt;
 	//CalRad(_pos, _nextPos);
 	if (abs((int)(_sigCnt)) % 10 == 0)
 	{
-		
 		dbgPoint.push_back(_pos + _vel);
 	}
 }
@@ -178,21 +171,16 @@ void Enemy::TargetUpdate()
 
 void Enemy::RotationUpdate()
 {
-	static Vector2d center = _pos - Vector2d(-40, -40);
-	_rotAngle = (_moveDir[0].x > 0 ? _rotAngle - 2 : _rotAngle + 2);
+	auto cost = cos(_rotAngle * (DX_PI / 180));
+	auto sint = sin(_rotAngle * (DX_PI / 180));
+	_pos = _rotCenter + Vector2d(_rotDistance * cost,
+								 _rotDistance * sint);
+	_rotAngle = (_moveDir[0].x < 0 ? _rotAngle - 4 : _rotAngle + 4);
 
-	auto cost = cos(_rotAngle * (DX_TWO_PI / 360));
-	auto sint = sin(_rotAngle * (DX_TWO_PI / 360));
-	_pos = center + Vector2d(40 * cost + -40 * sint,
-							 40 * sint + 40 * cost);
 }
 
 void Enemy::MoveUpdate()
 {
-	/// 最初に登録した敵と同じｱﾆﾒｰｼｮﾝをするようにしたが、
-	/// 処理の修正をした方がいいと思う
-	_rad = 0;
-	SetInvCnt(_leadCnt);
 }
 
 void Enemy::ShotUpdate()
@@ -208,6 +196,16 @@ void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos)
 	_dbgDrawFormatString(0, 100, 0xffff00, "%d", r);
 
 	_rad = r * (DX_PI / 180);*/
+}
+
+void Enemy::MakeRotaInfo(const double & distance)
+{
+	_rotDistance = distance;
+	_rotCenter = _pos + Vector2d(_distance * _moveDir[0].x,
+								 _distance * -_moveDir[_moveDir.size() - 1].y);
+
+	auto theta = atan2(_pos.y - _rotCenter.y, _pos.x - _rotCenter.x);
+	_rotAngle  = theta * (180 / DX_PI);
 }
 
 void Enemy::Update()
@@ -235,6 +233,7 @@ void Enemy::Update()
 		ResetInvCnt();
 	}
 
+	_dbgDrawCircle(_rotCenter.x, _rotCenter.y, 5, 0x00ff00, true);
 	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
 	for (auto point : dbgPoint)
 	{

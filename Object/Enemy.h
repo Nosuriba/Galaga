@@ -60,11 +60,13 @@ private:
 
 	void Init(EN_TYPE type, EN_ID id);
 	void CalRad(const Vector2d& sPos, const Vector2d& ePos);
+	void MakeRotaInfo(const double& distance);				// 回転するための情報を生成している
 
 	void (Enemy::*_updater)();
 
 	Vector2d _aimPos;	// 目標座標
 	Vector2d _nextPos;
+	Vector2d _rotCenter;	// 回転するときの中心点
 
 	std::vector<Vector2d> dbgPoint;
 	std::vector<Vector2> _moveDir;
@@ -77,5 +79,6 @@ private:
 	int _sigRange;	// ｼｸﾞﾓｲﾄﾞ関数の範囲
 
 	const int _sigMax;
+	const double _distance;
 };
 

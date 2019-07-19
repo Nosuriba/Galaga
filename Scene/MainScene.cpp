@@ -30,15 +30,15 @@ MainScene::MainScene() : _charSize(30,32), _enMax(7, 3)
 	DecideDir();
 
 	/// 左端
-	_initPos[0] = Vector2(-_charSize.width, _charSize.height);
-	_initPos[1] = Vector2(-_charSize.width, LpGame.gameScreenSize.y / 2);
-	_initPos[2] = Vector2(-_charSize.width, 
+	_initPos[0] = Vector2(0, _charSize.height);
+	_initPos[1] = Vector2(0, LpGame.gameScreenSize.y / 2);
+	_initPos[2] = Vector2(0, 
 						   LpGame.gameScreenSize.y - _charSize.height * 2);
 	/// 右端
-	_initPos[3] = Vector2(LpGame.gameScreenSize.x +_charSize.width, _charSize.height);
-	_initPos[4] = Vector2(LpGame.gameScreenSize.x +_charSize.width, 
+	_initPos[3] = Vector2(LpGame.gameScreenSize.x, _charSize.height);
+	_initPos[4] = Vector2(LpGame.gameScreenSize.x, 
 						  LpGame.gameScreenSize.y / 2);
-	_initPos[5] = Vector2(LpGame.gameScreenSize.x +_charSize.width,
+	_initPos[5] = Vector2(LpGame.gameScreenSize.x,
 						  LpGame.gameScreenSize.y - _charSize.height * 2);
 
 	/// 左端
@@ -129,7 +129,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			{
 				auto invPos = Vector2((num % _enMax.x) * 10, (num / _enMax.x) * 10);
 				auto aimPos = Vector2d(LpGame.gameScreenPos.x + ((num % _enMax.x) * _charSize.width) + invPos.x,
-									  LpGame.gameScreenPos.y + ((num / _enMax.x) * _charSize.height) + invPos.y);
+									   LpGame.gameScreenPos.y + ((num / _enMax.x) * _charSize.height) + invPos.y);
 				auto space = _enSpace[randNum % 6] + (_enSpace[randNum % 6] * cnt);
 				
 				/// ﾗﾝﾀﾞﾑで敵を出現させるようにしている
