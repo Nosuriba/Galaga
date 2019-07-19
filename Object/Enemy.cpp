@@ -9,7 +9,7 @@ Enemy::Enemy() : _sigMax(60)
 {
 }
 
-Enemy::Enemy(const EnemyState& state) : _sigMax(90)
+Enemy::Enemy(const EnemyState& state) : _sigMax(40)
 {
 	_size = std::get<static_cast<int>(EN_STATE::SIZE)>(state);
 	auto center = Vector2(std::get<static_cast<int>(EN_STATE::POS)>(state).x + _size.width / 2,
@@ -123,17 +123,18 @@ void Enemy::CurveUpdate()
 			return;
 		}
 	}
-	_vel.x = 1 * _moveDir[_moveCnt].x;
+	_vel.x = 2 * _moveDir[_moveCnt].x;
 	if (_sigCnt <= 0)
 	{
-		_vel.y += 1.5 * sigmoid(1.0, _sigCnt / (_sigMax / 10)) * _moveDir[_moveCnt].y;
+		_vel.y += 2 * sigmoid(1.0, _sigCnt / (_sigMax / 10)) * _moveDir[_moveCnt].y;
 	}
 	else
 	{
-		_vel.y = (_vel.y <= 0.001 || _vel.y >= 0.001 ? 0 : _vel.y);
+		// _vel.y = (_vel.y <= 0.001 || _vel.y >= 0.001 ? 0 : _vel.y);
+		_vel.y *= 0.8;
 		if ((int)(_vel.y) != 0)
 		{
-			_vel.y -= 1.5 * sigmoid(1.0, _sigCnt / (_sigMax / 10)) * _moveDir[_moveCnt].y;
+			// _vel.y -= 3 * sigmoid(1.0, _sigCnt / (_sigMax / 10)) * _moveDir[_moveCnt].y;
 		}
 	}
 	
@@ -144,7 +145,6 @@ void Enemy::CurveUpdate()
 	{
 		
 		dbgPoint.push_back(_pos + _vel);
-		CalRad(dbgPoint.back(), _pos);
 	}
 }
  
