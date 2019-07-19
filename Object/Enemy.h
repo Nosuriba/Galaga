@@ -66,18 +66,18 @@ private:
 	void (Enemy::*_updater)();
 
 	Vector2 _rotDir;
-	Vector2d _aimPos;	// 目標座標
+	Vector2d _aimPos;		// 目標座標
 	Vector2d _nextPos;
 	Vector2d _rotCenter;	// 回転するときの中心点
 
-	std::vector<int> _moveDir;
+	std::vector<int> _curveID;			// 曲がるIDの指定
 	std::vector<Vector2d> dbgPoint;
 	std::array<Vector2, 4> _curveInfo;
 	double _rotDistance;	// 回転幅の距離
 	double _rotAngle;		// 回転用の角度
 	
 	int _sigCnt;		// ｼｸﾞﾓｲﾄﾞ関数の値
-	int _sigRange;	// ｼｸﾞﾓｲﾄﾞ関数の範囲
+	int _sigRange;		// ｼｸﾞﾓｲﾄﾞ関数の範囲
 
 	const int _sigMax;
 	const double _distance;

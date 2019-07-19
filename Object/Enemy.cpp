@@ -20,7 +20,7 @@ Enemy::Enemy(const EnemyState& state) : _sigMax(40) , _distance(30)
 	_nextPos = _pos;
 	_aimPos  = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_rad	 = 0.0;
-	_moveDir = std::get<static_cast<int>(EN_STATE::MOVEINFO)>(state);
+	_curveID = std::get<static_cast<int>(EN_STATE::MOVEINFO)>(state);
 
 	/// 曲がる情報の設定
 	_curveInfo[0] = Vector2(1, 1);
@@ -79,7 +79,7 @@ void Enemy::Target()
 
 	CalRad(_pos, _aimPos);
 
-	_vel = Vector2d(3 * cost, 3 * sint);
+	_vel	 = Vector2d(3 * cost, 3 * sint);
 	_updater = &Enemy::TargetUpdate;
 }
 
@@ -111,13 +111,15 @@ void Enemy::CurveUpdate()
 		return 1.0 / (1.0 + exp(-gain * x));
 	};
 
-	auto dir = _moveDir[_moveDir.size() - 1];
+	auto dir = _curveID[_curveID.size() - 1];
 
 	/// ｶｳﾝﾄが一定値を超えた時の状態遷移
 	if (_sigCnt >= _sigRange)
 	{
-		_moveDir.pop_back();
-		if (_moveDir.size() <= 0)
+		/// ここの処理は変わる可能性がある
+		_rotDir = _curveInfo[_curveID[0]];
+		_curveID.pop_back();
+		if (_curveID.size() <= 0)
 		{
 			dbgPoint.clear();
 			Rotation();
@@ -180,7 +182,7 @@ void Enemy::RotationUpdate()
 	auto sint = sin(_rotAngle * (DX_PI / 180));
 	_pos = _rotCenter + Vector2d(_rotDistance * cost,
 								 _rotDistance * sint);
-	_rotAngle = (_curveInfo[0].x < 0 ? _rotAngle - 4 : _rotAngle + 4);
+	_rotAngle = (_rotDir.x < 0 ? _rotAngle - 4 : _rotAngle + 4);
 
 }
 
@@ -205,8 +207,8 @@ void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos)
 void Enemy::MakeRotaInfo(const double & distance)
 {
 	_rotDistance = distance;
-	_rotCenter = _pos + Vector2d(_distance * _curveInfo[0].x,
-								 _distance * - _curveInfo[0].y);
+	_rotCenter = _pos + Vector2d(_distance * _rotDir.x,
+								 _distance * -_rotDir.y);
 
 	auto theta = atan2(_pos.y - _rotCenter.y, _pos.x - _rotCenter.x);
 	_rotAngle  = theta * (180 / DX_PI);
