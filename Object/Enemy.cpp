@@ -5,11 +5,11 @@
 #include "../DebugDisp.h"
 #include "../DebugConOut.h"
 
-Enemy::Enemy()
+Enemy::Enemy() : _sigMax(60)
 {
 }
 
-Enemy::Enemy(const EnemyState& state)
+Enemy::Enemy(const EnemyState& state) : _sigMax(90)
 {
 	_size = std::get<static_cast<int>(EN_STATE::SIZE)>(state);
 	auto center = Vector2(std::get<static_cast<int>(EN_STATE::POS)>(state).x + _size.width / 2,
@@ -63,8 +63,8 @@ void Enemy::Init(EN_TYPE type, EN_ID id)
 void Enemy::Curve()
 {
 	/// ｼｸﾞﾓｲﾄﾞを使った移動範囲の設定
-	_sigCnt = -30;
-	_sigRange = abs(_sigCnt);
+	_sigCnt = -_sigMax;
+	_sigRange = abs(_sigMax);
 	_updater = &Enemy::CurveUpdate;
 }
 
@@ -100,6 +100,13 @@ void Enemy::Shot()
 
 void Enemy::CurveUpdate()
 {
+	auto sigmoid = [](const double& gain, const double& x)
+	{
+		auto debug = exp(-gain * x);
+		return 1.0 / (1.0 + exp(-gain * x));
+	};
+
+	/// ｶｳﾝﾄが一定値を超えた時の状態遷移
 	if (_sigCnt >= _sigRange)
 	{
 		++_moveCnt;
@@ -117,18 +124,30 @@ void Enemy::CurveUpdate()
 		}
 	}
 	_vel.x = 1 * _moveDir[_moveCnt].x;
-	_vel.y = Sigmoid(1.0, _sigCnt) * _moveDir[_moveCnt].y;
-	_nextPos = _vel * Vector2d(10, 10);
-	
-	_sigCnt += 0.3;
-	if (abs((int)(_sigCnt)) % 10 == 0)
+	if (_sigCnt <= 0)
 	{
-		CalRad(_pos, _nextPos);
-		dbgPoint.push_back(_pos + _vel);
+		_vel.y += 1.5 * sigmoid(1.0, _sigCnt / (_sigMax / 10)) * _moveDir[_moveCnt].y;
+	}
+	else
+	{
+		_vel.y = (_vel.y <= 0.001 || _vel.y >= 0.001 ? 0 : _vel.y);
+		if ((int)(_vel.y) != 0)
+		{
+			_vel.y -= 1.5 * sigmoid(1.0, _sigCnt / (_sigMax / 10)) * _moveDir[_moveCnt].y;
+		}
 	}
 	
+	
+	++_sigCnt;
+	//CalRad(_pos, _nextPos);
+	if (abs((int)(_sigCnt)) % 10 == 0)
+	{
+		
+		dbgPoint.push_back(_pos + _vel);
+		CalRad(dbgPoint.back(), _pos);
+	}
 }
-
+ 
 void Enemy::TargetUpdate()
 {
 	if (_vel.x >= 0)
@@ -160,7 +179,7 @@ void Enemy::TargetUpdate()
 void Enemy::RotationUpdate()
 {
 	static Vector2d center = _pos - Vector2d(-40, -40);
-	_rotAngle = (_moveDir[0].x < 0 ? _rotAngle - 1 : _rotAngle + 1);
+	_rotAngle = (_moveDir[0].x > 0 ? _rotAngle - 2 : _rotAngle + 2);
 
 	auto cost = cos(_rotAngle * (DX_TWO_PI / 360));
 	auto sint = sin(_rotAngle * (DX_TWO_PI / 360));
@@ -182,7 +201,6 @@ void Enemy::ShotUpdate()
 
 void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos)
 {
-	auto r = atan2(ePos.y - sPos.y, ePos.x - sPos.x);
 	_rad = atan2(ePos.y - sPos.y, ePos.x - sPos.x);
 
 	/*r = r * (180 / DX_PI);
@@ -190,12 +208,6 @@ void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos)
 	_dbgDrawFormatString(0, 100, 0xffff00, "%d", r);
 
 	_rad = r * (DX_PI / 180);*/
-}
-
-double Enemy::Sigmoid(const double & gain, const double & x)
-{
-	auto debug = exp(-gain * x);
-	return 1.0 / (1.0 + exp(-gain * x));
 }
 
 void Enemy::Update()

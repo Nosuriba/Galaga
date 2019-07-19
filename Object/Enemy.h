@@ -60,7 +60,6 @@ private:
 
 	void Init(EN_TYPE type, EN_ID id);
 	void CalRad(const Vector2d& sPos, const Vector2d& ePos);
-	double Sigmoid(const double& gain, const double& x);
 
 	void (Enemy::*_updater)();
 
@@ -71,9 +70,12 @@ private:
 	std::vector<Vector2> _moveDir;
 	int _moveCnt;		// 移動する回数
 	
+	double _rotDistance;	// 回転幅の距離
 	double _rotAngle;		// 回転用の角度
 	
-	double _sigCnt;		// ｼｸﾞﾓｲﾄﾞ関数の値
-	double _sigRange;	// ｼｸﾞﾓｲﾄﾞ関数の範囲
+	int _sigCnt;		// ｼｸﾞﾓｲﾄﾞ関数の値
+	int _sigRange;	// ｼｸﾞﾓｲﾄﾞ関数の範囲
+
+	const int _sigMax;
 };
 
