@@ -120,8 +120,8 @@ void Enemy::CurveUpdate()
 		if (_curveID.size() <= 0)
 		{
 			dbgPoint.clear();
-			// Rotation();
-			Target();
+			Rotation();
+			// Target();
 			return;
 		}
 		else
@@ -189,6 +189,13 @@ void Enemy::RotationUpdate()
 	// CalRad(_pos, ePos);
 	_pos = ePos;
 	_rotAngle = (_rotDir.y < 0 ? _rotAngle - 4 : _rotAngle + 4);
+
+	_rotDistance -= 0.1;
+
+	if (_rotDistance <= 0)
+	{
+		Target();
+	}
 
 }
 
