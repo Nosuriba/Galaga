@@ -77,7 +77,7 @@ void Enemy::Target()
 	auto cost = cos(theta);
 	auto sint = sin(theta);
 
-	CalRad(_pos, _aimPos);
+	CalRad(_pos, _aimPos, 0);
 
 	_vel	 = Vector2d(3 * cost, 3 * sint);
 	_updater = &Enemy::TargetUpdate;
@@ -111,8 +111,6 @@ void Enemy::CurveUpdate()
 		return 1.0 / (1.0 + exp(-gain * x));
 	};
 
-	auto dir = _curveID[_curveID.size() - 1];
-
 	/// ｶｳﾝﾄが一定値を超えた時の状態遷移
 	if (_sigCnt >= _sigRange)
 	{
@@ -122,7 +120,8 @@ void Enemy::CurveUpdate()
 		if (_curveID.size() <= 0)
 		{
 			dbgPoint.clear();
-			Rotation();
+			// Rotation();
+			Target();
 			return;
 		}
 		else
@@ -131,6 +130,9 @@ void Enemy::CurveUpdate()
 			return;
 		}
 	}
+
+	auto dir = _curveID[_curveID.size() - 1];
+
 	_vel.x = 2 * _curveInfo[dir].x;
 	if (_sigCnt <= 0)
 	{
@@ -141,7 +143,9 @@ void Enemy::CurveUpdate()
 		_vel.y *= 0.85;
 	}
 	++_sigCnt;
-	//CalRad(_pos, _nextPos);
+	_nextPos += _vel;
+	auto angle = (_vel.x < 0 ? -90 : 90);
+	CalRad(_pos, _nextPos, angle);
 	if (abs((int)(_sigCnt)) % 10 == 0)
 	{
 		dbgPoint.push_back(_pos + _vel);
@@ -180,9 +184,11 @@ void Enemy::RotationUpdate()
 {
 	auto cost = cos(_rotAngle * (DX_PI / 180));
 	auto sint = sin(_rotAngle * (DX_PI / 180));
-	_pos = _rotCenter + Vector2d(_rotDistance * cost,
-								 _rotDistance * sint);
-	_rotAngle = (_rotDir.x < 0 ? _rotAngle - 4 : _rotAngle + 4);
+	auto ePos = _rotCenter + Vector2d(_rotDistance * cost,
+									  _rotDistance * sint);
+	// CalRad(_pos, ePos);
+	_pos = ePos;
+	_rotAngle = (_rotDir.y < 0 ? _rotAngle - 4 : _rotAngle + 4);
 
 }
 
@@ -194,10 +200,11 @@ void Enemy::ShotUpdate()
 {
 }
 
-void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos)
+void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos, const double& angle)
 {
 	_rad = atan2(ePos.y - sPos.y, ePos.x - sPos.x);
 
+	_rad += angle * (DX_PI / 180);
 	/*r = r * (180 / DX_PI);
 
 	_dbgDrawFormatString(0, 100, 0xffff00, "%d", r);
@@ -207,7 +214,7 @@ void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos)
 void Enemy::MakeRotaInfo(const double & distance)
 {
 	_rotDistance = distance;
-	_rotCenter = _pos + Vector2d(_distance * _rotDir.x,
+	_rotCenter = _pos + Vector2d(_distance *  _rotDir.x,
 								 _distance * -_rotDir.y);
 
 	auto theta = atan2(_pos.y - _rotCenter.y, _pos.x - _rotCenter.x);

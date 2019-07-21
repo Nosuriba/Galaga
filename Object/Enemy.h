@@ -60,7 +60,7 @@ private:
 	void ShotUpdate();
 
 	void Init(EN_TYPE type, EN_ID id);
-	void CalRad(const Vector2d& sPos, const Vector2d& ePos);
+	void CalRad(const Vector2d& sPos, const Vector2d& ePos, const double& angle);
 	void MakeRotaInfo(const double& distance);		// ‰ñ“]‚·‚é‚½‚ß‚Ìî•ñ‚ğ¶¬‚µ‚Ä‚¢‚é
 
 	void (Enemy::*_updater)();
