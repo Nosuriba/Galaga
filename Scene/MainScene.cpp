@@ -20,6 +20,7 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 	{
 		_enTblInfo.emplace_back(0);
 	}
+	/// “Á’è‚ÌÃ°ÌÞÙ‚É‚Í”z’u‚Å‚«‚È‚¢‚æ‚¤‚É‚µ‚Ä‚¢‚é
 	_enTblInfo[0] = 1;
 	_enTblInfo[1] = 1;
 	_enTblInfo[2] = 1;
