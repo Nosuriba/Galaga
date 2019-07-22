@@ -1,13 +1,16 @@
+#pragma once
+
 #include <tuple>
 #include <array>
 #include "Object.h"
+#include "../Common/ImageMng.h"
+#include "../DebugConOut.h"
 
 enum class EN_STATE
 {
 	POS,
 	SIZE,
 	TYPE,
-	ID,
 	AIM,
 	NUM,
 	MOVEINFO,
@@ -32,8 +35,8 @@ enum class EN_ID
 	MAX
 };
 
-//	0 : 座標, 1 : ｻｲｽﾞ  2 : 種類, 3 : ID, 4 : 目標地点, 5 : 敵のﾃｰﾌﾞﾙの位置 6 : 移動方向の情報
-using EnemyState = std::tuple<Vector2, Size, EN_TYPE, EN_ID, Vector2d, int, std::vector<int>>;
+//	0 : 座標, 1 : ｻｲｽﾞ  2 : 種類, 3 : 目標地点, 4 : 敵のﾃｰﾌﾞﾙの位置 5 : 移動方向の情報
+using EnemyState = std::tuple<Vector2, Size, EN_TYPE, Vector2d, int, std::vector<int>>;
 
 class Enemy :
 	public Object
@@ -41,12 +44,14 @@ class Enemy :
 public:
 	Enemy();
 	Enemy(const EnemyState& state);
-	~Enemy();
+	virtual ~Enemy();
 	
 	void Update() override;
 	void Draw() override;
 	const Obj GetObjID() const override;
-private:
+
+protected:
+	//// 必要のない機能はすべて、privateもしくは削除する
 	void Curve();
 	void Target();
 	void Rotation();
@@ -59,12 +64,7 @@ private:
 	void MoveUpdate();
 	void ShotUpdate();
 
-	void Init(EN_TYPE type, EN_ID id);
-	void CalRad(const Vector2d& sPos, const Vector2d& ePos, const double& angle);
-	void MakeRotaInfo(const double& distance);		// 回転するための情報を生成している
-
-	void (Enemy::*_updater)();
-
+	/// protectedに必要のないものは、privateに移動しておく
 	Vector2 _rotDir;
 	Vector2d _aimPos;		// 目標座標
 	Vector2d _nextPos;
@@ -75,11 +75,19 @@ private:
 	std::array<Vector2, 4> _curveInfo;
 	double _rotDistance;	// 回転幅の距離
 	double _rotAngle;		// 回転用の角度
-	
+
 	int _sigCnt;		// ｼｸﾞﾓｲﾄﾞ関数の値
 	int _sigRange;		// ｼｸﾞﾓｲﾄﾞ関数の範囲
 
 	const int _sigMax;
 	const double _distance;
+private:
+	
+	void Init(EN_TYPE type, EN_ID id);
+	void CalRad(const Vector2d& sPos, const Vector2d& ePos, const double& angle);
+	void MakeRotaInfo(const double& distance);		// 回転するための情報を生成している
+
+	void (Enemy::*_updater)();
+
 };
 

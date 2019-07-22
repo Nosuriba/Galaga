@@ -2,9 +2,10 @@
 #include <list>
 #include <array>
 #include "Scene.h"
-#include "../Object/Enemy.h"
 
 class Object;
+
+using shared_obj = std::shared_ptr<Object>;
 
 class MainScene :
 	public Scene
@@ -17,11 +18,9 @@ public:
 	unique_scene Update(unique_scene scene, const Input& p) override;
 	const SCN_ID GetSceneID() const override;
 private:
-	std::vector<std::shared_ptr<Object>> _objs;
+	std::vector<shared_obj> _objs;
 
-	void AddEnemy(const EnemyState& state);
 	void DecideDir();
-	EN_ID SetID(const int& num);
 
 	int _ghGameScreen;		// ¹Þ°Ñ½¸Ø°Ý‚Ì‰æ‘œÊÝÄÞÙ
 

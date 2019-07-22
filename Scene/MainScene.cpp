@@ -6,8 +6,10 @@
 #include "MainScene.h"
 #include "ResultScene.h"
 
-#include "../Object/Object.h"
 #include "../Object/Player.h"
+#include "../Object/Bee.h"
+#include "../Object/Butterfly.h"
+#include "../Object/Scorpion.h"
 #include "../Common/ImageMng.h"
 
 MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
@@ -79,11 +81,6 @@ void MainScene::Init()
 	_objs.emplace_back(std::make_shared<Player>(Vector2(100, 200), _charSize));
 }
 
-void MainScene::AddEnemy(const EnemyState& state)
-{
-	_objs.emplace_back(std::make_shared<Enemy>(state));
-}
-
 void MainScene::DecideDir()
 {
 	_dirInfo[0][0] = 0;
@@ -106,23 +103,6 @@ void MainScene::DecideDir()
 	
 }
 
-EN_ID MainScene::SetID(const int & num)
-{
-	auto line = num / _enMax.x;
-	if (line == 0)
-	{
-		return EN_ID::SCORPION;
-	}
-	else if (line == 1 || line == 2)
-	{
-		return EN_ID::BUTTERFLY;
-	}
-	else
-	{
-		return EN_ID::BEE;
-	}
-}
-
 void MainScene::Draw()
 {
 	SetDrawScreen(_ghGameScreen);
@@ -143,7 +123,6 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	_dbgKey    = CheckHitKey(KEY_INPUT_SPACE);
 	auto randNum = rand();
 
-
 	if (_dbgKey && !_dbgKeyOld)
 	{
 		/// 一体ずつ出しているので、for文を使わないような処理を書くようにする
@@ -157,18 +136,33 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			auto num = rand() % (_enMax.x * _enMax.y);
 			if (!_enTblInfo[num])
 			{
+				/// 敵の情報設定
 				auto invPos = Vector2((num % _enMax.x) * 5, (num / _enMax.x) * 5);
 				auto aimPos = Vector2d(LpGame.gameScreenPos.x / 2 + ((num % _enMax.x) * _charSize.width) + invPos.x,
 									   LpGame.gameScreenPos.y / 2 + ((num / _enMax.x) * _charSize.height) + invPos.y);
-				auto space = _enSpace[randNum % 6] + (_enSpace[randNum % 6] * cnt);
+				auto space  = _enSpace[randNum % 6] + (_enSpace[randNum % 6] * cnt);
 				
-				/// ﾗﾝﾀﾞﾑで敵を出現させるようにしている
-				//auto type = (EN_TYPE)(randNum % static_cast<int>(EN_TYPE::MAX));
+				/// 敵の生成
+				EnemyState state = { _initPos[randNum % 6] + space, _charSize,
+									 EN_TYPE::NORMAL, aimPos, 
+									 num, _dirInfo[randNum % 6] };
+				auto line = num / _enMax.x;
+				if (line == 0)
+				{
+					/// ボス敵
+					_objs.emplace_back(std::make_shared<Scorpion>(state));
+				}
+				else if (line == 1 || line == 2)
+				{
+					/// 中間の敵
+					_objs.emplace_back(std::make_shared<Butterfly>(state));
+				}
+				else
+				{
+					/// 雑魚
+					_objs.emplace_back(std::make_shared<Bee>(state));
+				}
 				
-				AddEnemy({ _initPos[randNum % 6] + space, _charSize, EN_TYPE::NORMAL, SetID(num), aimPos, num, _dirInfo[randNum % 6] });
-
-				/// 特定の位置から出ているかの確認用(疲れた時はたまに見て楽しもう)
-				// AddEnemy({ _initPos[2], _charSize, type, id, aimPos, num, _dirInfo[2] });
 				++cnt;
 				++_enCnt;
 				_enTblInfo[num] = 1;

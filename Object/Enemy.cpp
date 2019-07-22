@@ -1,46 +1,19 @@
 ﻿#include <DxLib.h>
 #include <stdlib.h>
 #include "Enemy.h"
-#include "../Common/ImageMng.h"
 #include "../DebugDisp.h"
 #include "../DebugConOut.h"
 
-Enemy::Enemy() : _sigMax(0), _distance(0)
+Enemy::Enemy() : _sigMax(40), _distance(30)
 {
 }
 
 Enemy::Enemy(const EnemyState& state) : _sigMax(40) , _distance(30)
 {
-	_size = std::get<static_cast<int>(EN_STATE::SIZE)>(state);
-	auto center = Vector2(std::get<static_cast<int>(EN_STATE::POS)>(state).x + _size.width / 2,
-						  std::get<static_cast<int>(EN_STATE::POS)>(state).y + _size.height / 2);
-	_pos	 = Vector2d(center.x, center.y);
-	_vel	 = Vector2d();
-	_rect	 = Rect(center, _size);
-	_nextPos = _pos;
-	_aimPos  = std::get<static_cast<int>(EN_STATE::AIM)>(state);
-	_rad	 = 0.0;
-	_curveID = std::get<static_cast<int>(EN_STATE::MOVEINFO)>(state);
-
-	/// 曲がる情報の設定
-	_curveInfo[0] = Vector2(1, 1);
-	_curveInfo[1] = Vector2(1, -1);
-	_curveInfo[2] = Vector2(-1, -1);
-	_curveInfo[3] = Vector2(-1, 1);
-
-	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state),
-		 std::get<static_cast<int>(EN_STATE::ID)>(state));
-
-	SetEnemyNum(std::get<static_cast<int>(EN_STATE::NUM)>(state));
-	animKey(ANIM::NORMAL);
-
-	Curve();
 }
 
 Enemy::~Enemy()
 {
-	/// どの敵が死んだかの情報を書いてみる
-	TRACE("敵の死亡\n");
 }
 
 void Enemy::Init(EN_TYPE type, EN_ID id)
