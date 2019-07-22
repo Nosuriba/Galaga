@@ -158,9 +158,9 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 				auto space = _enSpace[randNum % 6] + (_enSpace[randNum % 6] * cnt);
 				
 				/// ﾗﾝﾀﾞﾑで敵を出現させるようにしている
-				auto type = (EN_TYPE)(randNum % static_cast<int>(EN_TYPE::MAX));
+				//auto type = (EN_TYPE)(randNum % static_cast<int>(EN_TYPE::MAX));
 				
-				AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, SetID(num), aimPos, num, _dirInfo[randNum % 6] });
+				AddEnemy({ _initPos[randNum % 6] + space, _charSize, EN_TYPE::NORMAL, SetID(num), aimPos, num, _dirInfo[randNum % 6] });
 
 				/// 特定の位置から出ているかの確認用(疲れた時はたまに見て楽しもう)
 				// AddEnemy({ _initPos[2], _charSize, type, id, aimPos, num, _dirInfo[2] });
