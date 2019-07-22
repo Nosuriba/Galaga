@@ -20,14 +20,18 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 	{
 		_enTblInfo.emplace_back(0);
 	}
-	/*_enTblInfo[0] = 1;
+	_enTblInfo[0] = 1;
 	_enTblInfo[1] = 1;
+	_enTblInfo[2] = 1;
+	_enTblInfo[7] = 1;
 	_enTblInfo[8] = 1;
 	_enTblInfo[9] = 1;
 	_enTblInfo[10] = 1;
 	_enTblInfo[19] = 1;
 	_enTblInfo[20] = 1;
-	_enTblInfo[29] = 1;*/
+	_enTblInfo[29] = 1;
+
+	_enCnt = 10;
 
 	/// “G‚ÌˆÚ“®•ûŒü‚Ìİ’è
 	_dirInfo.resize(6);
