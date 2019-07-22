@@ -39,6 +39,7 @@ Enemy::Enemy(const EnemyState& state) : _sigMax(40) , _distance(30)
 
 Enemy::~Enemy()
 {
+	/// どの敵が死んだかの情報を書いてみる
 	TRACE("敵の死亡\n");
 }
 
@@ -200,7 +201,7 @@ void Enemy::RotationUpdate()
 
 	_rotDistance -= 0.1;
 
-	if (_rotDistance <= 0)
+	if (_rotDistance <= 10)
 	{
 		Target();
 	}
