@@ -127,29 +127,37 @@ void Enemy::CurveUpdate()
 		else
 		{
 			Curve();
+			_nextPos += _vel;
 			return;
 		}
 	}
 
 	auto dir = _curveID[_curveID.size() - 1];
 
-	_vel.x = 2 * _curveInfo[dir].x;
+	/// ｼｸﾞﾓｲﾄﾞを使ってY方向の移動量を計算している
 	if (_sigCnt <= 0)
 	{
-		_vel.y += 2 * sigmoid(1.0, _sigCnt / (_sigMax / 10)) * _curveInfo[dir].y;
+		_vel.y += 3 * sigmoid(1.0, _sigCnt / (_sigMax / 10)) * _curveInfo[dir].y;
 	}
 	else
 	{
+		/// 一定時間たつと、Y方向の移動量を減らすようにしている
 		_vel.y *= 0.85;
 	}
+
+	/// Y方向の移動量によって、X方向の移動量が変化するようにしている
+	_vel.x = (3 - abs(_vel.y / 3)) * _curveInfo[dir].x;
+	
 	++_sigCnt;
+
+	//if (abs((int)(_sigCnt)) % 10 == 0)
+	//{
+	//	dbgPoint.push_back(_pos + _vel);
+	//}
+	
+	/// ﾌﾟﾚｲﾔｰの角度計算
 	_nextPos += _vel;
-	auto angle = (_vel.x < 0 ? -90 : 90);
-	CalRad(_pos, _nextPos, angle);
-	if (abs((int)(_sigCnt)) % 10 == 0)
-	{
-		dbgPoint.push_back(_pos + _vel);
-	}
+	CalRad(_pos, _nextPos, 90);
 }
  
 void Enemy::TargetUpdate()
@@ -212,11 +220,8 @@ void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos, const double& a
 	_rad = atan2(ePos.y - sPos.y, ePos.x - sPos.x);
 
 	_rad += angle * (DX_PI / 180);
-	/*r = r * (180 / DX_PI);
 
-	_dbgDrawFormatString(0, 100, 0xffff00, "%d", r);
-
-	_rad = r * (DX_PI / 180);*/
+	auto debug = _rad * (180 / DX_PI);
 }
 void Enemy::MakeRotaInfo(const double & distance)
 {

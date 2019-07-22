@@ -21,6 +21,7 @@ private:
 
 	void AddEnemy(const EnemyState& state);
 	void DecideDir();
+	EN_ID SetID(const int& num);
 
 	int _ghGameScreen;		// ¹Þ°Ñ½¸Ø°Ý‚Ì‰æ‘œÊÝÄÞÙ
 

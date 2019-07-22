@@ -10,7 +10,7 @@
 #include "../Object/Player.h"
 #include "../Common/ImageMng.h"
 
-MainScene::MainScene() : _charSize(30,32), _enMax(7, 3)
+MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 {
 	_enCnt = 0;
 
@@ -20,6 +20,14 @@ MainScene::MainScene() : _charSize(30,32), _enMax(7, 3)
 	{
 		_enTblInfo.emplace_back(0);
 	}
+	_enTblInfo[0] = 1;
+	_enTblInfo[1] = 1;
+	_enTblInfo[8] = 1;
+	_enTblInfo[9] = 1;
+	_enTblInfo[10] = 1;
+	_enTblInfo[19] = 1;
+	_enTblInfo[20] = 1;
+	_enTblInfo[29] = 1;
 
 	/// 敵の移動方向の設定
 	_dirInfo.resize(6);
@@ -93,6 +101,23 @@ void MainScene::DecideDir()
 	
 }
 
+EN_ID MainScene::SetID(const int & num)
+{
+	auto line = num / _enMax.x;
+	if (line == 0)
+	{
+		return EN_ID::SCORPION;
+	}
+	else if (line == 1 || line == 2)
+	{
+		return EN_ID::BUTTERFLY;
+	}
+	else
+	{
+		return EN_ID::BEE;
+	}
+}
+
 void MainScene::Draw()
 {
 	SetDrawScreen(_ghGameScreen);
@@ -127,16 +152,15 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			auto num = rand() % (_enMax.x * _enMax.y);
 			if (!_enTblInfo[num])
 			{
-				auto invPos = Vector2((num % _enMax.x) * 10, (num / _enMax.x) * 10);
-				auto aimPos = Vector2d(LpGame.gameScreenPos.x + ((num % _enMax.x) * _charSize.width) + invPos.x,
-									   LpGame.gameScreenPos.y + ((num / _enMax.x) * _charSize.height) + invPos.y);
+				auto invPos = Vector2((num % _enMax.x) * 5, (num / _enMax.x) * 5);
+				auto aimPos = Vector2d(LpGame.gameScreenPos.x / 2 + ((num % _enMax.x) * _charSize.width) + invPos.x,
+									   LpGame.gameScreenPos.y / 2 + ((num / _enMax.x) * _charSize.height) + invPos.y);
 				auto space = _enSpace[randNum % 6] + (_enSpace[randNum % 6] * cnt);
 				
 				/// ﾗﾝﾀﾞﾑで敵を出現させるようにしている
 				auto type = (EN_TYPE)(randNum % static_cast<int>(EN_TYPE::MAX));
-				auto id	  = (EN_ID)(rand() % static_cast<int>(EN_ID::MAX));
-
-				AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, id, aimPos, num, _dirInfo[randNum % 6] });
+				
+				AddEnemy({ _initPos[randNum % 6] + space, _charSize, type, SetID(num), aimPos, num, _dirInfo[randNum % 6] });
 
 				/// 特定の位置から出ているかの確認用(疲れた時はたまに見て楽しもう)
 				// AddEnemy({ _initPos[2], _charSize, type, id, aimPos, num, _dirInfo[2] });
