@@ -15,8 +15,8 @@ Bee::Bee(const EnemyState & state)
 	_nextPos = _pos;
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_rad = 0.0;
-	_curveID = std::get<static_cast<int>(EN_STATE::MOVEINFO)>(state);
-
+	// _curveID = std::get<static_cast<int>(EN_STATE::MOVEINFO)>(state);
+	_nextPos = std::get<static_cast<int>(EN_STATE::MOVEINFO)>(state);
 	/// ‹È‚ª‚éî•ñ‚Ìİ’è
 	_curveInfo[0] = Vector2(1, 1);
 	_curveInfo[1] = Vector2(1, -1);

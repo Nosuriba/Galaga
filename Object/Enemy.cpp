@@ -4,11 +4,11 @@
 #include "../DebugDisp.h"
 #include "../DebugConOut.h"
 
-Enemy::Enemy() : _sigMax(40), _distance(30)
+Enemy::Enemy() : _sigMax(10), _distance(30)
 {
 }
 
-Enemy::Enemy(const EnemyState& state) : _sigMax(40) , _distance(30)
+Enemy::Enemy(const EnemyState& state) : _sigMax(10) , _distance(30)
 {
 }
 
@@ -40,8 +40,8 @@ void Enemy::Init(EN_TYPE type, EN_ID id)
 void Enemy::Curve()
 {
 	/// ｼｸﾞﾓｲﾄﾞを使った移動範囲の設定
-	_sigCnt = -_sigMax;
-	_sigRange = abs(_sigMax);
+	_sigCnt	  = -_sigMax;
+	_sPos = _pos;
 	_updater = &Enemy::CurveUpdate;
 }
 
@@ -81,59 +81,80 @@ void Enemy::CurveUpdate()
 {
 	auto sigmoid = [](const double& gain, const double& x)
 	{
-		auto debug = exp(-gain * x);
+		auto debug = 1.0 / (1.0 + exp(-gain * x));
 		return 1.0 / (1.0 + exp(-gain * x));
 	};
 
-	/// ｶｳﾝﾄが一定値を超えた時の状態遷移
-	if (_sigCnt >= _sigRange)
+	if (_sigCnt >= _sigMax)
 	{
-		/// ここの処理は変わる可能性がある
-		_rotDir = _curveInfo[_curveID[0]];
-		_curveID.pop_back();
-		if (_curveID.size() <= 0)
-		{
-			dbgPoint.clear();
-			Rotation();
-			// Target();
-			return;
-		}
-		else
-		{
-			Curve();
-			_nextPos += _vel;
-			return;
-		}
+		// Rotation();
+ 		Target();
 	}
 
-	//// 計算式
-	/// (x + 10) / 20;
-	auto dir = _curveID[_curveID.size() - 1];
+	double X = (_sigCnt + _sigMax) / (_sigMax * 2);
 
-	/// ｼｸﾞﾓｲﾄﾞを使ってY方向の移動量を計算している
-	if (_sigCnt <= 0)
-	{
-		_vel.y += 3 * sigmoid(1.0, _sigCnt / (_sigMax / 10)) * _curveInfo[dir].y;
-	}
-	else
-	{
-		/// 一定時間たつと、Y方向の移動量を減らすようにしている
-		_vel.y *= 0.85;
-	}
+ 	auto range = Vector2d(abs(_pos.x - _nextPos.x), abs(_pos.y - _nextPos.y));
 
-	/// Y方向の移動量によって、X方向の移動量が変化するようにしている
-	_vel.x = (3 - abs(_vel.y / 3)) * _curveInfo[dir].x;
-	
-	++_sigCnt;
+	_pos.y = sigmoid(1.0, X) * range.y + _sPos.y;
+	_pos.x = X * range.x + _sPos.x;
+
+	/*auto theta = atan2f(_nextPos.y - _pos.y, _nextPos.x - _pos.x);
+	auto cost = cos(theta);
+	auto sint = sin(theta);
+
+	_vel.y = sigmoid(1.0, X) * 10 * sint;
+	_vel.x = X * (cost * 10);*/
+	_sigCnt += 0.1;
+
+	///// ｶｳﾝﾄが一定値を超えた時の状態遷移
+	//if (_sigCnt >= _sigRange)
+	//{
+	//	/// ここの処理は変わる可能性がある
+	//	_rotDir = _curveInfo[_curveID[0]];
+	//	_curveID.pop_back();
+	//	if (_curveID.size() <= 0)
+	//	{
+	//		dbgPoint.clear();
+	//		Rotation();
+	//		// Target();
+	//		return;
+	//	}
+	//	else
+	//	{
+	//		Curve();
+	//		_nextPos += _vel;
+	//		return;
+	//	}
+	//}
+
+	////// 計算式
+	///// (x + 10) / 20;
+	//auto dir = _curveID[_curveID.size() - 1];
+
+	///// ｼｸﾞﾓｲﾄﾞを使ってY方向の移動量を計算している
+	//if (_sigCnt <= 0)
+	//{
+	//	_vel.y += 3 * sigmoid(1.0, _sigCnt / (_sigMax / 10)) * _curveInfo[dir].y;
+	//}
+	//else
+	//{
+	//	/// 一定時間たつと、Y方向の移動量を減らすようにしている
+	//	_vel.y *= 0.85;
+	//}
+
+	///// Y方向の移動量によって、X方向の移動量が変化するようにしている
+	//_vel.x = (3 - abs(_vel.y / 3)) * _curveInfo[dir].x;
+	//
+	//++_sigCnt;
 
 	//if (abs((int)(_sigCnt)) % 10 == 0)
 	//{
 	//	dbgPoint.push_back(_pos + _vel);
 	//}
 	
-	/// ﾌﾟﾚｲﾔｰの角度計算
-	_nextPos += _vel;
-	CalRad(_pos, _nextPos, 90);
+	///// ﾌﾟﾚｲﾔｰの角度計算
+	//_nextPos += _vel;
+	//CalRad(_pos, _nextPos, 90);
 }
  
 void Enemy::TargetUpdate()

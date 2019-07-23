@@ -36,7 +36,9 @@ enum class EN_ID
 };
 
 //	0 : 座標, 1 : ｻｲｽﾞ  2 : 目標地点 3 : 種類, 4 : 敵のﾃｰﾌﾞﾙの位置 5 : 移動方向の情報
-using EnemyState = std::tuple<Vector2, Size, Vector2d, EN_TYPE, int, std::vector<int>>;
+// using EnemyState = std::tuple<Vector2, Size, Vector2d, EN_TYPE, int, std::vector<int>>;
+//	0 : 座標, 1 : ｻｲｽﾞ  2 : 目標地点 3 : 種類, 4 : 敵のﾃｰﾌﾞﾙの位置 5 : 移動方向の情報
+using EnemyState = std::tuple<Vector2, Size, Vector2d, EN_TYPE, int, Vector2d>;
 
 class Enemy :
 	public Object
@@ -67,7 +69,8 @@ protected:
 	/// protectedに必要のないものは、privateに移動しておく
 	Vector2 _rotDir;
 	Vector2d _aimPos;		// 目標座標
-	Vector2d _nextPos;
+	Vector2d _sPos;
+	Vector2d _nextPos;		// ｼｸﾞﾓｲﾄﾞのゴール地点(で使ってみる)
 	Vector2d _rotCenter;	// 回転するときの中心点
 
 	std::vector<int> _curveID;			// 曲がるIDの指定
@@ -76,10 +79,9 @@ protected:
 	double _rotDistance;	// 回転幅の距離
 	double _rotAngle;		// 回転用の角度
 
-	int _sigCnt;		// ｼｸﾞﾓｲﾄﾞ関数の値
-	int _sigRange;		// ｼｸﾞﾓｲﾄﾞ関数の範囲
+	double _sigCnt;		// ｼｸﾞﾓｲﾄﾞ関数の値
 
-	const int _sigMax;
+	const double _sigMax;
 	const double _distance;
 private:
 	
