@@ -102,6 +102,7 @@ void Enemy::CurveUpdate()
  
 void Enemy::TargetUpdate()
 {
+	CalRad(_pos, _aimPos, 90);
 	if (_vel.x >= 0)
 	{
 		_vel.x = (_pos.x >= _aimPos.x ? 0 : _vel.x);
@@ -134,7 +135,7 @@ void Enemy::RotationUpdate()
 	auto sint = sin(_rotAngle * (DX_PI / 180));
 	auto ePos = _rotCenter + Vector2d(_rotDistance * cost,
 									  _rotDistance * sint);
-	// CalRad(_pos, ePos);
+	 CalRad(_pos, ePos, 90);
 	_pos = ePos;
 	_rotAngle = (_rotDir.y < 0 ? _rotAngle - 4 : _rotAngle + 4);
 
