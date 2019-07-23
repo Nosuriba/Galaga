@@ -2,6 +2,7 @@
 #include <list>
 #include <array>
 #include "Scene.h"
+#include "../Object/Enemy.h"
 
 class Object;
 
@@ -18,8 +19,7 @@ public:
 	unique_scene Update(unique_scene scene, const Input& p) override;
 	const SCN_ID GetSceneID() const override;
 private:
-	std::vector<shared_obj> _objs;
-
+	void AddEnemy(const int& line, const EnemyState& state);
 	void DecideDir();
 
 	int _ghGameScreen;		// ｹﾞｰﾑｽｸﾘｰﾝの画像ﾊﾝﾄﾞﾙ
@@ -29,6 +29,9 @@ private:
 
 	int _enCnt;				// 出現している敵のｶｳﾝﾄ
 	
+	std::vector<shared_obj> _objs;
+
+
 	std::vector<char> _enTblInfo;				// 敵の配置情報を確認するﾃｰﾌﾞﾙ
 	std::vector<std::vector<int>> _dirInfo;		// 敵の移動方向の情報
 	std::array<Vector2, 6> _initPos;			// 敵の初期配置保存用

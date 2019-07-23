@@ -106,6 +106,8 @@ void Enemy::CurveUpdate()
 		}
 	}
 
+	//// 計算式
+	/// (x + 10) / 20;
 	auto dir = _curveID[_curveID.size() - 1];
 
 	/// ｼｸﾞﾓｲﾄﾞを使ってY方向の移動量を計算している

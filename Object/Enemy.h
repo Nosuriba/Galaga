@@ -10,8 +10,8 @@ enum class EN_STATE
 {
 	POS,
 	SIZE,
-	TYPE,
 	AIM,
+	TYPE,
 	NUM,
 	MOVEINFO,
 	MAX
@@ -35,8 +35,8 @@ enum class EN_ID
 	MAX
 };
 
-//	0 : 座標, 1 : ｻｲｽﾞ  2 : 種類, 3 : 目標地点, 4 : 敵のﾃｰﾌﾞﾙの位置 5 : 移動方向の情報
-using EnemyState = std::tuple<Vector2, Size, EN_TYPE, Vector2d, int, std::vector<int>>;
+//	0 : 座標, 1 : ｻｲｽﾞ  2 : 目標地点 3 : 種類, 4 : 敵のﾃｰﾌﾞﾙの位置 5 : 移動方向の情報
+using EnemyState = std::tuple<Vector2, Size, Vector2d, EN_TYPE, int, std::vector<int>>;
 
 class Enemy :
 	public Object

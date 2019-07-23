@@ -65,6 +65,10 @@ etc
 ※シグモイド関数の参考資料
 http://www.c-tipsref.com/tips/math/sigmoid.html
 (使い方)
+(x + 10) / 20  →　正規化
+
+y = sigmoid * Y方向の移動幅
+x = (x + 10) / 20 * X方向の移動幅
 
 
 移動パターン用のデータを作ってみる？

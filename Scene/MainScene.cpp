@@ -78,7 +78,26 @@ void MainScene::Init()
 	_ghGameScreen = MakeScreen(LpGame.gameScreenSize.x, LpGame.gameScreenSize.y, true);
 
 	/// ‰¼‚Ì¶¬
-	_objs.emplace_back(std::make_shared<Player>(Vector2(100, 200), _charSize));
+	_objs.emplace_back(std::make_shared<Player>(Vector2(100, LpGame.gameScreenSize.y - _charSize.height), _charSize));
+}
+
+void MainScene::AddEnemy(const int & line, const EnemyState & state)
+{
+	if (line == 0)
+	{
+		/// ƒ{ƒX“G
+		_objs.emplace_back(std::make_shared<Scorpion>(state));
+	}
+	else if (line == 1 || line == 2)
+	{
+		/// ’†ŠÔ‚Ì“G
+		_objs.emplace_back(std::make_shared<Butterfly>(state));
+	}
+	else
+	{
+		/// G‹›
+		_objs.emplace_back(std::make_shared<Bee>(state));
+	}
 }
 
 void MainScene::DecideDir()
@@ -143,25 +162,11 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 				auto space  = _enSpace[randNum % 6] + (_enSpace[randNum % 6] * cnt);
 				
 				/// “G‚Ì¶¬
-				EnemyState state = { _initPos[randNum % 6] + space, _charSize,
-									 EN_TYPE::NORMAL, aimPos, 
-									 num, _dirInfo[randNum % 6] };
 				auto line = num / _enMax.x;
-				if (line == 0)
-				{
-					/// ƒ{ƒX“G
-					_objs.emplace_back(std::make_shared<Scorpion>(state));
-				}
-				else if (line == 1 || line == 2)
-				{
-					/// ’†ŠÔ‚Ì“G
-					_objs.emplace_back(std::make_shared<Butterfly>(state));
-				}
-				else
-				{
-					/// G‹›
-					_objs.emplace_back(std::make_shared<Bee>(state));
-				}
+				EnemyState state = { _initPos[randNum % 6] + space, _charSize, aimPos, 
+									 EN_TYPE::NORMAL, num, _dirInfo[randNum % 6] };
+				
+				AddEnemy(line, state);
 				
 				++cnt;
 				++_enCnt;
