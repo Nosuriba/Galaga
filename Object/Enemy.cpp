@@ -79,82 +79,25 @@ void Enemy::Shot()
 
 void Enemy::CurveUpdate()
 {
-	auto sigmoid = [](const double& gain, const double& x)
-	{
-		auto debug = 1.0 / (1.0 + exp(-gain * x));
-		return 1.0 / (1.0 + exp(-gain * x));
-	};
+	auto sigmoid = [](const double& x){ return 1.0 / (1.0 + exp(-1.0 * x));};
 
 	if (_sigCnt >= _sigMax)
 	{
-		// Rotation();
- 		Target();
+		Rotation();
 	}
-
+	auto range = Vector2d(_nextPos.x - _sPos.x, _nextPos.y - _sPos.y);
 	double X = (_sigCnt + _sigMax) / (_sigMax * 2);
+	double Y = sigmoid(_sigCnt);
+	/// 角度計算
+	auto ePos = Vector2d(X * range.x + _sPos.x, Y * range.y * _sPos.y);
+	CalRad(_pos, ePos, 90);
 
- 	auto range = Vector2d(abs(_pos.x - _nextPos.x), abs(_pos.y - _nextPos.y));
-
-	_pos.y = sigmoid(1.0, X) * range.y + _sPos.y;
+	_pos.y = Y * range.y + _sPos.y;
 	_pos.x = X * range.x + _sPos.x;
 
-	/*auto theta = atan2f(_nextPos.y - _pos.y, _nextPos.x - _pos.x);
-	auto cost = cos(theta);
-	auto sint = sin(theta);
-
-	_vel.y = sigmoid(1.0, X) * 10 * sint;
-	_vel.x = X * (cost * 10);*/
-	_sigCnt += 0.1;
-
-	///// ｶｳﾝﾄが一定値を超えた時の状態遷移
-	//if (_sigCnt >= _sigRange)
-	//{
-	//	/// ここの処理は変わる可能性がある
-	//	_rotDir = _curveInfo[_curveID[0]];
-	//	_curveID.pop_back();
-	//	if (_curveID.size() <= 0)
-	//	{
-	//		dbgPoint.clear();
-	//		Rotation();
-	//		// Target();
-	//		return;
-	//	}
-	//	else
-	//	{
-	//		Curve();
-	//		_nextPos += _vel;
-	//		return;
-	//	}
-	//}
-
-	////// 計算式
-	///// (x + 10) / 20;
-	//auto dir = _curveID[_curveID.size() - 1];
-
-	///// ｼｸﾞﾓｲﾄﾞを使ってY方向の移動量を計算している
-	//if (_sigCnt <= 0)
-	//{
-	//	_vel.y += 3 * sigmoid(1.0, _sigCnt / (_sigMax / 10)) * _curveInfo[dir].y;
-	//}
-	//else
-	//{
-	//	/// 一定時間たつと、Y方向の移動量を減らすようにしている
-	//	_vel.y *= 0.85;
-	//}
-
-	///// Y方向の移動量によって、X方向の移動量が変化するようにしている
-	//_vel.x = (3 - abs(_vel.y / 3)) * _curveInfo[dir].x;
-	//
-	//++_sigCnt;
-
-	//if (abs((int)(_sigCnt)) % 10 == 0)
-	//{
-	//	dbgPoint.push_back(_pos + _vel);
-	//}
-	
-	///// ﾌﾟﾚｲﾔｰの角度計算
-	//_nextPos += _vel;
-	//CalRad(_pos, _nextPos, 90);
+	_sigCnt += 0.3;
+	CalRad(_pos, _nextPos, 90);
+	_dbgDrawCircle(_nextPos.x, _nextPos.y, 2, 0xffffff, true);
 }
  
 void Enemy::TargetUpdate()

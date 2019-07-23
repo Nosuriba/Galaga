@@ -168,8 +168,8 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 				/*EnemyState state = { _initPos[randNum % 6] + space, _charSize, aimPos, 
 									 EN_TYPE::NORMAL, num, _dirInfo[randNum % 6] };*/
 
-				auto debugPos = Vector2d(300, 400);
-				EnemyState state = { _initPos[0] + space, _charSize, aimPos,
+				auto debugPos = Vector2d(200, 300);
+				EnemyState state = { _initPos[randNum % 6] + space, _charSize, aimPos,
 									 EN_TYPE::NORMAL, num,  debugPos};
 				
 				AddEnemy(line, state);
