@@ -22,21 +22,19 @@ private:
 	void AddEnemy(const int& line, const EnemyState& state);
 
 	int _ghGameScreen;		// ｹﾞｰﾑｽｸﾘｰﾝの画像ﾊﾝﾄﾞﾙ
+	int _enCnt;				// 出現している敵のｶｳﾝﾄ
 
+	/// ﾃﾞﾊﾞｯｸﾞ用なので、後で消す
 	char _dbgKey;
 	char _dbgKeyOld;
-
-	int _enCnt;				// 出現している敵のｶｳﾝﾄ
 	
+	/// 敵とﾌﾟﾚｲﾔｰで分けてもいいかもしれない(分けたい)
 	std::vector<shared_obj> _objs;
 
-
-	std::vector<char> _enTblInfo;				// 敵の配置情報を確認するﾃｰﾌﾞﾙ
-	std::array<Vector2, 6> _initPos;			// 敵の初期配置保存用
-	std::array<Vector2, 6> _enSpace;			// 敵の間隔用
+	std::vector<char> _enTblInfo;		// 敵の配置情報を確認するﾃｰﾌﾞﾙ
+	std::array<Vector2, 6> _initPos;	// 敵の初期座標
 
 	const Size _charSize;
-	const Vector2 _enMax;			// 敵の最大数
-
+	const Vector2 _enMax;				// 敵の最大数
 };
 

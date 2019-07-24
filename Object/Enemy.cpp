@@ -20,9 +20,10 @@ void Enemy::Wait()
 void Enemy::Sigmoid()
 {
 	/// ｼｸﾞﾓｲﾄﾞを使った移動範囲の設定
-	_sigCnt	 = -_sigMax;
-	_sPos	 = _pos;
-	_updater = &Enemy::SigmoidUpdate;
+	_sigCnt	  = -_sigMax;
+	_sPos	  = _pos;
+	_sigRange = _ePos - _sPos;
+	_updater  = &Enemy::SigmoidUpdate;
 }
 
 void Enemy::Target()
@@ -63,27 +64,19 @@ void Enemy::WaitUpdate()
 void Enemy::SigmoidUpdate()
 {
 	auto sigmoid = [](const double& x){ return 1.0 / (1.0 + exp(-1.0 * x));};
-
-	auto range = Vector2d(_ePos.x - _sPos.x, _ePos.y - _sPos.y);
 	double X = (_sigCnt + _sigMax) / (_sigMax * 2);
 	double Y = sigmoid(_sigCnt);
 
-	/// 敵のの角度計算
-	auto ePos = Vector2d(X * range.x + _sPos.x, Y * range.y * _sPos.y);
-	CalRad(_pos, ePos, 90);
-
 	/// 敵の移動
-	_pos.y = Y * range.y + _sPos.y;
-	_pos.x = X * range.x + _sPos.x;
-
+	_pos.x = X * _sigRange.x + _sPos.x;
+	_pos.y = Y * _sigRange.y + _sPos.y;
+	
 	_sigCnt += 0.2;
 	CalRad(_pos, _ePos, 90);
-	_dbgDrawCircle(_ePos.x, _ePos.y, 2, 0xffffff, true);
-
 	if (_sigCnt >= _sigMax)
 	{
-		_rotDir.x = (range.x >= 0 ? 1: -1);
-		_rotDir.y = (range.y >= 0 ? -1 : 1);
+		_rotDir.x = (_sigRange.x >= 0 ? 1: -1);
+		_rotDir.y = (_sigRange.y >= 0 ? -1 : 1);
 		Rotation();
 	}
 }

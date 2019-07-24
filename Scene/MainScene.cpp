@@ -37,24 +37,15 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 	_enCnt = 10;
 
 	/// 左端
-	_initPos[0] = Vector2(0, _charSize.height);
-	_initPos[1] = Vector2(0, LpGame.gameScreenSize.y / 2);
-	_initPos[2] = Vector2(0, LpGame.gameScreenSize.y - _charSize.height * 2);
+	_initPos[0] = Vector2(-_charSize.width, _charSize.height);
+	_initPos[1] = Vector2(-_charSize.width, LpGame.gameScreenSize.y / 2);
+	_initPos[2] = Vector2(-_charSize.width, LpGame.gameScreenSize.y - _charSize.height * 2);
 	/// 右端
 	_initPos[3] = Vector2(LpGame.gameScreenSize.x, _charSize.height);
 	_initPos[4] = Vector2(LpGame.gameScreenSize.x, 
 						  LpGame.gameScreenSize.y / 2);
 	_initPos[5] = Vector2(LpGame.gameScreenSize.x,
 						  LpGame.gameScreenSize.y - _charSize.height * 2);
-
-	/// 左端
-	_enSpace[0] = Vector2(-_charSize.width, -_charSize.height);
-	_enSpace[1] = Vector2(-_charSize.width, 0);
-	_enSpace[2] = Vector2(-_charSize.width, _charSize.height);
-	/// 右端
-	_enSpace[3] = Vector2(_charSize.width, -_charSize.height);
-	_enSpace[4] = Vector2(_charSize.width, 0);
-	_enSpace[5] = Vector2(_charSize.width, _charSize.height);
 	Init();
 }
 
@@ -68,7 +59,7 @@ void MainScene::Init()
 
 	_ghGameScreen = MakeScreen(LpGame.gameScreenSize.x, LpGame.gameScreenSize.y, true);
 
-	/// 仮の生成
+	/// ﾌﾟﾚｲﾔｰの生成
 	_objs.emplace_back(std::make_shared<Player>(Vector2(100, LpGame.gameScreenSize.y - _charSize.height), _charSize));
 }
 
@@ -113,7 +104,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		for (int cnt = 0; cnt < 5;)
+		for (int cnt = 0; cnt < 1;)
 		{
 			/// 出現している敵が最大数を超えている時、処理を抜ける
 			if (_enCnt >= (_enMax.x * _enMax.y))
@@ -127,12 +118,11 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 				auto invPos = Vector2((num % _enMax.x) * 5, (num / _enMax.x) * 5);
 				auto aimPos = Vector2d(LpGame.gameScreenPos.x / 2 + ((num % _enMax.x) * _charSize.width) + invPos.x,
 									   LpGame.gameScreenPos.y / 2 + ((num / _enMax.x) * _charSize.height) + invPos.y);
-				auto space  = _enSpace[randNum % 6];
 				
 				/// 敵の生成
 				auto line = num / _enMax.x;
 				auto debugPos = Vector2d(200, 300);
-				EnemyState state = { _initPos[randNum % 6] + space, _charSize, 
+				EnemyState state = { _initPos[randNum % 6], _charSize, 
 									 EN_TYPE::NORMAL, num, 10 * cnt, aimPos, debugPos};
 				
 				AddEnemy(line, state);

@@ -70,6 +70,7 @@ protected:
 	Vector2d _aimPos;		// 目標座標
 	Vector2d _sPos;			// ｼｸﾞﾓｲﾄﾞのｽﾀｰﾄ地点
 	Vector2d _ePos;			// ｼｸﾞﾓｲﾄﾞのｺﾞｰﾙ地点
+	Vector2d _sigRange;		// ｼｸﾞﾓｲﾄﾞの移動幅
 	Vector2d _rotCenter;	// 回転するときの中心点
 	int _waitCnt;
 
