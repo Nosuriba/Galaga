@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <stdlib.h>	
-#include <time.h>
+#include <time.h>				/// ﾗﾝﾀﾞﾑ生成をやめた時、いずれ消すかもしれない
 #include "../Game.h"
 #include "../DebugConOut.h"
 #include "MainScene.h"
@@ -39,8 +39,7 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 	/// 左端
 	_initPos[0] = Vector2(0, _charSize.height);
 	_initPos[1] = Vector2(0, LpGame.gameScreenSize.y / 2);
-	_initPos[2] = Vector2(0, 
-						   LpGame.gameScreenSize.y - _charSize.height * 2);
+	_initPos[2] = Vector2(0, LpGame.gameScreenSize.y - _charSize.height * 2);
 	/// 右端
 	_initPos[3] = Vector2(LpGame.gameScreenSize.x, _charSize.height);
 	_initPos[4] = Vector2(LpGame.gameScreenSize.x, 
