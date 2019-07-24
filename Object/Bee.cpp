@@ -12,28 +12,21 @@ Bee::Bee(const EnemyState & state)
 	_pos = Vector2d(center.x, center.y);
 	_vel = Vector2d();
 	_rect = Rect(center, _size);
-	_nextPos = _pos;
+	_ePos = _pos;
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_rad = 0.0;
-	// _curveID = std::get<static_cast<int>(EN_STATE::MOVEINFO)>(state);
-	_nextPos = std::get<static_cast<int>(EN_STATE::MOVEINFO)>(state);
-	/// ‹È‚ª‚éî•ñ‚Ìİ’è
-	_curveInfo[0] = Vector2(1, 1);
-	_curveInfo[1] = Vector2(1, -1);
-	_curveInfo[2] = Vector2(-1, -1);
-	_curveInfo[3] = Vector2(-1, 1);
-
+	_ePos = std::get<static_cast<int>(EN_STATE::SIGPOS)>(state);
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
 
 	SetEnemyNum(std::get<static_cast<int>(EN_STATE::NUM)>(state));
 	animKey(ANIM::NORMAL);
 
-	Curve();
+	Sigmoid();
 }
 
 Bee::~Bee()
 {
-	TRACE("G‹›‚Ì€–S\n");
+	TRACE("Bee Die!! \n");
 }
 
 void Bee::Init(EN_TYPE type)

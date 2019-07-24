@@ -4,11 +4,7 @@
 #include "../DebugDisp.h"
 #include "../DebugConOut.h"
 
-Enemy::Enemy() : _sigMax(10), _distance(30)
-{
-}
-
-Enemy::Enemy(const EnemyState& state) : _sigMax(10) , _distance(30)
+Enemy::Enemy() : _sigMax(10), _distance(60)
 {
 }
 
@@ -37,12 +33,12 @@ void Enemy::Init(EN_TYPE type, EN_ID id)
 	SetAnim(ANIM::DEATH, data);
 }
 
-void Enemy::Curve()
+void Enemy::Sigmoid()
 {
 	/// ｼｸﾞﾓｲﾄﾞを使った移動範囲の設定
-	_sigCnt	  = -_sigMax;
-	_sPos = _pos;
-	_updater = &Enemy::CurveUpdate;
+	_sigCnt	 = -_sigMax;
+	_sPos	 = _pos;
+	_updater = &Enemy::SigmoidUpdate;
 }
 
 void Enemy::Target()
@@ -65,9 +61,8 @@ void Enemy::Rotation()
 
 void Enemy::Move()
 {
-	/// 最初に登録した敵と同じｱﾆﾒｰｼｮﾝをするようにしたが、
-	/// 処理の修正をした方がいいと思う
 	_rad = 0;
+	/// 先頭のｱﾆﾒｰｼｮﾝｶｳﾝﾄを渡している
 	SetInvCnt(_leadCnt);
 	_updater = &Enemy::MoveUpdate;
 }
@@ -77,15 +72,11 @@ void Enemy::Shot()
 	_updater = &Enemy::ShotUpdate;
 }
 
-void Enemy::CurveUpdate()
+void Enemy::SigmoidUpdate()
 {
 	auto sigmoid = [](const double& x){ return 1.0 / (1.0 + exp(-1.0 * x));};
 
-	if (_sigCnt >= _sigMax)
-	{
-		Rotation();
-	}
-	auto range = Vector2d(_nextPos.x - _sPos.x, _nextPos.y - _sPos.y);
+	auto range = Vector2d(_ePos.x - _sPos.x, _ePos.y - _sPos.y);
 	double X = (_sigCnt + _sigMax) / (_sigMax * 2);
 	double Y = sigmoid(_sigCnt);
 	/// 角度計算
@@ -95,9 +86,16 @@ void Enemy::CurveUpdate()
 	_pos.y = Y * range.y + _sPos.y;
 	_pos.x = X * range.x + _sPos.x;
 
-	_sigCnt += 0.3;
-	CalRad(_pos, _nextPos, 90);
-	_dbgDrawCircle(_nextPos.x, _nextPos.y, 2, 0xffffff, true);
+	_sigCnt += 0.2;
+	CalRad(_pos, _ePos, 90);
+	_dbgDrawCircle(_ePos.x, _ePos.y, 2, 0xffffff, true);
+
+	if (_sigCnt >= _sigMax)
+	{
+		_rotDir.x = (range.x >= 0 ? 1: -1);
+		_rotDir.y = (range.y >= 0 ? -1 : 1);
+		Rotation();
+	}
 }
  
 void Enemy::TargetUpdate()
@@ -133,19 +131,18 @@ void Enemy::RotationUpdate()
 {
 	auto cost = cos(_rotAngle * (DX_PI / 180));
 	auto sint = sin(_rotAngle * (DX_PI / 180));
-	auto ePos = _rotCenter + Vector2d(_rotDistance * cost,
+	auto ePos = _rotCenter - Vector2d(_rotDistance * cost,
 									  _rotDistance * sint);
 	 CalRad(_pos, ePos, 90);
 	_pos = ePos;
-	_rotAngle = (_rotDir.y < 0 ? _rotAngle - 4 : _rotAngle + 4);
+	_rotAngle += 4 * _rotDir.x * _rotDir.y;
 
 	_rotDistance -= 0.1;
 
-	if (_rotDistance <= 10)
+	if (_rotDistance <= _distance / 2)
 	{
 		Target();
 	}
-
 }
 
 void Enemy::MoveUpdate()
@@ -167,10 +164,9 @@ void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos, const double& a
 void Enemy::MakeRotaInfo(const double & distance)
 {
 	_rotDistance = distance;
-	_rotCenter = _pos + Vector2d(_distance *  _rotDir.x,
-								 _distance * -_rotDir.y);
+	_rotCenter = _pos + Vector2d(0, _distance * _rotDir.y);
 
-	auto theta = atan2(_pos.y - _rotCenter.y, _pos.x - _rotCenter.x);
+	auto theta = atan2(_rotCenter.y - _pos.y, _rotCenter.x - _pos.x);
 	_rotAngle  = theta * (180 / DX_PI);
 }
 
@@ -199,11 +195,9 @@ void Enemy::Update()
 		ResetInvCnt();
 	}
 
-	_dbgDrawCircle(_rotCenter.x, _rotCenter.y, 5, 0x00ff00, true);
-	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
-	for (auto point : dbgPoint)
+	if (_updater == &Enemy::RotationUpdate)
 	{
-		_dbgDrawCircle (point.x, point.y,3, 0xffffff);
+		_dbgDrawCircle(_rotCenter.x, _rotCenter.y, 5, 0x00ff00, true);
 	}
 	_dbgDrawBox(_rect.Left()  - _size.width / 2, _rect.Top()	- _size.height / 2,
 				_rect.Right() - _size.width / 2, _rect.Bottom() - _size.height / 2, 0xff0000, true);

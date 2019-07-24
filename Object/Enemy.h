@@ -10,10 +10,10 @@ enum class EN_STATE
 {
 	POS,
 	SIZE,
-	AIM,
 	TYPE,
 	NUM,
-	MOVEINFO,
+	AIM,
+	SIGPOS,
 	MAX
 };
 
@@ -35,17 +35,14 @@ enum class EN_ID
 	MAX
 };
 
-//	0 : 座標, 1 : ｻｲｽﾞ  2 : 目標地点 3 : 種類, 4 : 敵のﾃｰﾌﾞﾙの位置 5 : 移動方向の情報
-// using EnemyState = std::tuple<Vector2, Size, Vector2d, EN_TYPE, int, std::vector<int>>;
-//	0 : 座標, 1 : ｻｲｽﾞ  2 : 目標地点 3 : 種類, 4 : 敵のﾃｰﾌﾞﾙの位置 5 : 移動方向の情報
-using EnemyState = std::tuple<Vector2, Size, Vector2d, EN_TYPE, int, Vector2d>;
+// 0 : 座標, 1 : ｻｲｽﾞ 2 : 種類, 3 : 敵のﾃｰﾌﾞﾙの位置 4 : 目標地点 5 : ｼｸﾞﾓｲﾄﾞの移動地点
+using EnemyState = std::tuple<Vector2, Size, EN_TYPE, int, Vector2d, Vector2d>;
 
 class Enemy :
 	public Object
 {
 public:
 	Enemy();
-	Enemy(const EnemyState& state);
 	virtual ~Enemy();
 	
 	void Update() override;
@@ -54,13 +51,13 @@ public:
 
 protected:
 	//// 必要のない機能はすべて、privateもしくは削除する
-	void Curve();
+	void Sigmoid();
 	void Target();
 	void Rotation();
 	void Move();
 	void Shot();
 
-	void CurveUpdate();
+	void SigmoidUpdate();
 	void TargetUpdate();
 	void RotationUpdate();
 	void MoveUpdate();
@@ -69,13 +66,10 @@ protected:
 	/// protectedに必要のないものは、privateに移動しておく
 	Vector2 _rotDir;
 	Vector2d _aimPos;		// 目標座標
-	Vector2d _sPos;
-	Vector2d _nextPos;		// ｼｸﾞﾓｲﾄﾞのゴール地点(で使ってみる)
+	Vector2d _sPos;			// ｼｸﾞﾓｲﾄﾞのｽﾀｰﾄ地点
+	Vector2d _ePos;			// ｼｸﾞﾓｲﾄﾞのｺﾞｰﾙ地点
 	Vector2d _rotCenter;	// 回転するときの中心点
 
-	std::vector<int> _curveID;			// 曲がるIDの指定
-	std::vector<Vector2d> dbgPoint;
-	std::array<Vector2, 4> _curveInfo;
 	double _rotDistance;	// 回転幅の距離
 	double _rotAngle;		// 回転用の角度
 

@@ -83,7 +83,7 @@ void MainScene::Init()
 
 void MainScene::AddEnemy(const int & line, const EnemyState & state)
 {
-	/*if (line == 0)
+	if (line == 0)
 	{
 		/// É{ÉXìG
 		_objs.emplace_back(std::make_shared<Scorpion>(state));
@@ -97,9 +97,7 @@ void MainScene::AddEnemy(const int & line, const EnemyState & state)
 	{
 		/// éGãõ
 		_objs.emplace_back(std::make_shared<Bee>(state));
-	}*/
-
-	_objs.emplace_back(std::make_shared<Bee>(state));
+	}
 }
 
 void MainScene::DecideDir()
@@ -165,12 +163,9 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 				
 				/// ìGÇÃê∂ê¨
 				auto line = num / _enMax.x;
-				/*EnemyState state = { _initPos[randNum % 6] + space, _charSize, aimPos, 
-									 EN_TYPE::NORMAL, num, _dirInfo[randNum % 6] };*/
-
 				auto debugPos = Vector2d(200, 300);
-				EnemyState state = { _initPos[randNum % 6] + space, _charSize, aimPos,
-									 EN_TYPE::NORMAL, num,  debugPos};
+				EnemyState state = { _initPos[randNum % 6] + space, _charSize, 
+									 EN_TYPE::NORMAL, num, aimPos, debugPos};
 				
 				AddEnemy(line, state);
 				

@@ -55,7 +55,7 @@ protected:
 	const ANIM& animKey() const;
 
 	Vector2d _pos;
-	Vector2d _vel;
+	Vector2d _vel;				// •K—v‚È‚¢ê‡AŒã‚ÅÁ‚·
 	Size _size;
 	Rect _rect;
 	double _rad;
