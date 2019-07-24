@@ -19,8 +19,19 @@ Player::Player(const Vector2 & pos, const Size& size)
 	
 	Init();
 	animKey(ANIM::NORMAL);
-	_input	 = std::make_unique<KeyState>();
 
+	/// ﾊﾟｯﾄﾞが接続されていない時、ｷｰ操作の情報を生成する
+	if (GetJoypadNum() == 0)
+	{
+		_input = std::make_unique<KeyState>();
+	}
+	else
+	{
+		/// セーブとロードの部分を作成していないので
+		/// 作成しておくように...
+		_input = std::make_unique<PadState>();
+	}
+	
 	_updater = &Player::IdleUpdate;
 }
 

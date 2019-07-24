@@ -17,11 +17,12 @@ Bee::Bee(const EnemyState & state)
 	_rad = 0.0;
 	_ePos = std::get<static_cast<int>(EN_STATE::SIGPOS)>(state);
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
+	_waitCnt = std::get<static_cast<int>(EN_STATE::WAIT)>(state);
 
 	SetEnemyNum(std::get<static_cast<int>(EN_STATE::NUM)>(state));
 	animKey(ANIM::NORMAL);
 
-	Sigmoid();
+	Wait();
 }
 
 Bee::~Bee()

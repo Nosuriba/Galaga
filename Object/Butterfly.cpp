@@ -15,13 +15,14 @@ Butterfly::Butterfly(const EnemyState & state)
 	_ePos	= std::get<static_cast<int>(EN_STATE::SIGPOS)>(state);
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_rad = 0.0;
+	_waitCnt = std::get<static_cast<int>(EN_STATE::WAIT)>(state);
 
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
 
 	SetEnemyNum(std::get<static_cast<int>(EN_STATE::NUM)>(state));
 	animKey(ANIM::NORMAL);
 
-	Sigmoid();
+	Wait();
 }
 
 Butterfly::~Butterfly()

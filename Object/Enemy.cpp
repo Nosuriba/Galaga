@@ -4,7 +4,7 @@
 #include "../DebugDisp.h"
 #include "../DebugConOut.h"
 
-Enemy::Enemy() : _sigMax(10), _distance(60)
+Enemy::Enemy() : _sigMax(10), _distance(40)
 {
 }
 
@@ -12,25 +12,9 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::Init(EN_TYPE type, EN_ID id)
+void Enemy::Wait()
 {
-	anim_vec data;
-	auto enType = static_cast<int>(type) * 2;
-	auto enID = static_cast<int>(id) * 10;
-
-	data.emplace_back(IMAGE_ID("enemy")[0 + enType + enID], 30);
-	data.emplace_back(IMAGE_ID("enemy")[1 + enType + enID], 60);
-	SetAnim(ANIM::NORMAL, data);
-
-	data.emplace_back(IMAGE_ID("en_blast")[0], 15);
-	for (int i = 1; i < 5; ++i)
-	{
-		data.emplace_back(IMAGE_ID("en_blast")[i], 15 + (5 * i));
-	}
-	/// ｱﾆﾒｰｼｮﾝの終了位置を設定している
-	data.emplace_back(-1, 60);
-
-	SetAnim(ANIM::DEATH, data);
+	_updater = &Enemy::WaitUpdate;
 }
 
 void Enemy::Sigmoid()
@@ -67,9 +51,13 @@ void Enemy::Move()
 	_updater = &Enemy::MoveUpdate;
 }
 
-void Enemy::Shot()
+void Enemy::WaitUpdate()
 {
-	_updater = &Enemy::ShotUpdate;
+	if (_waitCnt <= 0)
+	{
+		Sigmoid();
+	}
+	--_waitCnt;
 }
 
 void Enemy::SigmoidUpdate()
@@ -146,10 +134,6 @@ void Enemy::RotationUpdate()
 }
 
 void Enemy::MoveUpdate()
-{
-}
-
-void Enemy::ShotUpdate()
 {
 }
 

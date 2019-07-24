@@ -145,7 +145,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	if (_dbgKey && !_dbgKeyOld)
 	{
 		/// 一体ずつ出しているので、for文を使わないような処理を書くようにする
-		for (int cnt = 0; cnt < 1;)
+		for (int cnt = 0; cnt < 3;)
 		{
 			/// 出現している敵が最大数を超えている時、処理を抜ける
 			if (_enCnt >= (_enMax.x * _enMax.y))
@@ -159,16 +159,15 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 				auto invPos = Vector2((num % _enMax.x) * 5, (num / _enMax.x) * 5);
 				auto aimPos = Vector2d(LpGame.gameScreenPos.x / 2 + ((num % _enMax.x) * _charSize.width) + invPos.x,
 									   LpGame.gameScreenPos.y / 2 + ((num / _enMax.x) * _charSize.height) + invPos.y);
-				auto space  = _enSpace[randNum % 6] + (_enSpace[randNum % 6] * cnt);
+				auto space  = _enSpace[randNum % 6];
 				
 				/// 敵の生成
 				auto line = num / _enMax.x;
 				auto debugPos = Vector2d(200, 300);
 				EnemyState state = { _initPos[randNum % 6] + space, _charSize, 
-									 EN_TYPE::NORMAL, num, aimPos, debugPos};
+									 EN_TYPE::NORMAL, num, 10 * cnt, aimPos, debugPos};
 				
 				AddEnemy(line, state);
-				
 				++cnt;
 				++_enCnt;
 				_enTblInfo[num] = 1;

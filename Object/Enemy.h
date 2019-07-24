@@ -12,6 +12,7 @@ enum class EN_STATE
 	SIZE,
 	TYPE,
 	NUM,
+	WAIT,
 	AIM,
 	SIGPOS,
 	MAX
@@ -35,8 +36,8 @@ enum class EN_ID
 	MAX
 };
 
-// 0 : 座標, 1 : ｻｲｽﾞ 2 : 種類, 3 : 敵のﾃｰﾌﾞﾙの位置 4 : 目標地点 5 : ｼｸﾞﾓｲﾄﾞの移動地点
-using EnemyState = std::tuple<Vector2, Size, EN_TYPE, int, Vector2d, Vector2d>;
+// 0 : 座標, 1 : ｻｲｽﾞ 2 : 種類, 3 : 敵のﾃｰﾌﾞﾙの位置 4 : 待機時間 5 : 目標地点 6 : ｼｸﾞﾓｲﾄﾞの移動地点
+using EnemyState = std::tuple<Vector2, Size, EN_TYPE, int, int, Vector2d, Vector2d>;
 
 class Enemy :
 	public Object
@@ -51,17 +52,18 @@ public:
 
 protected:
 	//// 必要のない機能はすべて、privateもしくは削除する
+
+	void Wait();
 	void Sigmoid();
 	void Target();
 	void Rotation();
 	void Move();
-	void Shot();
 
+	void WaitUpdate();
 	void SigmoidUpdate();
 	void TargetUpdate();
 	void RotationUpdate();
 	void MoveUpdate();
-	void ShotUpdate();
 
 	/// protectedに必要のないものは、privateに移動しておく
 	Vector2 _rotDir;
@@ -69,6 +71,7 @@ protected:
 	Vector2d _sPos;			// ｼｸﾞﾓｲﾄﾞのｽﾀｰﾄ地点
 	Vector2d _ePos;			// ｼｸﾞﾓｲﾄﾞのｺﾞｰﾙ地点
 	Vector2d _rotCenter;	// 回転するときの中心点
+	int _waitCnt;
 
 	double _rotDistance;	// 回転幅の距離
 	double _rotAngle;		// 回転用の角度
@@ -78,8 +81,7 @@ protected:
 	const double _sigMax;
 	const double _distance;
 private:
-	
-	void Init(EN_TYPE type, EN_ID id);
+
 	void CalRad(const Vector2d& sPos, const Vector2d& ePos, const double& angle);
 	void MakeRotaInfo(const double& distance);		// 回転するための情報を生成している
 
