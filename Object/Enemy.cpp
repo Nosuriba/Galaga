@@ -67,10 +67,12 @@ void Enemy::SigmoidUpdate()
 	auto range = Vector2d(_ePos.x - _sPos.x, _ePos.y - _sPos.y);
 	double X = (_sigCnt + _sigMax) / (_sigMax * 2);
 	double Y = sigmoid(_sigCnt);
-	/// 角度計算
+
+	/// 敵のの角度計算
 	auto ePos = Vector2d(X * range.x + _sPos.x, Y * range.y * _sPos.y);
 	CalRad(_pos, ePos, 90);
 
+	/// 敵の移動
 	_pos.y = Y * range.y + _sPos.y;
 	_pos.x = X * range.x + _sPos.x;
 

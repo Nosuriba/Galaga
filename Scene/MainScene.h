@@ -20,7 +20,6 @@ public:
 	const SCN_ID GetSceneID() const override;
 private:
 	void AddEnemy(const int& line, const EnemyState& state);
-	void DecideDir();
 
 	int _ghGameScreen;		// ｹﾞｰﾑｽｸﾘｰﾝの画像ﾊﾝﾄﾞﾙ
 
@@ -33,7 +32,6 @@ private:
 
 
 	std::vector<char> _enTblInfo;				// 敵の配置情報を確認するﾃｰﾌﾞﾙ
-	std::vector<std::vector<int>> _dirInfo;		// 敵の移動方向の情報
 	std::array<Vector2, 6> _initPos;			// 敵の初期配置保存用
 	std::array<Vector2, 6> _enSpace;			// 敵の間隔用
 

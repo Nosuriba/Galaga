@@ -36,14 +36,6 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 
 	_enCnt = 10;
 
-	/// 敵の移動方向の設定
-	_dirInfo.resize(6);
-	for (int i = 0; i < _dirInfo.size(); ++i)
-	{
-		_dirInfo[i].resize(2);
-	}
-	DecideDir();
-
 	/// 左端
 	_initPos[0] = Vector2(0, _charSize.height);
 	_initPos[1] = Vector2(0, LpGame.gameScreenSize.y / 2);
@@ -100,28 +92,6 @@ void MainScene::AddEnemy(const int & line, const EnemyState & state)
 	}
 }
 
-void MainScene::DecideDir()
-{
-	_dirInfo[0][0] = 0;
-	_dirInfo[0][1] = 0;
-
-	_dirInfo[1][0] = 1;
-	_dirInfo[1][1] = 0;
-
-	_dirInfo[2][0] = 0;
-	_dirInfo[2][1] = 1;
-
-	_dirInfo[3][0] = 3;
-	_dirInfo[3][1] = 3;
-
-	_dirInfo[4][0] = 2;
-	_dirInfo[4][1] = 3;
-
-	_dirInfo[5][0] = 3;
-	_dirInfo[5][1] = 2;
-	
-}
-
 void MainScene::Draw()
 {
 	SetDrawScreen(_ghGameScreen);
@@ -144,8 +114,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		/// 一体ずつ出しているので、for文を使わないような処理を書くようにする
-		for (int cnt = 0; cnt < 3;)
+		for (int cnt = 0; cnt < 5;)
 		{
 			/// 出現している敵が最大数を超えている時、処理を抜ける
 			if (_enCnt >= (_enMax.x * _enMax.y))

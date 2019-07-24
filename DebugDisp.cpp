@@ -50,10 +50,9 @@ void DebugDisp::AddDraw()
 
 	if (_dispFlag)
 	{
+		WaitMode();
 		LpGame.AddDrawQue({ _dbgScreen, 0, 0 });
 	}
-
-	WaitMode();
 }
 
 void DebugDisp::SetScreen()
