@@ -30,6 +30,10 @@ private:
 
 	std::vector<shared_obj> _objs;
 
+	//// ﾃｰﾌﾞﾙの左端の情報を持った座標を使っていけば、何とかできそうかも
+	/// 動かす座標はdouble型なので、int型でキャストして小数点の無い綺麗な値を渡してあげればいいかな
+	Vector2d _posLD;		// ﾃｰﾌﾞﾙの左下の座標
+
 	std::vector<char> _enTblInfo;		// 敵の配置情報を確認するﾃｰﾌﾞﾙ
 	std::array<Vector2, 6> _initPos;	// 敵の初期座標
 

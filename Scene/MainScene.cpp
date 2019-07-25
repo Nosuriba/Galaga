@@ -36,6 +36,9 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 
 	_enCnt = 10;
 
+	_posLD = Vector2d(LpGame.gameScreenPos.x / 2,
+					  LpGame.gameScreenPos.y / 2 + (_enMax.y - 1) * _charSize.height);
+
 	/// ç∂í[
 	_initPos[0] = Vector2(-_charSize.width, _charSize.height);
 	_initPos[1] = Vector2(-_charSize.width, LpGame.gameScreenSize.y / 2);
@@ -157,6 +160,8 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			--_enCnt;
 		}
 	}
+
+	_dbgDrawBox(_posLD.x, _posLD.y, _posLD.x + _charSize.width, _posLD.y + _charSize.height, 0xffff00, true);
 
 	Draw();
 
