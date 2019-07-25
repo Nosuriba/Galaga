@@ -8,6 +8,10 @@ public:
 	~PadState();
 	void Update() override;
 private:
+	bool SaveKeyData() override;
+	bool LoadKeyData() override;
+
+	// ·[î•ñ‚ğ”½‰f‚·‚é‚½‚ß‚Ì‚à‚Ì(–¼‘O‚ÍŒã‚Å•Ï‚¦‚é‚©‚à)
 	void RefKeyData() override;
 	void ResetKeyData() override;
 	void SetKeyData() override;

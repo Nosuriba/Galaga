@@ -29,7 +29,7 @@ KeyState::KeyState()
 		{
 			TRACE("ˆê•”·°‚Ì“Ç‚İ‚İ‚É¸”s‚µ‚Ü‚µ‚½B\n");
 			TRACE("ÃŞÌ«ÙÄ‚Ì·°‚É–ß‚µ‚Ü‚·\n");
-			ResetKeyData();
+			_keyID = _defKeyID;
 			break;
 		}
 	}
@@ -125,13 +125,11 @@ void KeyState::SetKeyData()
 	for (int id = 0; id < sizeof(_buf) / sizeof(_buf[0]); ++id)
 	{
 		if (_buf[id] && 
-			!_buf[_lastKeyID] &&
-			id != _lastKeyID && 
-			id != KEY_INPUT_F1)
+			!_buf[_lastID] && 
+			id != KEY_INPUT_F1 &&
+			id != KEY_INPUT_DELETE)
 		{
-			/// â‘ÎC³‚µ‚Ä‚â‚é‚¼.....
-			/// “¯‚¶·°‚ª“o˜^‚³‚ê‚Ä‚¢‚È‚¢‚É“o˜^‚·‚é‚æ‚¤‚È”»’è‚ğ’Ç‰Á‚·‚é
-			_lastKeyID = id;
+			_lastID = id;
 			_keyID[static_cast<int>(_confID)] = id;
 			++_confID;
 			TRACE("İ’è‚µ‚½·° : " "%d\n·°‚ÌID :%d\n",_confID, id);

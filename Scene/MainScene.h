@@ -27,8 +27,7 @@ private:
 	/// ﾃﾞﾊﾞｯｸﾞ用なので、後で消す
 	char _dbgKey;
 	char _dbgKeyOld;
-	
-	/// 敵とﾌﾟﾚｲﾔｰで分けてもいいかもしれない(分けたい)
+
 	std::vector<shared_obj> _objs;
 
 	std::vector<char> _enTblInfo;		// 敵の配置情報を確認するﾃｰﾌﾞﾙ

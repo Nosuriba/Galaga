@@ -10,8 +10,8 @@ public:
 
 	void Update() override;
 private:
-	bool SaveKeyData();
-	bool LoadKeyData();
+	bool SaveKeyData() override;
+	bool LoadKeyData() override;
 
 	// ·[î•ñ‚ğ”½‰f‚·‚é‚½‚ß‚Ì‚à‚Ì(–¼‘O‚ÍŒã‚Å•Ï‚¦‚é‚©‚à)
 	void RefKeyData() override;
@@ -26,6 +26,5 @@ private:
 	std::vector<int> _defKeyID;
 
 	INPUT_ID _confID;
-	int _lastKeyID;
 };
 

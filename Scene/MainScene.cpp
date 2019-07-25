@@ -105,6 +105,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 
 	auto randNum = rand();
 
+	/// “G‚Ì¶¬(‰¼‚Å¶¬‚µ‚Ä‚¢‚é)
 	if (_dbgKey && !_dbgKeyOld)
 	{
 		for (int cnt = 0; cnt < 3;)
@@ -151,6 +152,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		obj->Update();
 		if (obj->GetDeath() && obj->GetObjID() == Obj::ENEMY)
 		{
+			/// ÃŞÊŞ¯¸Ş’†‚Ì‚½‚ßA“G‚ª€–S‚µ‚½ˆÊ’u‚ÉÄ¶¬‚Å‚«‚é‚æ‚¤‚É‚µ‚Ä‚¢‚é
 			_enTblInfo[obj->GetEnemyNum()] = 0;
 			--_enCnt;
 		}

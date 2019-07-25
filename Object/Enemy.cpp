@@ -63,6 +63,14 @@ void Enemy::WaitUpdate()
 
 void Enemy::SigmoidUpdate()
 {
+	if (_sigCnt >= _sigMax)
+	{
+		_rotDir.x = (_sigRange.x >= 0 ? 1 : -1);
+		_rotDir.y = (_sigRange.y >= 0 ? -1 : 1);
+		Rotation();
+		return;
+	}
+
 	auto sigmoid = [](const double& x){ return 1.0 / (1.0 + exp(-1.0 * x));};
 	double X = (_sigCnt + _sigMax) / (_sigMax * 2);
 	double Y = sigmoid(_sigCnt);
@@ -73,12 +81,6 @@ void Enemy::SigmoidUpdate()
 	
 	_sigCnt += 0.3;
 	CalRad(_pos, _sigEnd, 90);
-	if (_sigCnt >= _sigMax)
-	{
-		_rotDir.x = (_sigRange.x >= 0 ? 1: -1);
-		_rotDir.y = (_sigRange.y >= 0 ? -1 : 1);
-		Rotation();
-	}
 }
  
 void Enemy::TargetUpdate()

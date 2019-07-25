@@ -27,10 +27,13 @@ public:
 protected:
 	// ‘O‚É“ü—Í‚µ‚½·°î•ñæ“¾—p
 	void SetOld(void);
+	virtual bool SaveKeyData() = 0;
+	virtual bool LoadKeyData() = 0;
 	virtual void RefKeyData() = 0;
 	virtual void ResetKeyData() = 0;
 	virtual void SetKeyData() = 0;
 
+	int _lastID;
 private:
 	// first : nowInput, second : oldInput
 	key_map _state;

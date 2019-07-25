@@ -15,13 +15,29 @@ PadState::PadState()
 	_defPadID.emplace_back(PAD_INPUT_Y);
 
 	_padID.reserve(static_cast<size_t>(end(INPUT_ID())));
-	_padID = _defPadID;
+	if (!LoadKeyData())
+	{
+		_padID = _defPadID;
+	}
+
+	/// “Ç‚İ‚İ‚É¸”s‚µ‚½A·°î•ñ‚ğÃŞÌ«ÙÄ‚É–ß‚·
+	for (auto id : INPUT_ID())
+	{
+		if (_padID[static_cast<int>(id)] <= 0)
+		{
+			TRACE("ˆê•”·°‚Ì“Ç‚İ‚İ‚É¸”s‚µ‚Ü‚µ‚½B\n");
+			TRACE("ÃŞÌ«ÙÄ‚Ì·°‚É–ß‚µ‚Ü‚·\n");
+			_padID = _defPadID;
+			break;
+		}
+	}
 
 	_padMode = &PadState::RefKeyData;
 }
 
 PadState::~PadState()
 {
+	SaveKeyData();
 }
 
 void PadState::Update()
@@ -44,9 +60,44 @@ void PadState::Update()
 
 	if (CheckHitKey(KEY_INPUT_DELETE) == 1)
 	{
-		TRACE("·°î•ñ‚ğØ¾¯Ä‚·‚é\n");
-		_padMode = &PadState::ResetKeyData;
+		for (auto id : INPUT_ID())
+		{
+			if (_padID[static_cast<int>(id)] != _defPadID[static_cast<int>(id)])
+			{
+				TRACE("·°î•ñ‚ğØ¾¯Ä‚·‚é\n");
+				_padMode = &PadState::ResetKeyData;
+				break;
+			}
+		}
 	}
+}
+
+bool PadState::SaveKeyData()
+{
+	FILE *fp;
+	if (fopen_s(&fp, "Data/pad.dat", "wb") != 0)
+	{
+		return false;
+	}
+	fwrite(_padID.data(), (_padID.size() * sizeof(_padID[0])), 1, fp);
+	fclose(fp);
+
+	return true;
+}
+
+bool PadState::LoadKeyData()
+{
+	_padID.resize(static_cast<size_t>(INPUT_ID::MAX));
+
+	FILE *fp;
+	if (fopen_s(&fp, "Data/pad.dat", "rb") != 0)
+	{
+		return false;
+	}
+	fread(_padID.data(), (_padID.size() * sizeof(_padID[0])), 1, fp);
+	fclose(fp);
+
+	return true;
 }
 
 void PadState::RefKeyData()
@@ -65,19 +116,21 @@ void PadState::ResetKeyData()
 
 void PadState::SetKeyData()
 {
-	auto num = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-	if (num > 0)
+	if (_inputPad > 0)
 	{
 		for (auto pad : _padID)
 		{
-			if (pad == num)
+			if (pad == _inputPad &&
+				_inputPad == _lastID)
 			{
 				TRACE("“¯‚¶·°‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚·B\n");
 				return;
 			}
 		}
-		_padID.emplace_back(num);
+		_lastID = _inputPad;
+		_padID.emplace_back(_inputPad);
 	}
+
 	if (_padID.size() >= static_cast<int>(INPUT_ID::MAX))
 	{
 		_padMode = &PadState::RefKeyData;
