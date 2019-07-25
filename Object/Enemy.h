@@ -70,10 +70,11 @@ protected:
 	Vector2d _sigEnd;		// ｼｸﾞﾓｲﾄﾞの終点
 	Vector2d _sigRange;		// ｼｸﾞﾓｲﾄﾞの移動幅
 	Vector2d _rotCenter;	// 回転するときの中心点
-	int _waitCnt;
 
-	double _rotDistance;	// 回転幅の距離
-	double _rotAngle;		// 回転用の角度
+	int _waitCnt;			// 敵が移動する前の待機時間
+
+	int _angle;
+	int _rotAngle;		// 回点した角度
 
 	double _sigCnt;			// ｼｸﾞﾓｲﾄﾞ関数の値
 
@@ -82,7 +83,7 @@ protected:
 private:
 
 	void CalRad(const Vector2d& sPos, const Vector2d& ePos, const double& angle);
-	void MakeRotaInfo(const double& distance);		// 回転するための情報を生成している
+	void MakeRotaInfo();		// 回転するための情報を生成している
 
 	void (Enemy::*_updater)();
 

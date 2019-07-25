@@ -40,7 +40,7 @@ void Enemy::Target()
 
 void Enemy::Rotation()
 {
-	MakeRotaInfo(_distance);
+	MakeRotaInfo();
 	_updater = &Enemy::RotationUpdate;
 }
 
@@ -71,7 +71,7 @@ void Enemy::SigmoidUpdate()
 	_pos.x = X * _sigRange.x + _sigBegin.x;
 	_pos.y = Y * _sigRange.y + _sigBegin.y;
 	
-	_sigCnt += 0.2;
+	_sigCnt += 0.3;
 	CalRad(_pos, _sigEnd, 90);
 	if (_sigCnt >= _sigMax)
 	{
@@ -112,17 +112,17 @@ void Enemy::TargetUpdate()
 
 void Enemy::RotationUpdate()
 {
-	auto cost = cos(_rotAngle * (DX_PI / 180));
-	auto sint = sin(_rotAngle * (DX_PI / 180));
-	auto ePos = _rotCenter - Vector2d(_rotDistance * cost,
-									  _rotDistance * sint);
+	auto cost = cos(_angle * (DX_PI / 180));
+	auto sint = sin(_angle * (DX_PI / 180));
+	auto ePos = _rotCenter - Vector2d(_distance * cost,
+									  _distance * sint);
 	 CalRad(_pos, ePos, 90);
 	_pos = ePos;
-	_rotAngle += 4 * _rotDir.x * _rotDir.y;
 
-	_rotDistance -= 0.1;
+	_angle += 4 * _rotDir.x * _rotDir.y;
+	_rotAngle += 4;
 
-	if (_rotDistance <= _distance - _distance / 4)
+	if (_rotAngle >= 360)
 	{
 		Target();
 	}
@@ -140,13 +140,13 @@ void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos, const double& a
 
 	auto debug = _rad * (180 / DX_PI);
 }
-void Enemy::MakeRotaInfo(const double & distance)
+void Enemy::MakeRotaInfo()
 {
-	_rotDistance = distance;
-	_rotCenter = _pos + Vector2d(0, _distance * _rotDir.y);
+	_rotCenter = _pos + Vector2d(_distance * _rotDir.x, _distance / 2 * -_rotDir.y);
 
-	auto theta = atan2(_rotCenter.y - _pos.y, _rotCenter.x - _pos.x);
-	_rotAngle  = theta * (180 / DX_PI);
+	auto theta  = atan2(_rotCenter.y - _pos.y, _rotCenter.x - _pos.x);
+	_angle		= theta * (180 / DX_PI);
+	_rotAngle	= 0;
 }
 
 void Enemy::Update()
