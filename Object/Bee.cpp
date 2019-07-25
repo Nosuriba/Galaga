@@ -12,12 +12,13 @@ Bee::Bee(const EnemyState & state)
 	_pos = Vector2d(center.x, center.y);
 	_vel = Vector2d();
 	_rect = Rect(center, _size);
-	_ePos = _pos;
+	_sigEnd = _pos;
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_rad = 0.0;
-	_ePos = std::get<static_cast<int>(EN_STATE::SIGPOS)>(state);
-	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
+	_sigEnd = std::get<static_cast<int>(EN_STATE::SIGPOS)>(state);
 	_waitCnt = std::get<static_cast<int>(EN_STATE::WAIT)>(state);
+
+	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
 
 	SetEnemyNum(std::get<static_cast<int>(EN_STATE::NUM)>(state));
 	animKey(ANIM::NORMAL);

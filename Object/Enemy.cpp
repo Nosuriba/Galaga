@@ -21,8 +21,8 @@ void Enemy::Sigmoid()
 {
 	/// ｼｸﾞﾓｲﾄﾞを使った移動範囲の設定
 	_sigCnt	  = -_sigMax;
-	_sPos	  = _pos;
-	_sigRange = _ePos - _sPos;
+	_sigBegin = _pos;
+	_sigRange = _sigEnd - _sigBegin;
 	_updater  = &Enemy::SigmoidUpdate;
 }
 
@@ -67,12 +67,12 @@ void Enemy::SigmoidUpdate()
 	double X = (_sigCnt + _sigMax) / (_sigMax * 2);
 	double Y = sigmoid(_sigCnt);
 
-	/// 敵の移動
-	_pos.x = X * _sigRange.x + _sPos.x;
-	_pos.y = Y * _sigRange.y + _sPos.y;
+	/// 敵の移動(移動する幅のXとYをグラフに変換して移動させている)
+	_pos.x = X * _sigRange.x + _sigBegin.x;
+	_pos.y = Y * _sigRange.y + _sigBegin.y;
 	
 	_sigCnt += 0.2;
-	CalRad(_pos, _ePos, 90);
+	CalRad(_pos, _sigEnd, 90);
 	if (_sigCnt >= _sigMax)
 	{
 		_rotDir.x = (_sigRange.x >= 0 ? 1: -1);
@@ -122,7 +122,7 @@ void Enemy::RotationUpdate()
 
 	_rotDistance -= 0.1;
 
-	if (_rotDistance <= _distance / 2)
+	if (_rotDistance <= _distance - _distance / 4)
 	{
 		Target();
 	}

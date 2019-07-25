@@ -12,7 +12,7 @@ Butterfly::Butterfly(const EnemyState & state)
 	_pos	= Vector2d(center.x, center.y);
 	_vel	= Vector2d();
 	_rect	= Rect(center, _size);
-	_ePos	= std::get<static_cast<int>(EN_STATE::SIGPOS)>(state);
+	_sigEnd	= std::get<static_cast<int>(EN_STATE::SIGPOS)>(state);
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_rad = 0.0;
 	_waitCnt = std::get<static_cast<int>(EN_STATE::WAIT)>(state);

@@ -51,8 +51,6 @@ public:
 	const Obj GetObjID() const override;
 
 protected:
-	//// 必要のない機能はすべて、privateもしくは削除する
-
 	void Wait();
 	void Sigmoid();
 	void Target();
@@ -68,8 +66,8 @@ protected:
 	/// protectedに必要のないものは、privateに移動しておく
 	Vector2 _rotDir;
 	Vector2d _aimPos;		// 目標座標
-	Vector2d _sPos;			// ｼｸﾞﾓｲﾄﾞのｽﾀｰﾄ地点
-	Vector2d _ePos;			// ｼｸﾞﾓｲﾄﾞのｺﾞｰﾙ地点
+	Vector2d _sigBegin;		// ｼｸﾞﾓｲﾄﾞの始点
+	Vector2d _sigEnd;		// ｼｸﾞﾓｲﾄﾞの終点
 	Vector2d _sigRange;		// ｼｸﾞﾓｲﾄﾞの移動幅
 	Vector2d _rotCenter;	// 回転するときの中心点
 	int _waitCnt;
@@ -77,7 +75,7 @@ protected:
 	double _rotDistance;	// 回転幅の距離
 	double _rotAngle;		// 回転用の角度
 
-	double _sigCnt;		// ｼｸﾞﾓｲﾄﾞ関数の値
+	double _sigCnt;			// ｼｸﾞﾓｲﾄﾞ関数の値
 
 	const double _sigMax;
 	const double _distance;

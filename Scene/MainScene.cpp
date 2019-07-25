@@ -67,23 +67,24 @@ void MainScene::AddEnemy(const int & line, const EnemyState & state)
 {
 	if (line == 0)
 	{
-		/// ƒ{ƒX“G
+		/// »¿Ø‚Ì¶¬
 		_objs.emplace_back(std::make_shared<Scorpion>(state));
 	}
 	else if (line == 1 || line == 2)
 	{
-		/// ’†ŠÔ‚Ì“G
+		/// ’±‚Ì¶¬
 		_objs.emplace_back(std::make_shared<Butterfly>(state));
 	}
 	else
 	{
-		/// G‹›
+		/// –I‚Ì¶¬
 		_objs.emplace_back(std::make_shared<Bee>(state));
 	}
 }
 
 void MainScene::Draw()
 {
+	/// ¹Ş°Ñ½¸Ø°İ‚Ì•`‰æ‚ğs‚Á‚Ä‚¢‚é
 	SetDrawScreen(_ghGameScreen);
 	ClsDrawScreen();
 	for (auto obj : _objs)
@@ -98,8 +99,10 @@ void MainScene::Draw()
 
 unique_scene MainScene::Update(unique_scene scene, const Input & p)
 {
+	/// “G‚ğ‰¼¶¬‚·‚é‚½‚ß‚Ìİ’è
 	_dbgKeyOld = _dbgKey;
 	_dbgKey    = CheckHitKey(KEY_INPUT_SPACE);
+
 	auto randNum = rand();
 
 	if (_dbgKey && !_dbgKeyOld)

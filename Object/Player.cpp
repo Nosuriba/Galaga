@@ -134,7 +134,7 @@ void Player::Update()
 	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
 	_dbgDrawBox(_rect.Left()  - _size.width / 2, _rect.Top()	- _size.height / 2,
 				_rect.Right() - _size.width / 2, _rect.Bottom() - _size.height / 2, 0x00ff00, true);
-	_dbgDrawFormatString(0, 0, 0xffffff, "(player) X座標 : %d, Y座標 : %d", _pos.x, _pos.y);
+	_dbgDrawFormatString(0, 0, 0xffffff, "(player) X座標 : %d", (int)_pos.x);
 
 
 	/// とりあえず今は無視しておこう
