@@ -15,7 +15,8 @@
 MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 {
 	_enCnt = 0;
-	_vel = Vector2d(4,0);
+	_vel = Vector2d(2,0);
+	_moveWidth = 0;
 
 	/// “G‚ÌÃ°ÌŞÙ‚ğ¶¬‚µ‚Ä‚¢‚é
 	_enTblInfo.reserve(_enMax.x * _enMax.y);
@@ -39,12 +40,12 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 
 	double posX, posY;
 	/// ¶‰º‚ÌÃ°ÌŞÙˆÊ’u‚ğ‹‚ß‚éŒvZ
-	posX = LpGame.gameScreenPos.x / 2;
+	posX = LpGame.gameScreenPos.x / 2 + _charSize.width / 2;
 	posY = LpGame.gameScreenPos.y / 2 + (_enMax.y * 2 - 1) * _charSize.height / 2 + (_enMax.y - 1);
   	_tblCtlPos[0] = Vector2d(posX, posY);
 	
 	/// ‰E‰º‚ÌÃ°ÌŞÙˆÊ’u‚ğ‹‚ß‚éŒvZ
-	posX = LpGame.gameScreenPos.x / 2 + (_enMax.x * 2 - 1) * _charSize.height / 2 + (_enMax.x + 1);
+	posX = LpGame.gameScreenPos.x / 2 + (_enMax.x * 2) * _charSize.height / 2 + (_enMax.x + 1);
 	_tblCtlPos[1] = Vector2d(posX, posY);
 
 
@@ -98,7 +99,7 @@ void MainScene::TblMoveUpdate()
 {
 	/// Ã°ÌŞÙã‚Å“®‚©‚µ‚½î•ñ‚ğ‚Ç‚¤‚â‚Á‚Ä“G¸×½‘¤‚É“n‚·‚æ‚¤‚É‚·‚ê‚Î‚¢‚¢‚¾‚ë‚¤‚©
 	/// 
-	if (_enCnt >= (_enMax.x * _enMax.y))
+	/*if (_enCnt >= (_enMax.x * _enMax.y))
 	{
 		/// Šg‘åk¬‚Ì“®‚«‚ª“ü‚é—\’è
 		/// ˆÚ“®•‚È‚Ç‚ğ‹‚ß‚½‚Ù‚¤‚ª‚æ‚³‚»‚¤H
@@ -109,7 +110,14 @@ void MainScene::TblMoveUpdate()
 		{
 			_vel.x = -_vel.x;
 		}
+	}*/
+
+	if (_tblCtlPos[0].x <= _charSize.width / 2 || 
+		_tblCtlPos[1].x >= LpGame.gameScreenSize.x  - _charSize.width / 2)
+	{
+		_vel.x = -_vel.x;
 	}
+	_moveWidth += _vel.x;
 }
 
 void MainScene::Draw()
@@ -149,7 +157,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			if (!_enTblInfo[num])
 			{
 				/// “G‚Ìî•ñİ’è
-				auto invPos = Vector2((num % _enMax.x) * 5, (num / _enMax.x) * 5);
+				auto invPos = Vector2(_charSize.width / 2 + (num % _enMax.x) * 5, (num / _enMax.x) * 5);
 				auto aimPos = Vector2d(LpGame.gameScreenPos.x / 2 + ((num % _enMax.x) * _charSize.width)  + invPos.x,
 									   LpGame.gameScreenPos.y / 2 + ((num / _enMax.x) * _charSize.height) + invPos.y);
 				
@@ -195,6 +203,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
  		_dbgDrawBox(tPos.x - _charSize.width / 2, tPos.y - _charSize.height / 2,
 					tPos.x + _charSize.width / 2, tPos.y + _charSize.height / 2,
 					0xffff00, true);
+		_dbgDrawFormatString(0, 0, 0xffffff, "ˆÚ“®• : %d", (int)(_moveWidth));
 	}
 	TblMoveUpdate();
 	Draw();

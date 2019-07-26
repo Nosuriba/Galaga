@@ -95,12 +95,12 @@ void Player::MoveUpdate()
 	/*if (_input->IsPressing(INPUT_ID::RIGHT))*/
 	if (_input->state(INPUT_ID::RIGHT).first)
 	{
-		_pos.x += 5;
+		_pos.x += 4;
 	}
 	/*else if (_input->IsPressing(INPUT_ID::LEFT))*/
 	else if (_input->state(INPUT_ID::LEFT).first)
 	{
-		_pos.x -= 5;
+		_pos.x -= 4;
 	}
 	else
 	{
@@ -134,7 +134,11 @@ void Player::Update()
 	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
 	_dbgDrawBox(_rect.Left()  - _size.width / 2, _rect.Top()	- _size.height / 2,
 				_rect.Right() - _size.width / 2, _rect.Bottom() - _size.height / 2, 0x00ff00, true);
-	_dbgDrawFormatString(0, 0, 0xffffff, "(player) X座標 : %d", (int)_pos.x);
+
+
+	_dbgDrawFormatString(LpGame.gameScreenPos.x + _pos.x - _size.width - _size.width / 2, 
+						 LpGame.gameScreenPos.y + _pos.y - _size.height, 
+						 0xffffff, "(%d, %d)", (int)_pos.x, (int)(_pos.y));
 
 
 	/// とりあえず今は無視しておこう

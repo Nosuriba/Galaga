@@ -23,7 +23,8 @@ private:
 	void TblMoveUpdate();	// ﾃｰﾌﾞﾙ更新用
 
 	Vector2d _vel;			// ﾃｰﾌﾞﾙの速度
-
+	
+	int _moveWidth;			// ﾃｰﾌﾞﾙの移動幅
 	int _ghGameScreen;		// ｹﾞｰﾑｽｸﾘｰﾝの画像ﾊﾝﾄﾞﾙ
 	int _enCnt;				// 出現している敵のｶｳﾝﾄ
 
