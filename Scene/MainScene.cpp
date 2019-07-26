@@ -15,6 +15,7 @@
 MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 {
 	_enCnt = 0;
+	_vel = Vector2d(4,0);
 
 	/// “G‚ÌÃ°ÌŞÙ‚ğ¶¬‚µ‚Ä‚¢‚é
 	_enTblInfo.reserve(_enMax.x * _enMax.y);
@@ -41,7 +42,8 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 	posX = LpGame.gameScreenPos.x / 2;
 	posY = LpGame.gameScreenPos.y / 2 + (_enMax.y * 2 - 1) * _charSize.height / 2 + (_enMax.y - 1);
   	_tblCtlPos[0] = Vector2d(posX, posY);
-
+	
+	/// ‰E‰º‚ÌÃ°ÌŞÙˆÊ’u‚ğ‹‚ß‚éŒvZ
 	posX = LpGame.gameScreenPos.x / 2 + (_enMax.x * 2 - 1) * _charSize.height / 2 + (_enMax.x + 1);
 	_tblCtlPos[1] = Vector2d(posX, posY);
 
@@ -89,6 +91,24 @@ void MainScene::AddEnemy(const int & line, const EnemyState & state)
 	{
 		/// –I‚Ì¶¬
 		_objs.emplace_back(std::make_shared<Bee>(state));
+	}
+}
+
+void MainScene::TblMoveUpdate()
+{
+	/// Ã°ÌŞÙã‚Å“®‚©‚µ‚½î•ñ‚ğ‚Ç‚¤‚â‚Á‚Ä“G¸×½‘¤‚É“n‚·‚æ‚¤‚É‚·‚ê‚Î‚¢‚¢‚¾‚ë‚¤‚©
+	/// 
+	if (_enCnt >= (_enMax.x * _enMax.y))
+	{
+		/// Šg‘åk¬‚Ì“®‚«‚ª“ü‚é—\’è
+		/// ˆÚ“®•‚È‚Ç‚ğ‹‚ß‚½‚Ù‚¤‚ª‚æ‚³‚»‚¤H
+	}
+	else
+	{
+		if (_tblCtlPos[0].x <= 0 || _tblCtlPos[1].x >= LpGame.gameScreenSize.x)
+		{
+			_vel.x = -_vel.x;
+		}
 	}
 }
 
@@ -169,12 +189,14 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	}
 
 	/// Ã°ÌŞÙ‚Ì¶‰ºÀ•W‚ÌÃŞÊŞ¯¸Ş—p•`‰æ
-	for (auto tPos : _tblCtlPos)
+	for (auto& tPos : _tblCtlPos)
 	{
+		tPos += _vel;
  		_dbgDrawBox(tPos.x - _charSize.width / 2, tPos.y - _charSize.height / 2,
 					tPos.x + _charSize.width / 2, tPos.y + _charSize.height / 2,
 					0xffff00, true);
 	}
+	TblMoveUpdate();
 	Draw();
 
 	/*if (p.IsKeyTrigger(KEY_INPUT_SPACE))
