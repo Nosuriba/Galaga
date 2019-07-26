@@ -34,6 +34,7 @@ public:
 
 	// 先頭に登録された敵のｱﾆﾒｰｼｮﾝ更新
 	void LeadAnimUpdate();
+	void EnemyMoveUpdate(const Vector2d& vel);
 	int GetEnemyNum() const;
 
 	bool GetDeath() const;
@@ -56,6 +57,7 @@ protected:
 
 	Vector2d _pos;
 	Vector2d _vel;				// 必要ない場合、後で消す
+	static Vector2d _tblVel;
 	Size _size;
 	Rect _rect;
 	double _rad;

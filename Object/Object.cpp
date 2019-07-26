@@ -90,6 +90,11 @@ void Object::LeadAnimUpdate()
 	++_leadCnt;
 }
 
+void Object::EnemyMoveUpdate(const Vector2d & vel)
+{
+	_pos += vel;
+}
+
 void Object::SetEnemyNum(const int & num)
 {
 	_enNum = num;
