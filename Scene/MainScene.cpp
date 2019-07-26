@@ -36,8 +36,15 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 
 	_enCnt = 10;
 
-	_posLD = Vector2d(LpGame.gameScreenPos.x / 2,
-					  LpGame.gameScreenPos.y / 2 + (_enMax.y - 1) * _charSize.height);
+	double posX, posY;
+	/// ç∂â∫ÇÃ√∞ÃﬁŸà íuÇãÅÇﬂÇÈåvéZ
+	posX = LpGame.gameScreenPos.x / 2;
+	posY = LpGame.gameScreenPos.y / 2 + (_enMax.y * 2 - 1) * _charSize.height / 2 + (_enMax.y - 1);
+  	_tblCtlPos[0] = Vector2d(posX, posY);
+
+	posX = LpGame.gameScreenPos.x / 2 + (_enMax.x * 2 - 1) * _charSize.height / 2 + (_enMax.x + 1);
+	_tblCtlPos[1] = Vector2d(posX, posY);
+
 
 	/// ç∂í[
 	_initPos[0] = Vector2(-_charSize.width, _charSize.height);
@@ -123,7 +130,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			{
 				/// ìGÇÃèÓïÒê›íË
 				auto invPos = Vector2((num % _enMax.x) * 5, (num / _enMax.x) * 5);
-				auto aimPos = Vector2d(LpGame.gameScreenPos.x / 2 + ((num % _enMax.x) * _charSize.width) + invPos.x,
+				auto aimPos = Vector2d(LpGame.gameScreenPos.x / 2 + ((num % _enMax.x) * _charSize.width)  + invPos.x,
 									   LpGame.gameScreenPos.y / 2 + ((num / _enMax.x) * _charSize.height) + invPos.y);
 				
 				/// ìGÇÃê∂ê¨
@@ -161,8 +168,13 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		}
 	}
 
-	_dbgDrawBox(_posLD.x, _posLD.y, _posLD.x + _charSize.width, _posLD.y + _charSize.height, 0xffff00, true);
-
+	/// √∞ÃﬁŸÇÃç∂â∫ç¿ïWÇÃ√ﬁ ﬁØ∏ﬁópï`âÊ
+	for (auto tPos : _tblCtlPos)
+	{
+ 		_dbgDrawBox(tPos.x - _charSize.width / 2, tPos.y - _charSize.height / 2,
+					tPos.x + _charSize.width / 2, tPos.y + _charSize.height / 2,
+					0xffff00, true);
+	}
 	Draw();
 
 	/*if (p.IsKeyTrigger(KEY_INPUT_SPACE))

@@ -30,14 +30,13 @@ private:
 
 	std::vector<shared_obj> _objs;
 
-	//// ﾃｰﾌﾞﾙの左端の情報を持った座標を使っていけば、何とかできそうかも
 	/// 動かす座標はdouble型なので、int型でキャストして小数点の無い綺麗な値を渡してあげればいいかな
-	Vector2d _posLD;		// ﾃｰﾌﾞﾙの左下の座標
+	std::array<Vector2d, 2> _tblCtlPos;		// ﾃｰﾌﾞﾙ移動制御用の座標
 
-	std::vector<char> _enTblInfo;		// 敵の配置情報を確認するﾃｰﾌﾞﾙ
-	std::array<Vector2, 6> _initPos;	// 敵の初期座標
+	std::vector<char> _enTblInfo;			// 敵の配置情報を確認するﾃｰﾌﾞﾙ
+	std::array<Vector2, 6> _initPos;		// 敵の初期座標
 
 	const Size _charSize;
-	const Vector2 _enMax;				// 敵の最大数
+	const Vector2 _enMax;					// 敵の最大数
 };
 
