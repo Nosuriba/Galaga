@@ -15,7 +15,7 @@
 MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 {
 	_enCnt = 0;
-	_vel = Vector2d(2,0);
+	_vel = Vector2d(0,0);
 	_moveWidth = 0;
 
 	/// 敵のﾃｰﾌﾞﾙを生成している
@@ -47,7 +47,6 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 	/// 右下のﾃｰﾌﾞﾙ位置を求める計算
 	posX = LpGame.gameScreenPos.x / 2 + (_enMax.x * 2) * _charSize.height / 2 + (_enMax.x + 1);
 	_tblCtlPos[1] = Vector2d(posX, posY);
-
 
 	/// 左端
 	_initPos[0] = Vector2(-_charSize.width, _charSize.height);
@@ -146,7 +145,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	/// 敵の生成(仮で生成している)
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		for (int cnt = 0; cnt < 3;)
+		for (int cnt = 0; cnt < 1;)
 		{
 			/// 出現している敵が最大数を超えている時、処理を抜ける
 			if (_enCnt >= (_enMax.x * _enMax.y))
@@ -180,7 +179,14 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		/// 最初に登録された敵のｱﾆﾒｰｼｮﾝｶｳﾝﾄを加算する処理
 		if (obj->GetObjID() == Obj::ENEMY)
 		{
+			if (obj->CheckMoveTbl())
+			{
+				_vel.x = (_vel.x == 0 ? 1 : _vel.x);
+				TblMoveUpdate();
+			}
+			//// 最初の敵がﾃｰﾌﾞﾙに配置したらﾃｰﾌﾞﾙの移動を開始するような処理を使用
 			obj->LeadAnimUpdate();
+			obj->SetMoveTbl(mTbl_pair{ _moveWidth, _vel.x });
 			break;
 		}
 	}
@@ -205,7 +211,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 					0xffff00, true);
 		_dbgDrawFormatString(0, 0, 0xffffff, "移動幅 : %d", (int)(_moveWidth));
 	}
-	TblMoveUpdate();
+	
 	Draw();
 
 	/*if (p.IsKeyTrigger(KEY_INPUT_SPACE))

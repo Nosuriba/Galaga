@@ -19,7 +19,7 @@ Butterfly::Butterfly(const EnemyState & state)
 
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
 
-	SetEnemyNum(std::get<static_cast<int>(EN_STATE::NUM)>(state));
+	_enNum = std::get<static_cast<int>(EN_STATE::NUM)>(state);
 	animKey(ANIM::NORMAL);
 
 	Wait();

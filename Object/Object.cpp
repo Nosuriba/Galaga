@@ -2,6 +2,7 @@
 #include "../DebugDisp.h"
 
 int Object::_leadCnt = 0;
+std::pair<double, int> Object::_moveTblInfo = {0,0};
 
 Object::Object()
 {
@@ -52,10 +53,10 @@ bool Object::animKey(const ANIM key)
 	return true;
 }
 
-const ANIM& Object::animKey() const
-{
-	return _animKey;
-}
+//const ANIM& Object::animKey() const
+//{
+//	return _animKey;
+//}
 
 void Object::AnimUpdate()
 {
@@ -90,14 +91,18 @@ void Object::LeadAnimUpdate()
 	++_leadCnt;
 }
 
-void Object::EnemyMoveUpdate(const Vector2d & vel)
+bool Object::CheckMoveTbl() const
 {
-	_pos += vel;
+	return _tblFlag;
 }
 
-void Object::SetEnemyNum(const int & num)
+void Object::SetMoveTbl(const mTbl_pair& tblInfo)
 {
-	_enNum = num;
+	if (_tblFlag)
+	{
+		_moveTblInfo = tblInfo;
+	}
+	
 }
 
 int Object::GetEnemyNum() const
@@ -108,9 +113,4 @@ int Object::GetEnemyNum() const
 bool Object::GetDeath() const
 {
 	return _isDeath;
-}
-
-const Vector2d & Object::pos() const
-{
-	return _pos;
 }

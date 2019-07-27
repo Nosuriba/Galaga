@@ -9,6 +9,9 @@
 // ±ÆÒ°¼®İŠÇ——p‚Ì‰Â•Ï’·”z—ñ
 using anim_vec = std::vector<std::pair<int, int>>;
 
+// Ã°ÌŞÙ‚ÌˆÚ“®î•ñ‚ÌÍß±
+using mTbl_pair = std::pair<double, int>;
+
 enum class ANIM
 {
 	NORMAL,		// ’Êí
@@ -23,6 +26,7 @@ enum class Obj
 	ENEMY,
 	MAX
 };
+
 class Object
 {
 public:
@@ -34,16 +38,14 @@ public:
 
 	// æ“ª‚É“o˜^‚³‚ê‚½“G‚Ì±ÆÒ°¼®İXV
 	void LeadAnimUpdate();
-	void EnemyMoveUpdate(const Vector2d& vel);
+	bool CheckMoveTbl() const;
+	void SetMoveTbl(const mTbl_pair& tblInfo);
 	int GetEnemyNum() const;
 
 	bool GetDeath() const;
-
-	const Vector2d& pos() const;
 protected:
 	// ±ÆÒ°¼®İ‚Ì“o˜^
 	bool SetAnim(ANIM key, anim_vec& data);
-	void SetEnemyNum(const int& num);
 
 	bool DestryCheck();
 
@@ -52,30 +54,33 @@ protected:
 
 	// key‚Ìó‘Ô‚ğ•ÏX‚µ‚Ä‚¢‚é
 	bool animKey(const ANIM key);
-	// key‚Ìî•ñ‚ğæ“¾‚µ‚Ä‚¢‚é
-	const ANIM& animKey() const;
+	//// key‚Ìî•ñ‚ğæ“¾‚µ‚Ä‚¢‚é
+	//const ANIM& animKey() const;
 
 	Vector2d _pos;
 	Vector2d _vel;				// •K—v‚È‚¢ê‡AŒã‚ÅÁ‚·
-	static Vector2d _tblVel;
 	Size _size;
 	Rect _rect;
 	double _rad;
+
+	bool _tblFlag = false;
 	bool _isAlive = true;		// true : ¶‘¶, false : €–S
 	bool _isDeath = false;		// true : “G‚Ìíœ, false : €–Sˆ—’†
 
+	int _enNum;					// “G‚Ì”Ô†
+	
+	// first : ˆÚ“®•(int‚É•ÏX‚·‚é‰Â”\«‚ ‚è), second : ˆÚ“®‘¬“x
+	static mTbl_pair _moveTblInfo;
 	static int _leadCnt;
 private:
 	void AnimUpdate();
 	
-	// pair‚Ì—v‘f(first : ID, second : frame)
+	// first : ‰æ‘œID, second : ±ÆÒ°¼®İÌÚ°Ñ
 	std::map<ANIM, anim_vec> _animMap;
 
 	ANIM _animKey;
 	int _invCnt = 0;
 	int _animID = 0;
-
-	int _enNum;
 
 };
 

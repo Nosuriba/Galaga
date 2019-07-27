@@ -32,8 +32,6 @@ void Enemy::Target()
 	auto cost = cos(theta);
 	auto sint = sin(theta);
 
-	CalRad(_pos, _aimPos, 0);
-
 	_vel	 = Vector2d(3 * cost, 3 * sint);
 	_updater = &Enemy::TargetUpdate;
 }
@@ -46,6 +44,7 @@ void Enemy::Rotation()
 
 void Enemy::Move()
 {
+	_tblFlag = true;
 	_rad = 0;
 	/// 先頭のｱﾆﾒｰｼｮﾝｶｳﾝﾄを渡している
 	SetInvCnt(_leadCnt);
@@ -85,14 +84,19 @@ void Enemy::SigmoidUpdate()
  
 void Enemy::TargetUpdate()
 {
-	CalRad(_pos, _aimPos, 90);
+	/// 目標地点までのﾗｼﾞｱﾝの計算
+	auto theta = atan2(_aimPos.y - _pos.y, _aimPos.x + _moveTblInfo.first - _pos.x);
+	auto cost = cos(theta);
+	auto sint = sin(theta);
+
+	/// 目標地点に着いたとき、速度を0にする処理
 	if (_vel.x >= 0)
 	{
-		_vel.x = (_pos.x >= _aimPos.x ? 0 : _vel.x);
+		_vel.x = (_pos.x >= _aimPos.x + _moveTblInfo.first ? 0 : _vel.x);
 	}
 	else
 	{
-		_vel.x = (_pos.x <= _aimPos.x ? 0 : _vel.x);
+		_vel.x = (_pos.x <= _aimPos.x + _moveTblInfo.first ? 0 : _vel.x);
 	}
 
 	if (_vel.y >= 0)
@@ -104,10 +108,16 @@ void Enemy::TargetUpdate()
 		_vel.y = (_pos.y <= _aimPos.y ? 0 : _vel.y);
 	}
 
+	CalRad(_pos, _aimPos, 90);
+
+	/// 目標地点までの速度計算
+	_vel.x = (_vel.x == 0 ? 0 : 3 * cost);
+	_vel.y = (_vel.y == 0 ? 0 : 3 * sint);
+	
 	if (_vel == Vector2d(0,0))
 	{
 		/// 配置時のずれを補正している
-		_pos = Vector2d(_aimPos.x, _aimPos.y);
+		_pos = Vector2d(_aimPos.x + _moveTblInfo.first, _aimPos.y);
 		Move();
 	}
 }
@@ -132,6 +142,7 @@ void Enemy::RotationUpdate()
 
 void Enemy::MoveUpdate()
 {
+	_pos.x += _moveTblInfo.second;
 }
 
 void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos, const double& angle)
