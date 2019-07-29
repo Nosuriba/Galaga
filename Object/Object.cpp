@@ -2,7 +2,7 @@
 #include "../DebugDisp.h"
 
 int Object::_leadCnt = 0;
-std::pair<double, int> Object::_moveTblInfo = {0,0};
+enTbl_pair Object::_moveTblInfo = {0,0};
 
 Object::Object()
 {
@@ -96,7 +96,7 @@ bool Object::CheckMoveTbl() const
 	return _tblFlag;
 }
 
-void Object::SetMoveTbl(const mTbl_pair& tblInfo)
+void Object::SetMoveTbl(const enTbl_pair& tblInfo)
 {
 	if (_tblFlag)
 	{

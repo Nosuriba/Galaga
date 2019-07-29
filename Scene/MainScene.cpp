@@ -14,10 +14,6 @@
 
 MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 {
-	_enCnt = 0;
-	_vel = Vector2d(0,0);
-	_moveWidth = 0;
-
 	/// 敵のﾃｰﾌﾞﾙを生成している
 	_enTblInfo.reserve(_enMax.x * _enMax.y);
 	for (int i = 0; i < (_enMax.x * _enMax.y); ++i)
@@ -36,17 +32,7 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 	_enTblInfo[20] = 1;
 	_enTblInfo[29] = 1;
 
-	_enCnt = 10;
-
-	double posX, posY;
-	/// 左下のﾃｰﾌﾞﾙ位置を求める計算
-	posX = LpGame.gameScreenPos.x / 2 + _charSize.width / 2;
-	posY = LpGame.gameScreenPos.y / 2 + (_enMax.y * 2 - 1) * _charSize.height / 2 + (_enMax.y - 1);
-  	_tblCtlPos[0] = Vector2d(posX, posY);
-	
-	/// 右下のﾃｰﾌﾞﾙ位置を求める計算
-	posX = LpGame.gameScreenPos.x / 2 + (_enMax.x * 2) * _charSize.height / 2 + (_enMax.x + 1);
-	_tblCtlPos[1] = Vector2d(posX, posY);
+	ResetEnemy();
 
 	/// 左端
 	_initPos[0] = Vector2(-_charSize.width, _charSize.height);
@@ -75,6 +61,22 @@ void MainScene::Init()
 	_objs.emplace_back(std::make_shared<Player>(Vector2(100, LpGame.gameScreenSize.y - _charSize.height), _charSize));
 }
 
+void MainScene::ResetEnemy()
+{
+	_enCnt = 10;
+	_tblInfo = { 0,0 };
+
+	double posX, posY;
+	/// 左下のﾃｰﾌﾞﾙ位置を求める計算
+	posX = LpGame.gameScreenPos.x / 2 + _charSize.width / 2;
+	posY = LpGame.gameScreenPos.y / 2 + (_enMax.y * 2 - 1) * _charSize.height / 2 + (_enMax.y - 1);
+	_tblCtlPos[0] = Vector2d(posX, posY);
+
+	/// 右下のﾃｰﾌﾞﾙ位置を求める計算
+	posX = LpGame.gameScreenPos.x / 2 + (_enMax.x * 2) * _charSize.height / 2 + (_enMax.x + 1);
+	_tblCtlPos[1] = Vector2d(posX, posY);
+}
+
 void MainScene::AddEnemy(const int & line, const EnemyState & state)
 {
 	if (line == 0)
@@ -96,27 +98,12 @@ void MainScene::AddEnemy(const int & line, const EnemyState & state)
 
 void MainScene::TblMoveUpdate()
 {
-	/// ﾃｰﾌﾞﾙ上で動かした情報をどうやって敵ｸﾗｽ側に渡すようにすればいいだろうか
-	/// 
-	/*if (_enCnt >= (_enMax.x * _enMax.y))
-	{
-		/// 拡大縮小の動きが入る予定
-		/// 移動幅などを求めたほうがよさそう？
-	}
-	else
-	{
-		if (_tblCtlPos[0].x <= 0 || _tblCtlPos[1].x >= LpGame.gameScreenSize.x)
-		{
-			_vel.x = -_vel.x;
-		}
-	}*/
-
 	if (_tblCtlPos[0].x <= _charSize.width / 2 || 
 		_tblCtlPos[1].x >= LpGame.gameScreenSize.x  - _charSize.width / 2)
 	{
-		_vel.x = -_vel.x;
+		_tblInfo.second = -_tblInfo.second;
 	}
-	_moveWidth += _vel.x;
+	_tblInfo.first += _tblInfo.second;
 }
 
 void MainScene::Draw()
@@ -145,7 +132,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	/// 敵の生成(仮で生成している)
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		for (int cnt = 0; cnt < 1;)
+		for (int cnt = 0; cnt < 3;)
 		{
 			/// 出現している敵が最大数を超えている時、処理を抜ける
 			if (_enCnt >= (_enMax.x * _enMax.y))
@@ -181,12 +168,25 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		{
 			if (obj->CheckMoveTbl())
 			{
-				_vel.x = (_vel.x == 0 ? 1 : _vel.x);
+				_tblInfo.second = (_tblInfo.second == 0 ? 1 : _tblInfo.second);
 				TblMoveUpdate();
+
+				/// ﾃｰﾌﾞﾙ制御の座標更新
+				for (auto& tPos : _tblCtlPos)
+				{
+					tPos.x += _tblInfo.second;
+				}
+			}
+			else
+			{
+				/// ﾃｰﾌﾞﾙ上に敵が存在しない状態の時にﾘｾｯﾄしてしまうと
+				/// ﾃｰﾌﾞﾙ配置の時に敵がおかしな位置に配置されたしまう不具合が
+				/// 起こるので、修正を行う
+				ResetEnemy();
 			}
 			//// 最初の敵がﾃｰﾌﾞﾙに配置したらﾃｰﾌﾞﾙの移動を開始するような処理を使用
 			obj->LeadAnimUpdate();
-			obj->SetMoveTbl(mTbl_pair{ _moveWidth, _vel.x });
+			obj->SetMoveTbl(_tblInfo);
 			break;
 		}
 	}
@@ -201,15 +201,14 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			--_enCnt;
 		}
 	}
-
-	/// ﾃｰﾌﾞﾙの左下座標のﾃﾞﾊﾞｯｸﾞ用描画
+	
+	/// ﾃｰﾌﾞﾙ制御のﾃﾞﾊﾞｯｸﾞ描画
 	for (auto& tPos : _tblCtlPos)
 	{
-		tPos += _vel;
  		_dbgDrawBox(tPos.x - _charSize.width / 2, tPos.y - _charSize.height / 2,
 					tPos.x + _charSize.width / 2, tPos.y + _charSize.height / 2,
 					0xffff00, true);
-		_dbgDrawFormatString(0, 0, 0xffffff, "移動幅 : %d", (int)(_moveWidth));
+		_dbgDrawFormatString(0, 0, 0xffffff, "移動幅 : %d", _tblInfo.first);
 	}
 	
 	Draw();
@@ -218,6 +217,8 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	{
 		return std::make_unique<ResultScene>();
 	}*/
+	
+
 	/// vectorの削除する範囲の指定
 	auto eraseBegin = remove_if(_objs.begin(),				// 開始位置
 								_objs.end(),				// 終了位置

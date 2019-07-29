@@ -9,8 +9,8 @@
 // ｱﾆﾒｰｼｮﾝ管理用の可変長配列
 using anim_vec = std::vector<std::pair<int, int>>;
 
-// ﾃｰﾌﾞﾙの移動情報のﾍﾟｱ
-using mTbl_pair = std::pair<double, int>;
+// 敵配置用ﾃｰﾌﾞﾙの移動情報
+using enTbl_pair = std::pair<int, int>;
 
 enum class ANIM
 {
@@ -39,7 +39,7 @@ public:
 	// 先頭に登録された敵のｱﾆﾒｰｼｮﾝ更新
 	void LeadAnimUpdate();
 	bool CheckMoveTbl() const;
-	void SetMoveTbl(const mTbl_pair& tblInfo);
+	void SetMoveTbl(const enTbl_pair& tblInfo);
 	int GetEnemyNum() const;
 
 	bool GetDeath() const;
@@ -70,7 +70,7 @@ protected:
 	int _enNum;					// 敵の番号
 	
 	// first : 移動幅(intに変更する可能性あり), second : 移動速度
-	static mTbl_pair _moveTblInfo;
+	static enTbl_pair _moveTblInfo;
 	static int _leadCnt;
 private:
 	void AnimUpdate();

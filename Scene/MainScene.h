@@ -19,12 +19,15 @@ public:
 	unique_scene Update(unique_scene scene, const Input& p) override;
 	const SCN_ID GetSceneID() const override;
 private:
+
+	// 敵の情報を再設定するもの
+	void ResetEnemy();
 	void AddEnemy(const int& line, const EnemyState& state);
 	void TblMoveUpdate();	// ﾃｰﾌﾞﾙ更新用
 
-	Vector2d _vel;			// ﾃｰﾌﾞﾙの速度
-	
-	int _moveWidth;			// ﾃｰﾌﾞﾙの移動幅
+	// first : 移動幅, second : 速度
+	enTbl_pair _tblInfo;
+
 	int _ghGameScreen;		// ｹﾞｰﾑｽｸﾘｰﾝの画像ﾊﾝﾄﾞﾙ
 	int _enCnt;				// 出現している敵のｶｳﾝﾄ
 

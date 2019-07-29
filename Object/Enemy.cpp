@@ -10,6 +10,7 @@ Enemy::Enemy() : _sigMax(10), _distance(40)
 
 Enemy::~Enemy()
 {
+	_moveTblInfo = { 0,0 };
 }
 
 void Enemy::Wait()
@@ -85,18 +86,19 @@ void Enemy::SigmoidUpdate()
 void Enemy::TargetUpdate()
 {
 	/// 目標地点までのﾗｼﾞｱﾝの計算
-	auto theta = atan2(_aimPos.y - _pos.y, _aimPos.x + _moveTblInfo.first - _pos.x);
+	auto theta = atan2(_aimPos.y - _pos.y, (_aimPos.x + _moveTblInfo.first) - _pos.x);
 	auto cost = cos(theta);
 	auto sint = sin(theta);
 
+	_vel.x += _moveTblInfo.second;
 	/// 目標地点に着いたとき、速度を0にする処理
-	if (_vel.x >= 0)
+	if (_vel.x > 0)
 	{
-		_vel.x = (_pos.x >= _aimPos.x + _moveTblInfo.first ? 0 : _vel.x);
+		_vel.x = (_pos.x >= _aimPos.x + abs(_moveTblInfo.first) ? 0 : _vel.x);
 	}
 	else
 	{
-		_vel.x = (_pos.x <= _aimPos.x + _moveTblInfo.first ? 0 : _vel.x);
+		_vel.x = (_pos.x <= _aimPos.x - abs(_moveTblInfo.first) ? 0 : _vel.x);
 	}
 
 	if (_vel.y >= 0)
@@ -108,7 +110,7 @@ void Enemy::TargetUpdate()
 		_vel.y = (_pos.y <= _aimPos.y ? 0 : _vel.y);
 	}
 
-	CalRad(_pos, _aimPos, 90);
+	CalRad(_pos, _aimPos + Vector2d(_moveTblInfo.first, 0), 90);
 
 	/// 目標地点までの速度計算
 	_vel.x = (_vel.x == 0 ? 0 : 3 * cost);
