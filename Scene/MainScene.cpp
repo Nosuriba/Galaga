@@ -135,7 +135,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		for (int cnt = 0; cnt < 3;)
 		{
 			/// 出現している敵が最大数を超えている時、処理を抜ける
-			if (_enCnt >= (_enMax.x * _enMax.y))
+ 			if (_enCnt >= (_enMax.x * _enMax.y))
 			{
 				break;
 			}
@@ -177,13 +177,6 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 					tPos.x += _tblInfo.second;
 				}
 			}
-			else
-			{
-				/// ﾃｰﾌﾞﾙ上に敵が存在しない状態の時にﾘｾｯﾄしてしまうと
-				/// ﾃｰﾌﾞﾙ配置の時に敵がおかしな位置に配置されたしまう不具合が
-				/// 起こるので、修正を行う
-				ResetEnemy();
-			}
 			//// 最初の敵がﾃｰﾌﾞﾙに配置したらﾃｰﾌﾞﾙの移動を開始するような処理を使用
 			obj->LeadAnimUpdate();
 			obj->SetMoveTbl(_tblInfo);
@@ -200,6 +193,21 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			_enTblInfo[obj->GetEnemyNum()] = 0;
 			--_enCnt;
 		}
+	}
+
+	bool checkEnemy = false;
+	for (auto obj : _objs)
+	{
+		if (obj->GetObjID() == Obj::ENEMY)
+		{
+			checkEnemy = true;
+			break;
+		}
+	}
+
+	if (!checkEnemy)
+	{
+		ResetEnemy();
 	}
 	
 	/// ﾃｰﾌﾞﾙ制御のﾃﾞﾊﾞｯｸﾞ描画
