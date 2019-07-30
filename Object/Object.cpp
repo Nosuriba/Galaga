@@ -102,7 +102,6 @@ void Object::SetMoveTbl(const enTbl_pair& tblInfo)
 	{
 		_moveTblInfo = tblInfo;
 	}
-	
 }
 
 int Object::GetEnemyNum() const

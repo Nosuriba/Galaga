@@ -47,17 +47,18 @@ public:
 	Enemy();
 	virtual ~Enemy();
 	
-	void Update() override;
-	void Draw() override;
+	virtual void Update() override  = 0;
 	const Obj GetObjID() const override;
 
 protected:
+	/// 各行動の初期化
 	int Wait();
 	int Sigmoid();
 	int Target();
 	int Rotation();
 	int Move();
 
+	/// 各行動の更新
 	int WaitUpdate();
 	int SigmoidUpdate();
 	int TargetUpdate();
@@ -65,6 +66,7 @@ protected:
 	int MoveUpdate();
 
 	std::list<int(Enemy::*)()> _moveList;
+	int (Enemy::*_updater)();
 
 	/// protectedに必要のないものは、privateに移動しておく
 	Vector2d _aimPos;		// 目標座標
@@ -84,13 +86,17 @@ protected:
 
 	const double _sigMax;
 	const double _distance;
+
+	/// debug用で敵を削除している(後で必ず消せ！！)
+	static char now;
+	static char old;
 private:
 
 	bool ChangeMove();
 	void CalRad(const Vector2d& sPos, const Vector2d& ePos, const double& angle);
 	void MakeRotaInfo();		// 回転するための情報を生成している
 
-	int (Enemy::*_updater)();
+	
 
 };
 

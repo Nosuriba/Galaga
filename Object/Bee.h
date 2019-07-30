@@ -7,6 +7,7 @@ public:
 	Bee();
 	Bee(const EnemyState& state);
 	~Bee();
+	void Update() override;
 private:
 	void Init(EN_TYPE type);
 };

@@ -37,8 +37,7 @@ private:
 
 	std::vector<shared_obj> _objs;
 
-	/// 動かす座標はdouble型なので、int型でキャストして小数点の無い綺麗な値を渡してあげればいいかな
-	std::array<Vector2d, 2> _tblCtlPos;		// ﾃｰﾌﾞﾙ移動制御用の座標
+	std::array<Vector2, 2> _tblCtlPos;		// ﾃｰﾌﾞﾙ移動制御用の座標
 
 	std::vector<char> _enTblInfo;			// 敵の配置情報を確認するﾃｰﾌﾞﾙ
 	std::array<Vector2, 6> _initPos;		// 敵の初期座標

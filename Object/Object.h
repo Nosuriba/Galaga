@@ -33,7 +33,7 @@ public:
 	Object();
 	virtual ~Object();
 	virtual void Update() = 0;
-	virtual void Draw();
+	void Draw();
 	virtual const Obj GetObjID() const = 0;
 
 	// æ“ª‚É“o˜^‚³‚ê‚½“G‚Ì±ÆÒ°¼®İXV
@@ -50,7 +50,7 @@ protected:
 	bool DestryCheck();
 
 	void SetInvCnt(const int& leadCnt);
-	void ResetInvCnt();
+	void ResetInvCnt();						// €–S‚É±ÆÒ°¼®İ‚ğØ¾¯Ä‚·‚é‚½‚ß‚Ì‚à‚Ì
 
 	// key‚Ìó‘Ô‚ğ•ÏX‚µ‚Ä‚¢‚é
 	bool animKey(const ANIM key);

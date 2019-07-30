@@ -4,6 +4,9 @@
 #include "../DebugDisp.h"
 #include "../DebugConOut.h"
 
+char Enemy::now = 0;
+char Enemy::old = 0;
+
 Enemy::Enemy() : _sigMax(10), _distance(40)
 {
 	_moveList.emplace_back(&Enemy::Sigmoid);
@@ -21,7 +24,6 @@ Enemy::~Enemy()
 int Enemy::Wait()
 {
 	_updater = &Enemy::WaitUpdate;
-
 	return 0;
 }
 
@@ -33,7 +35,6 @@ int Enemy::Sigmoid()
 	_sigRange = _sigEnd - _sigBegin;
 	_updater  = &Enemy::SigmoidUpdate;
 	return 0;
-
 }
 
 int Enemy::Target()
@@ -196,44 +197,6 @@ void Enemy::MakeRotaInfo()
 	auto theta  = atan2(_rotCenter.y - _pos.y, _rotCenter.x - _pos.x);
 	_angle		= theta * (180 / DX_PI);
 	_rotAngle	= 0;
-}
-
-void Enemy::Update()
-{
-	if (DestryCheck())
-	{
-		return;
-	}
-	(this->*_updater)();
-	_pos += _vel;
-
-	auto center = Vector2(_pos.x + _size.width / 2, _pos.y + _size.height / 2);
-	_rect = Rect(center, _size);
-
-	/// debug用で敵を削除している
-	static char now;
-	static char old;
-	old = now;
-	now = CheckHitKey(KEY_INPUT_C);
-
-	if (now && !old)
-	{
-		animKey(ANIM::DEATH);
-		_isAlive = false;
-		ResetInvCnt();
-	}
-
-	/// ﾃﾞﾊﾞｯｸﾞ用の描画
-	if (_updater == &Enemy::RotationUpdate)
-	{
-		_dbgDrawCircle(_rotCenter.x, _rotCenter.y, 5, 0x00ff00, true);
-	}
-	_dbgDrawBox(_rect.Left()  - _size.width / 2, _rect.Top()	- _size.height / 2,
-				_rect.Right() - _size.width / 2, _rect.Bottom() - _size.height / 2, 0xff0000, true);
-}
-
-void Enemy::Draw()
-{
 }
 
 const Obj Enemy::GetObjID() const

@@ -91,7 +91,7 @@
       <Filter>Object\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Object\Boss.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Object\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,7 +156,7 @@
       <Filter>Object\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Object\Boss.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Object\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -71,11 +71,11 @@ void MainScene::ResetTbl()
 	/// 左下のﾃｰﾌﾞﾙ位置を求める計算
 	posX = LpGame.gameScreenPos.x / 2 + _charSize.width / 2;
 	posY = LpGame.gameScreenPos.y / 2 + (_enMax.y * 2 - 1) * _charSize.height / 2 + (_enMax.y - 1);
-	_tblCtlPos[0] = Vector2d(posX, posY);
+	_tblCtlPos[0] = Vector2(posX, posY);
 
 	/// 右下のﾃｰﾌﾞﾙ位置を求める計算
 	posX = LpGame.gameScreenPos.x / 2 + (_enMax.x * 2) * _charSize.height / 2 + (_enMax.x + 1);
-	_tblCtlPos[1] = Vector2d(posX, posY);
+	_tblCtlPos[1] = Vector2(posX, posY);
 }
 
 void MainScene::AddEnemy(const int & line, const EnemyState & state)
@@ -133,7 +133,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	/// 敵の生成(仮で生成している)
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		for (int cnt = 0; cnt < 1;)
+		for (int cnt = 0; cnt < 3;)
 		{
 			/// 出現している敵が最大数を超えている時、処理を抜ける
  			if (_enCnt >= (_enMax.x * _enMax.y))
@@ -200,6 +200,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		}
 	}
 
+	/// ﾃﾞﾊﾞｯｸﾞ用で作ったもの
 	auto checkEnemy = false;
 	for (auto obj : _objs)
 	{
@@ -208,7 +209,6 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			checkEnemy = true;
 		}
 	}
-
 	if (!checkEnemy)
 	{
 		ResetTbl();
