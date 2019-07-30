@@ -1,12 +1,12 @@
 #pragma once
 #include "Enemy.h"
-class Scorpion :
+class Boss :
 	public Enemy
 {
 public:
-	Scorpion();
-	Scorpion(const EnemyState& state);
-	~Scorpion();
+	Boss();
+	Boss(const EnemyState& state);
+	~Boss();
 private:
 	void Init(EN_TYPE type);
 };

@@ -5,7 +5,7 @@
 #include "../DebugConOut.h"
 
 Enemy::Enemy() : _sigMax(10), _distance(40)
-{
+ {
 }
 
 Enemy::~Enemy()
@@ -29,6 +29,7 @@ void Enemy::Sigmoid()
 
 void Enemy::Target()
 {
+	CalRad(_pos, _aimPos + Vector2d(_moveTblInfo.first, 0), 90);
 	auto theta = atan2(_aimPos.y - _pos.y, _aimPos.x - _pos.x);
 	auto cost = cos(theta);
 	auto sint = sin(theta);
@@ -85,40 +86,25 @@ void Enemy::SigmoidUpdate()
  
 void Enemy::TargetUpdate()
 {
-	/// 目標地点までのﾗｼﾞｱﾝの計算
+	/// 目標地点までのﾗｼﾞｱﾝ計算
 	auto theta = atan2(_aimPos.y - _pos.y, (_aimPos.x + _moveTblInfo.first) - _pos.x);
 	auto cost = cos(theta);
 	auto sint = sin(theta);
 
-	_vel.x += _moveTblInfo.second;
-	/// 目標地点に着いたとき、速度を0にする処理
-	if (_vel.x > 0)
-	{
-		_vel.x = (_pos.x >= _aimPos.x + abs(_moveTblInfo.first) ? 0 : _vel.x);
-	}
-	else
-	{
-		_vel.x = (_pos.x <= _aimPos.x - abs(_moveTblInfo.first) ? 0 : _vel.x);
-	}
+	/// 敵の座標から目標地点までの距離の計算
+	auto length = Vector2(abs(_pos.x - (_aimPos.x + _moveTblInfo.first)), abs(_pos.y - _aimPos.y));
 
-	if (_vel.y >= 0)
-	{
-		_vel.y = (_pos.y >= _aimPos.y ? 0 : _vel.y);
-	}
-	else
-	{
-		_vel.y = (_pos.y <= _aimPos.y ? 0 : _vel.y);
-	}
+	/// 目標地点に向けての速度設定
+	_vel.x += _moveTblInfo.second;				// 移動ﾃｰﾌﾞﾙの速度を加算している
+	_vel.x = (length.x <= 1 ? 0 : _vel.x);
+	_vel.y = (length.y <= 1 ? 0 : _vel.y);
 
-	CalRad(_pos, _aimPos + Vector2d(_moveTblInfo.first, 0), 90);
-
-	/// 目標地点までの速度計算
+	/// 目標地点の付近まで到達してなかった時、速度計算を行う
 	_vel.x = (_vel.x == 0 ? 0 : 3 * cost);
 	_vel.y = (_vel.y == 0 ? 0 : 3 * sint);
 	
 	if (_vel == Vector2d(0,0))
 	{
-		/// 配置時のずれを補正している
 		_pos = Vector2d(_aimPos.x + _moveTblInfo.first, _aimPos.y);
 		Move();
 	}
@@ -157,6 +143,7 @@ void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos, const double& a
 }
 void Enemy::MakeRotaInfo()
 {
+	/// 中心地点の計算を別の場所で行った方がいい
 	_rotCenter = _pos + Vector2d(_distance * _rotDir.x, _distance / 2 * -_rotDir.y);
 
 	auto theta  = atan2(_rotCenter.y - _pos.y, _rotCenter.x - _pos.x);
@@ -189,6 +176,7 @@ void Enemy::Update()
 		ResetInvCnt();
 	}
 
+	/// ﾃﾞﾊﾞｯｸﾞ用の描画
 	if (_updater == &Enemy::RotationUpdate)
 	{
 		_dbgDrawCircle(_rotCenter.x, _rotCenter.y, 5, 0x00ff00, true);

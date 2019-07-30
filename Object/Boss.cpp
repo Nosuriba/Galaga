@@ -1,10 +1,10 @@
-#include "Scorpion.h"
+#include "Boss.h"
 
-Scorpion::Scorpion()
+Boss::Boss()
 {
 }
 
-Scorpion::Scorpion(const EnemyState & state)
+Boss::Boss(const EnemyState & state)
 {
 	_size = std::get<static_cast<int>(EN_STATE::SIZE)>(state);
 	auto center = Vector2(std::get<static_cast<int>(EN_STATE::POS)>(state).x + _size.width / 2,
@@ -25,12 +25,12 @@ Scorpion::Scorpion(const EnemyState & state)
 	Wait();
 }
 
-Scorpion::~Scorpion()
+Boss::~Boss()
 {
-	TRACE("Scorpion Die!!\n");
+	TRACE("Boss Die!!\n");
 }
 
-void Scorpion::Init(EN_TYPE type)
+void Boss::Init(EN_TYPE type)
 {
 	anim_vec data;
 	auto enType = static_cast<int>(type) * 2;

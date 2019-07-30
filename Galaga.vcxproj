@@ -157,8 +157,8 @@
     <ClCompile Include="Input\PadState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object\Bee.cpp" />
+    <ClCompile Include="Object\Boss.cpp" />
     <ClCompile Include="Object\Butterfly.cpp" />
-    <ClCompile Include="Object\Scorpion.cpp" />
     <ClCompile Include="Object\Shot.cpp" />
     <ClCompile Include="Scene\MainScene.cpp" />
     <ClCompile Include="Object\Enemy.cpp" />
@@ -179,8 +179,8 @@
     <ClInclude Include="Input\KeyState.h" />
     <ClInclude Include="Input\PadState.h" />
     <ClInclude Include="Object\Bee.h" />
+    <ClInclude Include="Object\Boss.h" />
     <ClInclude Include="Object\Butterfly.h" />
-    <ClInclude Include="Object\Scorpion.h" />
     <ClInclude Include="Object\Shot.h" />
     <ClInclude Include="Scene\MainScene.h" />
     <ClInclude Include="Object\Enemy.h" />

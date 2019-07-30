@@ -90,8 +90,8 @@
     <ClCompile Include="Object\Enemy.cpp">
       <Filter>Object\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Scorpion.cpp">
-      <Filter>Object\Enemy</Filter>
+    <ClCompile Include="Object\Boss.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -155,8 +155,8 @@
     <ClInclude Include="Object\Enemy.h">
       <Filter>Object\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Scorpion.h">
-      <Filter>Object\Enemy</Filter>
+    <ClInclude Include="Object\Boss.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

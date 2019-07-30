@@ -9,7 +9,7 @@
 #include "../Object/Player.h"
 #include "../Object/Bee.h"
 #include "../Object/Butterfly.h"
-#include "../Object/Scorpion.h"
+#include "../Object/Boss.h"
 #include "../Common/ImageMng.h"
 
 MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
@@ -32,7 +32,9 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 	_enTblInfo[20] = 1;
 	_enTblInfo[29] = 1;
 
-	ResetEnemy();
+	_enCnt = 10;
+
+	ResetTbl();
 
 	/// 左端
 	_initPos[0] = Vector2(-_charSize.width, _charSize.height);
@@ -61,9 +63,8 @@ void MainScene::Init()
 	_objs.emplace_back(std::make_shared<Player>(Vector2(100, LpGame.gameScreenSize.y - _charSize.height), _charSize));
 }
 
-void MainScene::ResetEnemy()
+void MainScene::ResetTbl()
 {
-	_enCnt = 10;
 	_tblInfo = { 0,0 };
 
 	double posX, posY;
@@ -82,7 +83,7 @@ void MainScene::AddEnemy(const int & line, const EnemyState & state)
 	if (line == 0)
 	{
 		/// ｻｿﾘの生成
-		_objs.emplace_back(std::make_shared<Scorpion>(state));
+		_objs.emplace_back(std::make_shared<Boss>(state));
 	}
 	else if (line == 1 || line == 2)
 	{
@@ -132,7 +133,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	/// 敵の生成(仮で生成している)
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		for (int cnt = 0; cnt < 3;)
+		for (int cnt = 0; cnt < 8;)
 		{
 			/// 出現している敵が最大数を超えている時、処理を抜ける
  			if (_enCnt >= (_enMax.x * _enMax.y))
@@ -170,12 +171,16 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			{
 				_tblInfo.second = (_tblInfo.second == 0 ? 1 : _tblInfo.second);
 				TblMoveUpdate();
-
 				/// ﾃｰﾌﾞﾙ制御の座標更新
 				for (auto& tPos : _tblCtlPos)
 				{
 					tPos.x += _tblInfo.second;
 				}
+			}
+			else
+			{
+				//// ここはﾃﾞﾊﾞｯｸﾞ用でとりあえず作っているので、後から消す
+				ResetTbl();
 			}
 			//// 最初の敵がﾃｰﾌﾞﾙに配置したらﾃｰﾌﾞﾙの移動を開始するような処理を使用
 			obj->LeadAnimUpdate();
@@ -195,21 +200,20 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		}
 	}
 
-	bool checkEnemy = false;
+	auto checkEnemy = false;
 	for (auto obj : _objs)
 	{
 		if (obj->GetObjID() == Obj::ENEMY)
 		{
 			checkEnemy = true;
-			break;
 		}
 	}
 
 	if (!checkEnemy)
 	{
-		ResetEnemy();
+		ResetTbl();
 	}
-	
+
 	/// ﾃｰﾌﾞﾙ制御のﾃﾞﾊﾞｯｸﾞ描画
 	for (auto& tPos : _tblCtlPos)
 	{

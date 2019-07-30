@@ -32,7 +32,7 @@ enum class EN_ID
 {
 	BEE,
 	BUTTERFLY,
-	SCORPION,
+	BOSS,
 	MAX
 };
 
@@ -64,11 +64,12 @@ protected:
 	void MoveUpdate();
 
 	/// protectedに必要のないものは、privateに移動しておく
-	Vector2 _rotDir;
 	Vector2d _aimPos;		// 目標座標
 	Vector2d _sigBegin;		// ｼｸﾞﾓｲﾄﾞの始点
 	Vector2d _sigEnd;		// ｼｸﾞﾓｲﾄﾞの終点
 	Vector2d _sigRange;		// ｼｸﾞﾓｲﾄﾞの移動幅
+
+	Vector2 _rotDir;
 	Vector2d _rotCenter;	// 回転するときの中心点
 
 	int _waitCnt;			// 敵が移動する前の待機時間

@@ -21,7 +21,7 @@ public:
 private:
 
 	// “G‚Ìî•ñ‚ğÄİ’è‚·‚é‚à‚Ì
-	void ResetEnemy();
+	void ResetTbl();
 	void AddEnemy(const int& line, const EnemyState& state);
 	void TblMoveUpdate();	// Ã°ÌŞÙXV—p
 
