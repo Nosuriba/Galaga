@@ -13,6 +13,8 @@ Enemy::Enemy() : _sigMax(10), _distance(40)
 	_moveList.emplace_back(&Enemy::Rotation);
 	_moveList.emplace_back(&Enemy::Target);
 
+	_sigAdd = 0.3;
+
 	Wait();
 }
 
@@ -104,7 +106,7 @@ int Enemy::SigmoidUpdate()
 	_pos.x = X * _sigRange.x + _sigBegin.x;
 	_pos.y = Y * _sigRange.y + _sigBegin.y;
 	
-	_sigCnt += 0.3;
+	_sigCnt += _sigAdd;
 	CalRad(_pos, _sigEnd, 90);
 
 	return 0;
@@ -168,6 +170,11 @@ int Enemy::MoveUpdate()
 {
 	_pos.x += _moveTblInfo.second;
 	return 0;
+}
+
+void Enemy::SetSigAdd(const double & sigAdd)
+{
+	_sigAdd = sigAdd;
 }
 
 bool Enemy::ChangeMove()

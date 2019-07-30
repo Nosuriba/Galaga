@@ -47,7 +47,7 @@ public:
 	Enemy();
 	virtual ~Enemy();
 	
-	virtual void Update() override  = 0;
+	virtual void Update() = 0;
 	const Obj GetObjID() const override;
 
 protected:
@@ -65,7 +65,9 @@ protected:
 	int RotationUpdate();
 	int MoveUpdate();
 
-	std::list<int(Enemy::*)()> _moveList;
+	void SetSigAdd(const double& sigAdd);	// ｼｸﾞﾓｲﾄﾞに加算する値の変更用
+
+	std::list<int(Enemy::*)()> _moveList;	// 移動状態の保存用
 	int (Enemy::*_updater)();
 
 	/// protectedに必要のないものは、privateに移動しておく
@@ -80,7 +82,7 @@ protected:
 	int _waitCnt;			// 敵が移動する前の待機時間
 
 	int _angle;
-	int _rotAngle;		// 回点した角度
+	int _rotAngle;			// 回点した角度
 
 	double _sigCnt;			// ｼｸﾞﾓｲﾄﾞ関数の値
 
@@ -92,11 +94,10 @@ protected:
 	static char old;
 private:
 
-	bool ChangeMove();
+	bool ChangeMove();			// 移動状態の変更
 	void CalRad(const Vector2d& sPos, const Vector2d& ePos, const double& angle);
 	void MakeRotaInfo();		// 回転するための情報を生成している
 
-	
-
+	double _sigAdd;				// ｼｸﾞﾓｲﾄﾞのｶｳﾝﾄ加算用
 };
 

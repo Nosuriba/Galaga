@@ -51,14 +51,6 @@ void Butterfly::Update()
 		_isAlive = false;
 		ResetInvCnt();
 	}
-
-	/// ÃÞÊÞ¯¸Þ—p‚Ì•`‰æ
-	/*if (_updater == &Enemy::RotationUpdate)
-	{
-		_dbgDrawCircle(_rotCenter.x, _rotCenter.y, 5, 0x00ff00, true);
-	}
-	_dbgDrawBox(_rect.Left() - _size.width / 2, _rect.Top() - _size.height / 2,
-		_rect.Right() - _size.width / 2, _rect.Bottom() - _size.height / 2, 0xff0000, true);*/
 }
 
 void Butterfly::Init(EN_TYPE type)
