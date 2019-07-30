@@ -70,7 +70,7 @@ void MainScene::ResetTbl()
 	double posX, posY;
 	/// 左下のﾃｰﾌﾞﾙ位置を求める計算
 	posX = LpGame.gameScreenPos.x / 2 + _charSize.width / 2;
-	posY = LpGame.gameScreenPos.y / 2 + (_enMax.y * 2 - 1) * _charSize.height / 2 + (_enMax.y - 1);
+	posY = LpGame.gameScreenPos.y / 2 + (_enMax.y * 2 - 3) * _charSize.height / 2 + (_enMax.y - 1);
 	_tblCtlPos[0] = Vector2(posX, posY);
 
 	/// 右下のﾃｰﾌﾞﾙ位置を求める計算
@@ -133,7 +133,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	/// 敵の生成(仮で生成している)
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		for (int cnt = 0; cnt < 3;)
+		for (int cnt = 0; cnt < 1;)
 		{
 			/// 出現している敵が最大数を超えている時、処理を抜ける
  			if (_enCnt >= (_enMax.x * _enMax.y))
@@ -146,11 +146,11 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 				/// 敵の情報設定
 				auto invPos = Vector2(_charSize.width / 2 + (num % _enMax.x) * 5, (num / _enMax.x) * 5);
 				auto aimPos = Vector2d(LpGame.gameScreenPos.x / 2 + ((num % _enMax.x) * _charSize.width)  + invPos.x,
-									   LpGame.gameScreenPos.y / 2 + ((num / _enMax.x) * _charSize.height) + invPos.y);
+									   LpGame.gameScreenPos.y / 2 - _charSize.height + ((num / _enMax.x) * _charSize.height) + invPos.y);
 				
 				/// 敵の生成
 				auto line = num / _enMax.x;
-				auto debugPos = Vector2d(200, 300);
+				auto debugPos = Vector2d(200, 280);
 				EnemyState state = { _initPos[randNum % 6], _charSize, 
 									 EN_TYPE::NORMAL, num, 10 * cnt, aimPos, debugPos};
 				
@@ -182,7 +182,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 				//// ここはﾃﾞﾊﾞｯｸﾞ用でとりあえず作っているので、後から消す
 				ResetTbl();
 			}
-			//// 最初の敵がﾃｰﾌﾞﾙに配置したらﾃｰﾌﾞﾙの移動を開始するような処理を使用
+			/// 最初の敵がﾃｰﾌﾞﾙに配置したらﾃｰﾌﾞﾙの移動を開始するような処理を使用
 			obj->LeadAnimUpdate();
 			obj->SetMoveTbl(_tblInfo);
 			break;

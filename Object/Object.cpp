@@ -113,3 +113,13 @@ bool Object::GetDeath() const
 {
 	return _isDeath;
 }
+
+void Object::SetSigEnd(const Vector2d & sigEnd)
+{
+	_sigEnd = sigEnd;
+}
+
+const Vector2d & Object::GetPos() const
+{
+	return _pos;
+}

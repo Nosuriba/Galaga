@@ -72,17 +72,15 @@ protected:
 
 	/// protectedに必要のないものは、privateに移動しておく
 	Vector2d _aimPos;		// 目標座標
-	Vector2d _sigBegin;		// ｼｸﾞﾓｲﾄﾞの始点
-	Vector2d _sigEnd;		// ｼｸﾞﾓｲﾄﾞの終点
 	Vector2d _sigRange;		// ｼｸﾞﾓｲﾄﾞの移動幅
 
-	Vector2 _rotDir;
+	Vector2  _rotDir;
 	Vector2d _rotCenter;	// 回転するときの中心点
 
 	int _waitCnt;			// 敵が移動する前の待機時間
 
 	int _angle;
-	int _rotAngle;			// 回点した角度
+	int _rotAngle;			// 回転した角度
 
 	double _sigCnt;			// ｼｸﾞﾓｲﾄﾞ関数の値
 

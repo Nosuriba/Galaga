@@ -7,7 +7,7 @@
 char Enemy::now = 0;
 char Enemy::old = 0;
 
-Enemy::Enemy() : _sigMax(10), _distance(40)
+Enemy::Enemy() : _sigMax(10), _distance(30)
 {
 	_moveList.emplace_back(&Enemy::Sigmoid);
 	_moveList.emplace_back(&Enemy::Rotation);
@@ -54,7 +54,12 @@ int Enemy::Target()
 
 int Enemy::Rotation()
 {
+	/// 回転方向の設定
+	_rotDir.x = (_sigBegin.x < LpGame.gameScreenSize.x / 2 ? 1 : -1);
+	_rotDir.y = (_sigBegin.y < LpGame.gameScreenSize.y / 2 ? 1 : -1);
+
 	MakeRotaInfo();
+
 	_updater = &Enemy::RotationUpdate;
 
 	return 0;
@@ -89,8 +94,6 @@ int Enemy::SigmoidUpdate()
 {
 	if (_sigCnt >= _sigMax)
 	{
-		_rotDir.x = (_sigRange.x >= 0 ? 1 : -1);
-		_rotDir.y = (_sigRange.y >= 0 ? -1 : 1);
 		if (!ChangeMove())
 		{
 			Move();
@@ -145,17 +148,18 @@ int Enemy::TargetUpdate()
 
 int Enemy::RotationUpdate()
 {
+	_angle += 4 * _rotDir.x * _rotDir.y;
+	_rotAngle += 4;
+
 	auto cost = cos(_angle * (DX_PI / 180));
 	auto sint = sin(_angle * (DX_PI / 180));
-	auto ePos = _rotCenter - Vector2d(_distance * cost,
+	auto ePos = _rotCenter + Vector2d(_distance * cost,
 									  _distance * sint);
 	 CalRad(_pos, ePos, 90);
 	_pos = ePos;
 
-	_angle += 4 * _rotDir.x * _rotDir.y;
-	_rotAngle += 4;
-
-	if (_rotAngle >= 360)
+	
+	if (_rotAngle >= 360 + (-_rotDir.y * 90))
 	{
 		if (!ChangeMove())
 		{
@@ -169,6 +173,7 @@ int Enemy::RotationUpdate()
 int Enemy::MoveUpdate()
 {
 	_pos.x += _moveTblInfo.second;
+	_sigBegin = _pos;
 	return 0;
 }
 
@@ -199,9 +204,9 @@ void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos, const double& a
 void Enemy::MakeRotaInfo()
 {
 	/// 中心地点の計算を別の場所で行った方がいい
-	_rotCenter = _pos + Vector2d(_distance * _rotDir.x, _distance / 2 * -_rotDir.y);
+	_rotCenter = _pos + Vector2d(0, _distance * _rotDir.y);
 
-	auto theta  = atan2(_rotCenter.y - _pos.y, _rotCenter.x - _pos.x);
+	auto theta  = atan2(_pos.y - _rotCenter.y,  _pos.x - _rotCenter.x);
 	_angle		= theta * (180 / DX_PI);
 	_rotAngle	= 0;
 }

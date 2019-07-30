@@ -43,6 +43,9 @@ public:
 	int GetEnemyNum() const;
 
 	bool GetDeath() const;
+
+	void SetSigEnd(const Vector2d& sigEnd);
+	const Vector2d& GetPos() const;
 protected:
 	// ｱﾆﾒｰｼｮﾝの登録
 	bool SetAnim(ANIM key, anim_vec& data);
@@ -58,7 +61,9 @@ protected:
 	//const ANIM& animKey() const;
 
 	Vector2d _pos;
-	Vector2d _vel;				// 必要ない場合、後で消す
+	Vector2d _vel;
+	Vector2d _sigBegin;		// ｼｸﾞﾓｲﾄﾞの始点
+	Vector2d _sigEnd;		// ｼｸﾞﾓｲﾄﾞの終点
 	Size _size;
 	Rect _rect;
 	double _rad;
