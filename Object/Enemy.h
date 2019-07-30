@@ -2,6 +2,7 @@
 
 #include <tuple>
 #include <array>
+#include <list>
 #include "Object.h"
 #include "../Common/ImageMng.h"
 #include "../DebugConOut.h"
@@ -51,17 +52,19 @@ public:
 	const Obj GetObjID() const override;
 
 protected:
-	void Wait();
-	void Sigmoid();
-	void Target();
-	void Rotation();
-	void Move();
+	int Wait();
+	int Sigmoid();
+	int Target();
+	int Rotation();
+	int Move();
 
-	void WaitUpdate();
-	void SigmoidUpdate();
-	void TargetUpdate();
-	void RotationUpdate();
-	void MoveUpdate();
+	int WaitUpdate();
+	int SigmoidUpdate();
+	int TargetUpdate();
+	int RotationUpdate();
+	int MoveUpdate();
+
+	std::list<int(Enemy::*)()> _moveList;
 
 	/// protectedに必要のないものは、privateに移動しておく
 	Vector2d _aimPos;		// 目標座標
@@ -83,10 +86,11 @@ protected:
 	const double _distance;
 private:
 
+	bool ChangeMove();
 	void CalRad(const Vector2d& sPos, const Vector2d& ePos, const double& angle);
 	void MakeRotaInfo();		// 回転するための情報を生成している
 
-	void (Enemy::*_updater)();
+	int (Enemy::*_updater)();
 
 };
 

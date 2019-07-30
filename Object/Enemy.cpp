@@ -5,7 +5,12 @@
 #include "../DebugConOut.h"
 
 Enemy::Enemy() : _sigMax(10), _distance(40)
- {
+{
+	_moveList.emplace_back(&Enemy::Sigmoid);
+	_moveList.emplace_back(&Enemy::Rotation);
+	_moveList.emplace_back(&Enemy::Target);
+
+	Wait();
 }
 
 Enemy::~Enemy()
@@ -13,21 +18,25 @@ Enemy::~Enemy()
 	_moveTblInfo = { 0,0 };
 }
 
-void Enemy::Wait()
+int Enemy::Wait()
 {
 	_updater = &Enemy::WaitUpdate;
+
+	return 0;
 }
 
-void Enemy::Sigmoid()
+int Enemy::Sigmoid()
 {
 	/// ｼｸﾞﾓｲﾄﾞを使った移動範囲の設定
 	_sigCnt	  = -_sigMax;
 	_sigBegin = _pos;
 	_sigRange = _sigEnd - _sigBegin;
 	_updater  = &Enemy::SigmoidUpdate;
+	return 0;
+
 }
 
-void Enemy::Target()
+int Enemy::Target()
 {
 	CalRad(_pos, _aimPos + Vector2d(_moveTblInfo.first, 0), 90);
 	auto theta = atan2(_aimPos.y - _pos.y, _aimPos.x - _pos.x);
@@ -36,40 +45,54 @@ void Enemy::Target()
 
 	_vel	 = Vector2d(3 * cost, 3 * sint);
 	_updater = &Enemy::TargetUpdate;
+
+	return 0;
 }
 
-void Enemy::Rotation()
+int Enemy::Rotation()
 {
 	MakeRotaInfo();
 	_updater = &Enemy::RotationUpdate;
+
+	return 0;
 }
 
-void Enemy::Move()
+int Enemy::Move()
 {
 	_tblFlag = true;
 	_rad = 0;
 	/// 先頭のｱﾆﾒｰｼｮﾝｶｳﾝﾄを渡している
 	SetInvCnt(_leadCnt);
 	_updater = &Enemy::MoveUpdate;
+
+	return 0;
 }
 
-void Enemy::WaitUpdate()
+int Enemy::WaitUpdate()
 {
 	if (_waitCnt <= 0)
 	{
-		Sigmoid();
+		if (!ChangeMove())
+		{
+			Move();
+		}
 	}
 	--_waitCnt;
+
+	return 0;
 }
 
-void Enemy::SigmoidUpdate()
+int Enemy::SigmoidUpdate()
 {
 	if (_sigCnt >= _sigMax)
 	{
 		_rotDir.x = (_sigRange.x >= 0 ? 1 : -1);
 		_rotDir.y = (_sigRange.y >= 0 ? -1 : 1);
-		Rotation();
-		return;
+		if (!ChangeMove())
+		{
+			Move();
+		}
+		return 0;
 	}
 
 	auto sigmoid = [](const double& x){ return 1.0 / (1.0 + exp(-1.0 * x));};
@@ -82,9 +105,11 @@ void Enemy::SigmoidUpdate()
 	
 	_sigCnt += 0.3;
 	CalRad(_pos, _sigEnd, 90);
+
+	return 0;
 }
  
-void Enemy::TargetUpdate()
+int Enemy::TargetUpdate()
 {
 	/// 目標地点までのﾗｼﾞｱﾝ計算
 	auto theta = atan2(_aimPos.y - _pos.y, (_aimPos.x + _moveTblInfo.first) - _pos.x);
@@ -106,11 +131,16 @@ void Enemy::TargetUpdate()
 	if (_vel == Vector2d(0,0))
 	{
 		_pos = Vector2d(_aimPos.x + _moveTblInfo.first, _aimPos.y);
-		Move();
+		if (!ChangeMove())
+		{
+			Move();
+		}
 	}
+
+	return 0;
 }
 
-void Enemy::RotationUpdate()
+int Enemy::RotationUpdate()
 {
 	auto cost = cos(_angle * (DX_PI / 180));
 	auto sint = sin(_angle * (DX_PI / 180));
@@ -124,13 +154,30 @@ void Enemy::RotationUpdate()
 
 	if (_rotAngle >= 360)
 	{
-		Target();
+		if (!ChangeMove())
+		{
+			Move();
+		}
 	}
+
+	return 0;
 }
 
-void Enemy::MoveUpdate()
+int Enemy::MoveUpdate()
 {
 	_pos.x += _moveTblInfo.second;
+	return 0;
+}
+
+bool Enemy::ChangeMove()
+{
+	if (_moveList.size() > 0)
+	{
+		_updater = _moveList.front();
+		_moveList.pop_front();
+		return true;
+	}
+	return false;
 }
 
 void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos, const double& angle)

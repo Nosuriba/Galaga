@@ -22,7 +22,6 @@ Boss::Boss(const EnemyState & state)
 	_enNum = std::get<static_cast<int>(EN_STATE::NUM)>(state);
 	animKey(ANIM::NORMAL);
 
-	Wait();
 }
 
 Boss::~Boss()
