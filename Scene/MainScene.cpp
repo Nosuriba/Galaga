@@ -69,12 +69,12 @@ void MainScene::ResetTbl()
 
 	double posX, posY;
 	/// ç∂â∫ÇÃ√∞ÃﬁŸà íuÇãÅÇﬂÇÈåvéZ
-	posX = LpGame.gameScreenPos.x / 2 + _charSize.width / 2;
-	posY = LpGame.gameScreenPos.y / 2 + (_enMax.y * 2 - 3) * _charSize.height / 2 + (_enMax.y - 1);
+	posX = LpGame.gameScreenPos.x / 2 + _charSize.width;
+	posY = LpGame.gameScreenPos.y / 2 + (_enMax.y - 2) * _charSize.height;
 	_tblCtlPos[0] = Vector2(posX, posY);
 
 	/// âEâ∫ÇÃ√∞ÃﬁŸà íuÇãÅÇﬂÇÈåvéZ
-	posX = LpGame.gameScreenPos.x / 2 + (_enMax.x * 2) * _charSize.height / 2 + (_enMax.x + 1);
+	posX = LpGame.gameScreenPos.x / 2 + _enMax.x * _charSize.width;
 	_tblCtlPos[1] = Vector2(posX, posY);
 }
 
@@ -133,7 +133,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	/// ìGÇÃê∂ê¨(âºÇ≈ê∂ê¨ÇµÇƒÇ¢ÇÈ)
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		for (int cnt = 0; cnt < 1;)
+		for (int cnt = 0; cnt < 8;)
 		{
 			/// èoåªÇµÇƒÇ¢ÇÈìGÇ™ç≈ëÂêîÇí¥Ç¶ÇƒÇ¢ÇÈéûÅAèàóùÇî≤ÇØÇÈ
  			if (_enCnt >= (_enMax.x * _enMax.y))
@@ -144,13 +144,12 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			if (!_enTblInfo[num])
 			{
 				/// ìGÇÃèÓïÒê›íË
-				auto invPos = Vector2(_charSize.width / 2 + (num % _enMax.x) * 5, (num / _enMax.x) * 5);
-				auto aimPos = Vector2d(LpGame.gameScreenPos.x / 2 + ((num % _enMax.x) * _charSize.width)  + invPos.x,
-									   LpGame.gameScreenPos.y / 2 - _charSize.height + ((num / _enMax.x) * _charSize.height) + invPos.y);
+				auto aimPos = Vector2d(LpGame.gameScreenPos.x / 2 + ((num % _enMax.x) + 1) * _charSize.width,
+									   LpGame.gameScreenPos.y / 2 + ((num / _enMax.x) - 1) * _charSize.height);
 				
 				/// ìGÇÃê∂ê¨
 				auto line = num / _enMax.x;
-				auto debugPos = Vector2d(200, 280);
+				auto debugPos = Vector2d(200, 250);
 				EnemyState state = { _initPos[randNum % 6], _charSize, 
 									 EN_TYPE::NORMAL, num, 10 * cnt, aimPos};
 				

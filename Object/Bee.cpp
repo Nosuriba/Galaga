@@ -12,7 +12,6 @@ Bee::Bee(const EnemyState & state)
 	_pos = Vector2d(center.x, center.y);
 	_vel = Vector2d();
 	_rect = Rect(center, _size);
-	_sigEnd = _pos;
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_rad = 0.0;
 	_waitTime = std::get<static_cast<int>(EN_STATE::WAIT)>(state);
@@ -28,7 +27,6 @@ Bee::~Bee()
 {
 	TRACE("Bee Die!! \n");
 }
-
 
 void Bee::Init(EN_TYPE type)
 {
@@ -57,7 +55,6 @@ int Bee::MoveUpdate()
 	_pos.x += _moveTblInfo.second;
 	_sigBegin = _pos;
 
-	/// ‰ñ“], ¼¸ÞÓ²ÄÞ, ‰ñ“], –Ú•W’n“_
 	return 0;
 }
 

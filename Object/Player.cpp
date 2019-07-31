@@ -114,6 +114,7 @@ void Player::DieUpdate()
 
 void Player::Update()
 {
+	AnimUpdate(1);
 	_input->Update();
 	(this->*_updater)();
 	if (DestryCheck())
