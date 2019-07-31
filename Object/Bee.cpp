@@ -15,8 +15,7 @@ Bee::Bee(const EnemyState & state)
 	_sigEnd = _pos;
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_rad = 0.0;
-	_sigEnd = std::get<static_cast<int>(EN_STATE::SIGPOS)>(state);
-	_waitCnt = std::get<static_cast<int>(EN_STATE::WAIT)>(state);
+	_waitTime = std::get<static_cast<int>(EN_STATE::WAIT)>(state);
 
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
 
@@ -28,6 +27,37 @@ Bee::Bee(const EnemyState & state)
 Bee::~Bee()
 {
 	TRACE("Bee Die!! \n");
+}
+
+
+void Bee::Init(EN_TYPE type)
+{
+	anim_vec data;
+	auto enType = static_cast<int>(type) * 2;
+
+	data.emplace_back(IMAGE_ID("enemy")[0 + enType], 30);
+	data.emplace_back(IMAGE_ID("enemy")[1 + enType], 60);
+	SetAnim(ANIM::NORMAL, data);
+
+	data.emplace_back(IMAGE_ID("en_blast")[0], 15);
+	for (int i = 1; i < 5; ++i)
+	{
+		data.emplace_back(IMAGE_ID("en_blast")[i], 15 + (5 * i));
+	}
+	/// ｱﾆﾒｰｼｮﾝの終了位置を設定している
+	data.emplace_back(-1, 60);
+
+	SetAnim(ANIM::DEATH, data);
+}
+
+
+int Bee::MoveUpdate()
+{
+	_pos.x += _moveTblInfo.second;
+	_sigBegin = _pos;
+
+	/// 回転, ｼｸﾞﾓｲﾄﾞ, 回転, 目標地点
+	return 0;
 }
 
 void Bee::Update()
@@ -52,24 +82,4 @@ void Bee::Update()
 		_isAlive = false;
 		ResetInvCnt();
 	}
-}
-
-void Bee::Init(EN_TYPE type)
-{
-	anim_vec data;
-	auto enType = static_cast<int>(type) * 2;
-
-	data.emplace_back(IMAGE_ID("enemy")[0 + enType], 30);
-	data.emplace_back(IMAGE_ID("enemy")[1 + enType], 60);
-	SetAnim(ANIM::NORMAL, data);
-
-	data.emplace_back(IMAGE_ID("en_blast")[0], 15);
-	for (int i = 1; i < 5; ++i)
-	{
-		data.emplace_back(IMAGE_ID("en_blast")[i], 15 + (5 * i));
-	}
-	/// ｱﾆﾒｰｼｮﾝの終了位置を設定している
-	data.emplace_back(-1, 60);
-
-	SetAnim(ANIM::DEATH, data);
 }

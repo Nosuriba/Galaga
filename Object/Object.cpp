@@ -93,12 +93,13 @@ void Object::LeadAnimUpdate()
 
 bool Object::CheckMoveTbl() const
 {
-	return _tblFlag;
+	return _isTable;
 }
 
 void Object::SetMoveTbl(const enTbl_pair& tblInfo)
 {
-	if (_tblFlag)
+	/// 最初の敵がﾃｰﾌﾞﾙに配置された時、情報を更新する
+	if (_isTable)
 	{
 		_moveTblInfo = tblInfo;
 	}

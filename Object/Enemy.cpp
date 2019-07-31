@@ -54,7 +54,7 @@ int Enemy::Target()
 
 int Enemy::Rotation()
 {
-	/// 回転方向の設定
+	/// 回転方向の指定
 	_rotDir.x = (_sigBegin.x < LpGame.gameScreenSize.x / 2 ? 1 : -1);
 	_rotDir.y = (_sigBegin.y < LpGame.gameScreenSize.y / 2 ? 1 : -1);
 
@@ -67,7 +67,7 @@ int Enemy::Rotation()
 
 int Enemy::Move()
 {
-	_tblFlag = true;
+	_isTable = true;
 	_rad = 0;
 	/// 先頭のｱﾆﾒｰｼｮﾝｶｳﾝﾄを渡している
 	SetInvCnt(_leadCnt);
@@ -78,14 +78,14 @@ int Enemy::Move()
 
 int Enemy::WaitUpdate()
 {
-	if (_waitCnt <= 0)
+	if (_waitTime <= 0)
 	{
 		if (!ChangeMove())
 		{
 			Move();
 		}
 	}
-	--_waitCnt;
+	--_waitTime;
 
 	return 0;
 }
@@ -170,13 +170,6 @@ int Enemy::RotationUpdate()
 	return 0;
 }
 
-int Enemy::MoveUpdate()
-{
-	_pos.x += _moveTblInfo.second;
-	_sigBegin = _pos;
-	return 0;
-}
-
 void Enemy::SetSigAdd(const double & sigAdd)
 {
 	_sigAdd = sigAdd;
@@ -211,7 +204,7 @@ void Enemy::MakeRotaInfo()
 	_rotAngle	= 0;
 }
 
-const Obj Enemy::GetObjID() const
+const OBJ Enemy::GetObjID() const
 {
-	return Obj::ENEMY;
+	return OBJ::ENEMY;
 }

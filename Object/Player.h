@@ -17,7 +17,7 @@ public:
 	~Player();
 
 	void Update() override;
-	const Obj GetObjID() const override;
+	const OBJ GetObjID() const override;
 private:
 	void Init();
 

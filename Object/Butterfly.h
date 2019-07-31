@@ -9,6 +9,7 @@ public:
 	~Butterfly();
 
 	void Update() override;
+	int MoveUpdate() override;
 private:
 	void Init(EN_TYPE type);
 };

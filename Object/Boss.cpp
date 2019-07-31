@@ -13,10 +13,9 @@ Boss::Boss(const EnemyState & state)
 	_rect	= Rect(center, _size);
 
 	_vel	= Vector2d();
-	_sigEnd	= std::get<static_cast<int>(EN_STATE::SIGPOS)>(state);;
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_rad	= 0.0;
-	_waitCnt = std::get<static_cast<int>(EN_STATE::WAIT)>(state);
+	_waitTime = std::get<static_cast<int>(EN_STATE::WAIT)>(state);
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
 
 	_enNum = std::get<static_cast<int>(EN_STATE::NUM)>(state);
@@ -27,6 +26,36 @@ Boss::Boss(const EnemyState & state)
 Boss::~Boss()
 {
 	TRACE("Boss Die!!\n");
+}
+
+void Boss::Init(EN_TYPE type)
+{
+	anim_vec data;
+	auto enType = static_cast<int>(type) * 2;
+
+	data.emplace_back(IMAGE_ID("enemy")[20 + enType], 30);
+	data.emplace_back(IMAGE_ID("enemy")[21 + enType], 60);
+	SetAnim(ANIM::NORMAL, data);
+
+	data.emplace_back(IMAGE_ID("en_blast")[0], 15);
+	for (int i = 1; i < 5; ++i)
+	{
+		data.emplace_back(IMAGE_ID("en_blast")[i], 15 + (5 * i));
+	}
+	/// ｱﾆﾒｰｼｮﾝの終了位置を設定している
+	data.emplace_back(-1, 60);
+
+	SetAnim(ANIM::DEATH, data);
+}
+
+int Boss::MoveUpdate()
+{
+	_pos.x += _moveTblInfo.second;
+	_sigBegin = _pos;
+
+	/// 回転, ｼｸﾞﾓｲﾄﾞ, 目標地点
+	/// 回転, ｼｸﾞﾓｲﾄﾞ, ｷｬﾌﾟﾁｬ, 目標地点
+	return 0;
 }
 
 void Boss::Update()
@@ -59,24 +88,4 @@ void Boss::Update()
 	//}
 	//_dbgDrawBox(_rect.Left() - _size.width / 2, _rect.Top() - _size.height / 2,
 	//	_rect.Right() - _size.width / 2, _rect.Bottom() - _size.height / 2, 0xff0000, true);
-}
-
-void Boss::Init(EN_TYPE type)
-{
-	anim_vec data;
-	auto enType = static_cast<int>(type) * 2;
-
-	data.emplace_back(IMAGE_ID("enemy")[20 + enType], 30);
-	data.emplace_back(IMAGE_ID("enemy")[21 + enType], 60);
-	SetAnim(ANIM::NORMAL, data);
-
-	data.emplace_back(IMAGE_ID("en_blast")[0], 15);
-	for (int i = 1; i < 5; ++i)
-	{
-		data.emplace_back(IMAGE_ID("en_blast")[i], 15 + (5 * i));
-	}
-	/// ｱﾆﾒｰｼｮﾝの終了位置を設定している
-	data.emplace_back(-1, 60);
-
-	SetAnim(ANIM::DEATH, data);
 }

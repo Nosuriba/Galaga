@@ -152,9 +152,11 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 				auto line = num / _enMax.x;
 				auto debugPos = Vector2d(200, 280);
 				EnemyState state = { _initPos[randNum % 6], _charSize, 
-									 EN_TYPE::NORMAL, num, 10 * cnt, aimPos, debugPos};
+									 EN_TYPE::NORMAL, num, 10 * cnt, aimPos};
 				
 				AddEnemy(line, state);
+				/// ¼¸ÞÓ²ÄÞ‚Ì–Ú•W’n“_‚ðÝ’è‚µ‚Ä‚¢‚é
+				_objs[_objs.size() - 1]->SetSigEnd(debugPos);
 				++cnt;
 				++_enCnt;
 				_enTblInfo[num] = 1;
@@ -165,7 +167,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	for (auto obj : _objs)
 	{
 		/// Å‰‚É“o˜^‚³‚ê‚½“G‚Ì±ÆÒ°¼®Ý¶³ÝÄ‚ð‰ÁŽZ‚·‚éˆ—
-		if (obj->GetObjID() == Obj::ENEMY)
+		if (obj->GetObjID() == OBJ::ENEMY)
 		{
 			if (obj->CheckMoveTbl())
 			{
@@ -192,7 +194,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	for (auto obj : _objs)
 	{
 		obj->Update();
-		if (obj->GetDeath() && obj->GetObjID() == Obj::ENEMY)
+		if (obj->GetDeath() && obj->GetObjID() == OBJ::ENEMY)
 		{
 			/// ÃÞÊÞ¯¸Þ’†‚Ì‚½‚ßA“G‚ªŽ€–S‚µ‚½ˆÊ’u‚ÉÄ¶¬‚Å‚«‚é‚æ‚¤‚É‚µ‚Ä‚¢‚é
 			_enTblInfo[obj->GetEnemyNum()] = 0;
@@ -204,7 +206,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	auto checkEnemy = false;
 	for (auto obj : _objs)
 	{
-		if (obj->GetObjID() == Obj::ENEMY)
+		if (obj->GetObjID() == OBJ::ENEMY)
 		{
 			checkEnemy = true;
 		}

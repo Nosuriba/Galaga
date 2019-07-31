@@ -6,7 +6,7 @@ Shot::Shot()
 {
 }
 
-Shot::Shot(const Vector2 & pos)
+Shot::Shot(const Vector2d & pos)
 {
 	_pos = pos;
 
@@ -18,6 +18,15 @@ Shot::Shot(const Vector2 & pos)
 }
 
 Shot::~Shot()
+{
+}
+
+bool Shot::ShotCheck() const
+{
+	return _isShot;
+}
+
+void Shot::SetShot(const Vector2d & pos)
 {
 }
 

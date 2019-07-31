@@ -1,10 +1,13 @@
 #pragma once
 #include <vector>
+#include <array>
 #include <memory>
 #include <map>
 #include "../Vector2.h"
 #include "../Input.h"
 #include "../DebugDisp.h"
+
+class Shot;
 
 // ｱﾆﾒｰｼｮﾝ管理用の可変長配列
 using anim_vec = std::vector<std::pair<int, int>>;
@@ -20,11 +23,29 @@ enum class ANIM
 	MAX
 };
 
-enum class Obj
+enum class OBJ
 {
 	PLAYER,
 	ENEMY,
 	MAX
+};
+
+struct ShotInfo
+{
+	Vector2d _pos;
+	Vector2d _vel;
+	Size _size;
+	Rect _rect;
+
+	bool flag;
+
+	ShotInfo() : _pos(0, 0), _vel(0, 0), _size(0, 0) {};
+	ShotInfo(const Vector2d& pos, const Vector2d& vel, const Size& size)
+	{
+		_pos = pos;
+		_vel = vel;
+		_size = size;
+	}
 };
 
 class Object
@@ -34,7 +55,7 @@ public:
 	virtual ~Object();
 	virtual void Update() = 0;
 	void Draw();
-	virtual const Obj GetObjID() const = 0;
+	virtual const OBJ GetObjID() const = 0;
 
 	// 先頭に登録された敵のｱﾆﾒｰｼｮﾝ更新
 	void LeadAnimUpdate();
@@ -60,21 +81,24 @@ protected:
 	//// keyの情報を取得している
 	//const ANIM& animKey() const;
 
-	Vector2d _pos;
-	Vector2d _vel;
+	std::array<Shot, 2> _shots;
+
 	Vector2d _sigBegin;		// ｼｸﾞﾓｲﾄﾞの始点
 	Vector2d _sigEnd;		// ｼｸﾞﾓｲﾄﾞの終点
+
+	Vector2d _pos;
+	Vector2d _vel;
 	Size _size;
 	Rect _rect;
-	double _rad;
+	double _rad;			// 画像の向き(ﾗｼﾞｱﾝ)
 
-	bool _tblFlag = false;
+	bool _isTable = false;		// true : ﾃｰﾌﾞﾙに配置された, false : ﾃｰﾌﾞﾙに配置されていない
 	bool _isAlive = true;		// true : 生存, false : 死亡
-	bool _isDeath = false;		// true : 敵の削除, false : 死亡処理中
+	bool _isDeath = false;		// true : 死亡, false : 死亡処理中
 
 	int _enNum;					// 敵の番号
 	
-	// first : 移動幅(intに変更する可能性あり), second : 移動速度
+	// first : 移動幅, second : 移動速度
 	static enTbl_pair _moveTblInfo;
 	static int _leadCnt;
 private:

@@ -157,7 +157,7 @@ void Player::Update()
 	//}
 }
 
-const Obj Player::GetObjID() const
+const OBJ Player::GetObjID() const
 {
-	return Obj::PLAYER;
+	return OBJ::PLAYER;
 }

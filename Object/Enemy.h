@@ -15,7 +15,6 @@ enum class EN_STATE
 	NUM,
 	WAIT,
 	AIM,
-	SIGPOS,
 	MAX
 };
 
@@ -37,8 +36,8 @@ enum class EN_ID
 	MAX
 };
 
-// 0 : 座標, 1 : ｻｲｽﾞ 2 : 種類, 3 : 敵のﾃｰﾌﾞﾙの位置 4 : 待機時間 5 : 目標地点 6 : ｼｸﾞﾓｲﾄﾞの移動地点
-using EnemyState = std::tuple<Vector2, Size, EN_TYPE, int, int, Vector2d, Vector2d>;
+// 0 : 座標, 1 : ｻｲｽﾞ 2 : 種類, 3 : 敵のﾃｰﾌﾞﾙの位置 4 : 待機時間 5 : 目標地点
+using EnemyState = std::tuple<Vector2, Size, EN_TYPE, int, int, Vector2d>;
 
 class Enemy :
 	public Object
@@ -48,7 +47,7 @@ public:
 	virtual ~Enemy();
 	
 	virtual void Update() = 0;
-	const Obj GetObjID() const override;
+	const OBJ GetObjID() const override;
 
 protected:
 	/// 各行動の初期化
@@ -63,7 +62,7 @@ protected:
 	int SigmoidUpdate();
 	int TargetUpdate();
 	int RotationUpdate();
-	int MoveUpdate();
+	virtual int MoveUpdate() = 0;
 
 	void SetSigAdd(const double& sigAdd);	// ｼｸﾞﾓｲﾄﾞに加算する値の変更用
 
@@ -77,7 +76,7 @@ protected:
 	Vector2  _rotDir;
 	Vector2d _rotCenter;	// 回転するときの中心点
 
-	int _waitCnt;			// 敵が移動する前の待機時間
+	int _waitTime;			// 敵が移動する前の待機時間
 
 	int _angle;
 	int _rotAngle;			// 回転した角度
@@ -91,7 +90,6 @@ protected:
 	static char now;
 	static char old;
 private:
-
 	bool ChangeMove();			// 移動状態の変更
 	void CalRad(const Vector2d& sPos, const Vector2d& ePos, const double& angle);
 	void MakeRotaInfo();		// 回転するための情報を生成している
