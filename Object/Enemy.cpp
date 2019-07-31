@@ -24,6 +24,45 @@ Enemy::~Enemy()
 	_moveTblInfo = { 0,0 };
 }
 
+void Enemy::SetSigAdd(const double & sigAdd)
+{
+	_sigAdd = sigAdd;
+}
+
+bool Enemy::ChangeMove()
+{
+	if (_moveList.size() > 0)
+	{
+		_updater = _moveList.front();
+		_moveList.pop_front();
+		return true;
+	}
+	return false;
+}
+
+void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos, const double& angle)
+{
+	_rad = atan2(ePos.y - sPos.y, ePos.x - sPos.x);
+
+	_rad += angle * (DX_PI / 180);
+
+	auto debug = _rad * (180 / DX_PI);
+}
+void Enemy::MakeRotaInfo()
+{
+	/// 中心地点の計算を別の場所で行った方がいい
+	_rotCenter = _pos + Vector2d(0, _distance * _rotDir.y);
+
+	auto theta = atan2(_pos.y - _rotCenter.y, _pos.x - _rotCenter.x);
+	_angle = theta * (180 / DX_PI);
+	_rotAngle = 0;
+}
+
+const OBJ Enemy::GetObjID() const
+{
+	return OBJ::ENEMY;
+}
+
 int Enemy::Wait()
 {
 	_updater = &Enemy::WaitUpdate;
@@ -32,7 +71,6 @@ int Enemy::Wait()
 
 int Enemy::Sigmoid()
 {
-	/// ｼｸﾞﾓｲﾄﾞを使った移動範囲の設定
 	_sigCnt	  = -_sigMax;
 	_sigBegin = _pos;
 	_sigRange = _sigEnd - _sigBegin;
@@ -65,6 +103,11 @@ int Enemy::Target()
 
 	return 0;
 }
+
+//void Enemy::SetTarget(const Vector2d & sigEnd)
+//{
+//	_sigEnd = sigEnd;
+//}
 
 int Enemy::Move()
 {
@@ -170,43 +213,4 @@ int Enemy::TargetUpdate()
 		}
 	}
 	return 0;
-}
-
-void Enemy::SetSigAdd(const double & sigAdd)
-{
-	_sigAdd = sigAdd;
-}
-
-bool Enemy::ChangeMove()
-{
-	if (_moveList.size() > 0)
-	{
-		_updater = _moveList.front();
-		_moveList.pop_front();
-		return true;
-	}
-	return false;
-}
-
-void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos, const double& angle)
-{
-	_rad = atan2(ePos.y - sPos.y, ePos.x - sPos.x);
-
-	_rad += angle * (DX_PI / 180);
-
-	auto debug = _rad * (180 / DX_PI);
-}
-void Enemy::MakeRotaInfo()
-{
-	/// 中心地点の計算を別の場所で行った方がいい
-	_rotCenter = _pos + Vector2d(0, _distance * _rotDir.y);
-
-	auto theta  = atan2(_pos.y - _rotCenter.y,  _pos.x - _rotCenter.x);
-	_angle		= theta * (180 / DX_PI);
-	_rotAngle	= 0;
-}
-
-const OBJ Enemy::GetObjID() const
-{
-	return OBJ::ENEMY;
 }

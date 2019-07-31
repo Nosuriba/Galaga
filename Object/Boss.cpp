@@ -15,6 +15,7 @@ Boss::Boss(const EnemyState & state)
 	_vel	= Vector2d();
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_rad	= 0.0;
+	_gain = 1.0;
 	_waitTime = std::get<static_cast<int>(EN_STATE::WAIT)>(state);
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
 

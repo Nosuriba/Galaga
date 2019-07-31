@@ -63,6 +63,11 @@ void MainScene::Init()
 	_objs.emplace_back(std::make_shared<Player>(Vector2(100, LpGame.gameScreenSize.y - _charSize.height), _charSize));
 }
 
+const SCN_ID MainScene::GetSceneID() const
+{
+	return SCN_ID::MAIN;
+}
+
 void MainScene::ResetTbl()
 {
 	_tblInfo = { 0,0 };
@@ -97,16 +102,6 @@ void MainScene::AddEnemy(const int & line, const EnemyState & state)
 	}
 }
 
-void MainScene::TblMoveUpdate()
-{
-	if (_tblCtlPos[0].x <= _charSize.width / 2 || 
-		_tblCtlPos[1].x >= LpGame.gameScreenSize.x  - _charSize.width / 2)
-	{
-		_tblInfo.second = -_tblInfo.second;
-	}
-	_tblInfo.first += _tblInfo.second;
-}
-
 void MainScene::Draw()
 {
 	/// πﬁ∞—Ω∏ÿ∞›ÇÃï`âÊÇçsÇ¡ÇƒÇ¢ÇÈ
@@ -120,6 +115,16 @@ void MainScene::Draw()
 		}
 	}
 	LpGame.AddDrawQue({ _ghGameScreen, LpGame.gameScreenPos.x, LpGame.gameScreenPos.y});
+}
+
+void MainScene::TblMoveUpdate()
+{
+	if (_tblCtlPos[0].x <= _charSize.width / 2 ||
+		_tblCtlPos[1].x >= LpGame.gameScreenSize.x - _charSize.width / 2)
+	{
+		_tblInfo.second = -_tblInfo.second;
+	}
+	_tblInfo.first += _tblInfo.second;
 }
 
 unique_scene MainScene::Update(unique_scene scene, const Input & p)
@@ -240,9 +245,4 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	/// éwíËÇµÇΩîÕàÕÇÃvectorÇçÌèúÇµÇƒÇ¢ÇÈ
 	_objs.erase(eraseBegin, _objs.end());
 	return std::move(scene);
-}
-
-const SCN_ID MainScene::GetSceneID() const
-{
-	return SCN_ID::MAIN;
 }

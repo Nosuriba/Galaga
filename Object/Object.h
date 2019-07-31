@@ -113,6 +113,7 @@ private:
 	ANIM _animKey;
 	int _invCnt = 0;
 	int _animID = 0;
+	int enAction = 0;
 
 };
 
