@@ -15,6 +15,7 @@ Bee::Bee(const EnemyState & state)
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_rad = 0.0;
 	_gain = 1.0;
+	_sigEnd   = std::get<static_cast<int>(EN_STATE::SIGPOS)>(state);
 	_waitTime = std::get<static_cast<int>(EN_STATE::WAIT)>(state);
 
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
@@ -55,18 +56,23 @@ int Bee::MoveUpdate()
 	AnimUpdate(1);
 	_pos.x += _moveTblInfo.second;
 	_sigBegin = _pos;
+	return 0;
+}
 
-	/// ‰¼‚Ì“o˜^
-	if (_waitAction < 0)
+void Bee::SetMoveInfo(const Vector2d& sigEnd)
+{
+	if (_moveList.size() == 0 && _actionCnt < 2)
 	{
+ 		++_actionCnt;
+		_sigEnd = sigEnd - Vector2d(0, _size.height * 2);
 		Rotation();
-		_gain = 0.3;
+		_gain = 0.5;
+		_sigAdd = 0.2;
 		_moveList.emplace_back(&Enemy::Sigmoid);
 		_moveList.emplace_back(&Enemy::Rotation);
 		_moveList.emplace_back(&Enemy::Target);
 	}
-	--_waitAction;
-	return 0;
+	
 }
 
 void Bee::Update()

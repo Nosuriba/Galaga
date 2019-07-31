@@ -16,6 +16,7 @@ Boss::Boss(const EnemyState & state)
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_rad	= 0.0;
 	_gain = 1.0;
+	_sigEnd   = std::get<static_cast<int>(EN_STATE::SIGPOS)>(state);
 	_waitTime = std::get<static_cast<int>(EN_STATE::WAIT)>(state);
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
 
@@ -54,10 +55,22 @@ int Boss::MoveUpdate()
 	AnimUpdate(1);
 	_pos.x += _moveTblInfo.second;
 	_sigBegin = _pos;
-
-	/// 回転, ｼｸﾞﾓｲﾄﾞ, 目標地点
-	/// 回転, ｼｸﾞﾓｲﾄﾞ, ｷｬﾌﾟﾁｬ, 目標地点
 	return 0;
+}
+
+void Boss::SetMoveInfo(const Vector2d& sigEnd)
+{
+	if (_moveList.size() == 0 && _actionCnt < 2)
+	{
+		++_actionCnt;
+		_sigEnd = sigEnd;
+		_gain = 0.5;
+		_sigAdd = 0.2;
+		Rotation();
+		_moveList.emplace_back(&Enemy::Sigmoid);
+		_moveList.emplace_back(&Enemy::Target);
+	}
+	
 }
 
 void Boss::Update()

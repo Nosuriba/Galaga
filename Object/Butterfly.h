@@ -8,6 +8,7 @@ public:
 	Butterfly(const EnemyState& state);
 	~Butterfly();
 
+	void SetMoveInfo(const Vector2d& sigEnd) override;
 	void Update() override;
 	int MoveUpdate() override;
 private:

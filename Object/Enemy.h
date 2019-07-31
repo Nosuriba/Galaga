@@ -14,6 +14,7 @@ enum class EN_STATE
 	TYPE,
 	NUM,
 	WAIT,
+	SIGPOS,
 	AIM,
 	MAX
 };
@@ -36,8 +37,8 @@ enum class EN_ID
 	MAX
 };
 
-// 0 : 座標, 1 : ｻｲｽﾞ 2 : 種類, 3 : 敵のﾃｰﾌﾞﾙの位置 4 : 待機時間 5 : 目標地点
-using EnemyState = std::tuple<Vector2, Size, EN_TYPE, int, int, Vector2d>;
+// 0 : 座標, 1 : ｻｲｽﾞ 2 : 種類, 3 : 敵のﾃｰﾌﾞﾙの位置 4 : 待機時間 5 : ｼｸﾞﾓｲﾄﾞの終点, 6 : 目標地点
+using EnemyState = std::tuple<Vector2, Size, EN_TYPE, int, int, Vector2d, Vector2d>;
 
 class Enemy :
 	public Object
@@ -55,6 +56,7 @@ public:
 	//static void SetTarget(const Vector2d& sigEnd);
 
 	const OBJ GetObjID() const override;
+	virtual void SetMoveInfo(const Vector2d& sigEnd) override = 0;
 
 protected:
 	/// 各行動の初期化
@@ -82,6 +84,8 @@ protected:
 
 	double _sigAdd;			// ｼｸﾞﾓｲﾄﾞのｶｳﾝﾄ加算用
 	double _gain;			// ｼｸﾞﾓｲﾄﾞのｸﾞﾗﾌ制御用
+
+	static int _actionCnt;		// 行動中の敵の数
 
 	/// debug用で敵を削除している(後で必ず消せ！！)
 	static char now;

@@ -4,6 +4,8 @@
 #include "../DebugDisp.h"
 #include "../DebugConOut.h"
 
+int Enemy::_actionCnt = 0;
+
 char Enemy::now = 0;
 char Enemy::old = 0;
 
@@ -111,6 +113,12 @@ int Enemy::Target()
 
 int Enemy::Move()
 {
+	/// 行動中の敵がいないときは、ｶｳﾝﾄを変動しないようにしている
+	if (_isTable)
+	{
+		_actionCnt -= (_actionCnt == 0 ? 0 : 1);
+	}
+	
 	_waitAction = 60;		/// 行動待機時間の仮設定
 	_isTable = true;
 	_rad = 0;

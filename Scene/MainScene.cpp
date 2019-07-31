@@ -138,7 +138,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	/// 敵の生成(仮で生成している)
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		for (int cnt = 0; cnt < 1;)
+		for (int cnt = 0; cnt < 8;)
 		{
 			/// 出現している敵が最大数を超えている時、処理を抜ける
  			if (_enCnt >= (_enMax.x * _enMax.y))
@@ -156,11 +156,9 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 				auto line = num / _enMax.x;
 				auto debugPos = Vector2d(200, 250);
 				EnemyState state = { _initPos[randNum % 6], _charSize, 
-									 EN_TYPE::NORMAL, num, 10 * cnt, aimPos};
+									 EN_TYPE::NORMAL, num, 10 * cnt, debugPos, aimPos};
 				
 				AddEnemy(line, state);
-				/// ｼｸﾞﾓｲﾄﾞの目標地点を設定している
-				_objs[_objs.size() - 1]->SetSigEnd(debugPos);
 				++cnt;
 				++_enCnt;
 				_enTblInfo[num] = 1;
@@ -192,6 +190,30 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			obj->LeadAnimUpdate();
 			obj->SetMoveTbl(_tblInfo);
 			break;
+		}
+	}
+
+	if (_enCnt >= (_enMax.x * _enMax.y))
+	{
+		Vector2d pPos;
+		for (auto obj : _objs)
+		{
+			if (obj->GetObjID() == OBJ::PLAYER)
+			{
+				pPos = obj->GetPos();
+			}
+		}
+		for (auto& obj : _objs)
+		{
+			if (obj->GetObjID() == OBJ::ENEMY && obj->CheckMoveTbl())
+			{
+				auto isAction = (rand() % 20 == 0);
+				if (isAction)
+				{
+ 					obj->SetMoveInfo(pPos);
+				}
+			}
+			
 		}
 	}
 

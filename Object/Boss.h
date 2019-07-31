@@ -8,6 +8,7 @@ public:
 	Boss(const EnemyState& state);
 	~Boss();
 
+	void SetMoveInfo(const Vector2d& sigEnd) override;
 	void Update() override;
 	int MoveUpdate() override;
 private:

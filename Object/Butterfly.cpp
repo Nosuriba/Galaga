@@ -15,6 +15,7 @@ Butterfly::Butterfly(const EnemyState & state)
 	_aimPos = std::get<static_cast<int>(EN_STATE::AIM)>(state);
 	_rad = 0.0;
 	_gain = 1.0;
+	_sigEnd   = std::get<static_cast<int>(EN_STATE::SIGPOS)>(state);
 	_waitTime = std::get<static_cast<int>(EN_STATE::WAIT)>(state);
 
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
@@ -58,6 +59,20 @@ int Butterfly::MoveUpdate()
 
 	/// ‰ñ“], ¼¸ÞÓ²ÄÞ, –Ú•W’n“_, 
 	return 0;
+}
+
+void Butterfly::SetMoveInfo(const Vector2d& sigEnd)
+{
+	if (_moveList.size() == 0 && _actionCnt < 2)
+	{
+ 		++_actionCnt;
+		_sigEnd = sigEnd;
+		_gain = 0.5;
+		_sigAdd = 0.2;
+		Rotation();
+		_moveList.emplace_back(&Enemy::Sigmoid);
+		_moveList.emplace_back(&Enemy::Target);
+	}
 }
 
 void Butterfly::Update()

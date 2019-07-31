@@ -65,9 +65,11 @@ public:
 	void SetMoveTbl(const enTbl_pair& tblInfo);
 	int GetEnemyNum() const;
 
+	//	“G‚ÌˆÚ“®î•ñ‚ğŒp³‚ÌŒp³æ‚Åİ’è‚µ‚Ä‚¢‚é
+	virtual void SetMoveInfo(const Vector2d& sigEnd);
+
 	bool GetDeath() const;
 
-	void SetSigEnd(const Vector2d& sigEnd);
 	const Vector2d& GetPos() const;
 protected:
 	// ±ÆÒ°¼®İ‚Ì“o˜^

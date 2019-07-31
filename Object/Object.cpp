@@ -12,6 +12,28 @@ Object::~Object()
 {
 }
 
+int Object::GetEnemyNum() const
+{
+	return _enNum;
+}
+
+void Object::SetMoveInfo(const Vector2d& sigEnd)
+{
+	/// ‰½‚à‚µ‚È‚¢
+}
+
+bool Object::GetDeath() const
+{
+	return _isDeath;
+}
+
+const Vector2d & Object::GetPos() const
+{
+	return _pos;
+}
+
+
+
 bool Object::SetAnim(ANIM key, anim_vec& data)
 {
 	return _animMap.try_emplace(key, std::move(data)).second;
@@ -103,24 +125,4 @@ void Object::SetMoveTbl(const enTbl_pair& tblInfo)
 	{
 		_moveTblInfo = tblInfo;
 	}
-}
-
-int Object::GetEnemyNum() const
-{
-	return _enNum;
-}
-
-bool Object::GetDeath() const
-{
-	return _isDeath;
-}
-
-void Object::SetSigEnd(const Vector2d & sigEnd)
-{
-	_sigEnd = sigEnd;
-}
-
-const Vector2d & Object::GetPos() const
-{
-	return _pos;
 }

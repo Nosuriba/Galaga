@@ -10,6 +10,7 @@ public:
 	~Bee();
 	int MoveUpdate() override;
 
+	void SetMoveInfo(const Vector2d& sigEnd) override;
 	void Update() override;
 	
 private:
