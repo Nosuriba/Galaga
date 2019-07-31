@@ -48,27 +48,27 @@ bool Object::animKey(const ANIM key)
 	{
 		return false;
 	}
-	_animKey = key;
+ 	_animKey = key;
 
 	return true;
+}
+
+void Object::AnimUpdate(const int & animSpeed)
+{
+	if (_invCnt >= _animMap[_animKey][_animID].second)
+	{
+		auto debug = _animMap[_animKey][_animMap[_animKey].size() - 1].second;
+		_animID = (_animID + 1) % _animMap[_animKey].size();
+		_invCnt = (_invCnt < _animMap[_animKey][_animMap[_animKey].size() - 1].second ? _invCnt : 0);
+	}
+	_leadCnt = (_leadCnt < _animMap[_animKey][_animMap[_animKey].size() - 1].second ? _leadCnt : 0);
+	_invCnt += animSpeed;
 }
 
 //const ANIM& Object::animKey() const
 //{
 //	return _animKey;
 //}
-
-void Object::AnimUpdate()
-{
-	if (_invCnt >= _animMap[_animKey][_animID].second)
-	{
-		auto debug = _animMap[_animKey][_animMap[_animKey].size() - 1].second;
-		_animID	   = (_animID + 1) % _animMap[_animKey].size();
-		_invCnt    = (_invCnt < _animMap[_animKey][_animMap[_animKey].size() - 1].second ? _invCnt : 0);
-	}
-	_leadCnt = (_leadCnt < _animMap[_animKey][_animMap[_animKey].size() - 1].second  ? _leadCnt : 0);
-	++_invCnt;
-}
 
 void Object::Draw()
 {
@@ -81,7 +81,7 @@ void Object::Draw()
 		return;
 	}
 
-	AnimUpdate();
+	//AnimUpdate();
 
 	DrawRotaGraph(_pos.x, _pos.y, 1.0, _rad, _animMap[_animKey][_animID].first, true);
 }

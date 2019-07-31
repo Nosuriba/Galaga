@@ -53,15 +53,15 @@ protected:
 	/// 各行動の初期化
 	int Wait();
 	int Sigmoid();
-	int Target();
 	int Rotation();
+	int Target();
 	int Move();
 
 	/// 各行動の更新
 	int WaitUpdate();
 	int SigmoidUpdate();
-	int TargetUpdate();
 	int RotationUpdate();
+	int TargetUpdate();
 	virtual int MoveUpdate() = 0;
 
 	void SetSigAdd(const double& sigAdd);	// ｼｸﾞﾓｲﾄﾞに加算する値の変更用

@@ -39,19 +39,6 @@ int Enemy::Sigmoid()
 	return 0;
 }
 
-int Enemy::Target()
-{
-	CalRad(_pos, _aimPos + Vector2d(_moveTblInfo.first, 0), 90);
-	auto theta = atan2(_aimPos.y - _pos.y, _aimPos.x - _pos.x);
-	auto cost = cos(theta);
-	auto sint = sin(theta);
-
-	_vel	 = Vector2d(3 * cost, 3 * sint);
-	_updater = &Enemy::TargetUpdate;
-
-	return 0;
-}
-
 int Enemy::Rotation()
 {
 	/// 回転方向の指定
@@ -61,6 +48,19 @@ int Enemy::Rotation()
 	MakeRotaInfo();
 
 	_updater = &Enemy::RotationUpdate;
+
+	return 0;
+}
+
+int Enemy::Target()
+{
+	CalRad(_pos, _aimPos + Vector2d(_moveTblInfo.first, 0), 90);
+	auto theta = atan2(_aimPos.y - _pos.y, _aimPos.x - _pos.x);
+	auto cost = cos(theta);
+	auto sint = sin(theta);
+
+	_vel	 = Vector2d(3 * cost, 3 * sint);
+	_updater = &Enemy::TargetUpdate;
 
 	return 0;
 }
@@ -114,7 +114,32 @@ int Enemy::SigmoidUpdate()
 
 	return 0;
 }
- 
+
+int Enemy::RotationUpdate()
+{
+	AnimUpdate(5);
+	_angle += 4 * _rotDir.x * _rotDir.y;
+	_rotAngle += 4;
+
+	auto cost = cos(_angle * (DX_PI / 180));
+	auto sint = sin(_angle * (DX_PI / 180));
+	auto ePos = _rotCenter + Vector2d(_distance * cost,
+									  _distance * sint);
+	 CalRad(_pos, ePos, 90);
+	_pos = ePos;
+
+	
+	if (_rotAngle >= 360 + (-_rotDir.y * 90))
+	{
+		if (!ChangeMove())
+		{
+			Move();
+		}
+	}
+
+	return 0;
+}
+
 int Enemy::TargetUpdate()
 {
 	/// 目標地点までのﾗｼﾞｱﾝ計算
@@ -133,34 +158,10 @@ int Enemy::TargetUpdate()
 	/// 目標地点の付近まで到達してなかった時、速度計算を行う
 	_vel.x = (_vel.x == 0 ? 0 : 3 * cost);
 	_vel.y = (_vel.y == 0 ? 0 : 3 * sint);
-	
-	if (_vel == Vector2d(0,0))
+
+	if (_vel == Vector2d(0, 0))
 	{
 		_pos = Vector2d(_aimPos.x + _moveTblInfo.first, _aimPos.y);
-		if (!ChangeMove())
-		{
-			Move();
-		}
-	}
-
-	return 0;
-}
-
-int Enemy::RotationUpdate()
-{
-	_angle += 4 * _rotDir.x * _rotDir.y;
-	_rotAngle += 4;
-
-	auto cost = cos(_angle * (DX_PI / 180));
-	auto sint = sin(_angle * (DX_PI / 180));
-	auto ePos = _rotCenter + Vector2d(_distance * cost,
-									  _distance * sint);
-	 CalRad(_pos, ePos, 90);
-	_pos = ePos;
-
-	
-	if (_rotAngle >= 360 + (-_rotDir.y * 90))
-	{
 		if (!ChangeMove())
 		{
 			Move();

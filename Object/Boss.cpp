@@ -50,6 +50,7 @@ void Boss::Init(EN_TYPE type)
 
 int Boss::MoveUpdate()
 {
+	AnimUpdate(1);
 	_pos.x += _moveTblInfo.second;
 	_sigBegin = _pos;
 
@@ -62,6 +63,7 @@ void Boss::Update()
 {
 	if (DestryCheck())
 	{
+		AnimUpdate(1);
 		return;
 	}
 	(this->*_updater)();

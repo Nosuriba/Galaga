@@ -16,7 +16,7 @@ private:
 	Vector2d _vel;
 	Rect _rect;
 
-	bool _isShot;		// true : ¼®¯Ä‚ð‘Å‚Á‚Ä‚¢‚é, false : ¼®¯Ä‚ð‘Å‚Á‚Ä‚¢‚È‚¢
+	bool _isShot;		// true : ‘Å‚Á‚Ä‚¢‚é, false : ‘Å‚Á‚Ä‚¢‚È‚¢
 
 	const Size _shotSize = Size(20,20);
 };

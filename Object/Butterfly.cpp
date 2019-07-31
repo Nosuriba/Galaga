@@ -51,6 +51,7 @@ void Butterfly::Init(EN_TYPE type)
 
 int Butterfly::MoveUpdate()
 {
+	AnimUpdate(1);
 	_pos.x += _moveTblInfo.second;
 	_sigBegin = _pos;
 
@@ -62,6 +63,7 @@ void Butterfly::Update()
 {
 	if (DestryCheck())
 	{
+		AnimUpdate(1);
 		return;
 	}
 	(this->*_updater)();

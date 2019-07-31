@@ -48,6 +48,8 @@ struct ShotInfo
 	}
 };
 
+using shared_shot = std::shared_ptr<Shot>;
+
 class Object
 {
 public:
@@ -81,7 +83,7 @@ protected:
 	//// keyの情報を取得している
 	//const ANIM& animKey() const;
 
-	std::array<Shot, 2> _shots;
+	// std::array<shared_shot, 2> _shots;
 
 	Vector2d _sigBegin;		// ｼｸﾞﾓｲﾄﾞの始点
 	Vector2d _sigEnd;		// ｼｸﾞﾓｲﾄﾞの終点
@@ -101,8 +103,9 @@ protected:
 	// first : 移動幅, second : 移動速度
 	static enTbl_pair _moveTblInfo;
 	static int _leadCnt;
+	void AnimUpdate(const int& animSpeed);
 private:
-	void AnimUpdate();
+	// void AnimUpdate();
 	
 	// first : 画像ID, second : ｱﾆﾒｰｼｮﾝﾌﾚｰﾑ
 	std::map<ANIM, anim_vec> _animMap;
