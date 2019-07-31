@@ -133,7 +133,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	/// “G‚Ì¶¬(‰¼‚Å¶¬‚µ‚Ä‚¢‚é)
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		for (int cnt = 0; cnt < 8;)
+		for (int cnt = 0; cnt < 1;)
 		{
 			/// oŒ»‚µ‚Ä‚¢‚é“G‚ªÅ‘å”‚ğ’´‚¦‚Ä‚¢‚éAˆ—‚ğ”²‚¯‚é
  			if (_enCnt >= (_enMax.x * _enMax.y))

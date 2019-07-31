@@ -47,14 +47,17 @@ public:
 	virtual ~Enemy();
 	
 	virtual void Update() = 0;
+
+	/// 関数ﾎﾟｲﾝﾀのｱﾄﾞﾚｽを取得するため、publicに移動した
+	int Sigmoid();
+	int Rotation();
+	int Target();
+
 	const OBJ GetObjID() const override;
 
 protected:
 	/// 各行動の初期化
 	int Wait();
-	int Sigmoid();
-	int Rotation();
-	int Target();
 	int Move();
 
 	/// 各行動の更新
@@ -77,11 +80,14 @@ protected:
 	Vector2d _rotCenter;	// 回転するときの中心点
 
 	int _waitTime;			// 敵が移動する前の待機時間
+	int _waitAction;		// 敵が行動するまでの待機時間
 
 	int _angle;
 	int _rotAngle;			// 回転した角度
 
-	double _sigCnt;			// ｼｸﾞﾓｲﾄﾞ関数の値
+	double _sigCnt;			// ｼｸﾞﾓｲﾄﾞの値
+	double _sigAdd;			// ｼｸﾞﾓｲﾄﾞのｶｳﾝﾄ加算用
+	double _gain;			// ｼｸﾞﾓｲﾄﾞのｸﾞﾗﾌ制御用
 
 	const double _sigMax;
 	const double _distance;
@@ -94,6 +100,6 @@ private:
 	void CalRad(const Vector2d& sPos, const Vector2d& ePos, const double& angle);
 	void MakeRotaInfo();		// 回転するための情報を生成している
 
-	double _sigAdd;				// ｼｸﾞﾓｲﾄﾞのｶｳﾝﾄ加算用
+	
 };
 

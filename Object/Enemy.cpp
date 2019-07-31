@@ -9,6 +9,7 @@ char Enemy::old = 0;
 
 Enemy::Enemy() : _sigMax(10), _distance(30)
 {
+	/// 初期の移動ﾘｽﾄを登録している
 	_moveList.emplace_back(&Enemy::Sigmoid);
 	_moveList.emplace_back(&Enemy::Rotation);
 	_moveList.emplace_back(&Enemy::Target);
@@ -67,6 +68,7 @@ int Enemy::Target()
 
 int Enemy::Move()
 {
+	_waitAction = 60;		/// 行動待機時間の仮設定
 	_isTable = true;
 	_rad = 0;
 	/// 先頭のｱﾆﾒｰｼｮﾝｶｳﾝﾄを渡している
@@ -101,9 +103,9 @@ int Enemy::SigmoidUpdate()
 		return 0;
 	}
 
-	auto sigmoid = [](const double& x){ return 1.0 / (1.0 + exp(-1.0 * x));};
+	auto sigmoid = [](const double& x, const double& gain){ return 1.0 / (1.0 + exp(-gain * x));};
 	double X = (_sigCnt + _sigMax) / (_sigMax * 2);
-	double Y = sigmoid(_sigCnt);
+	double Y = sigmoid(_sigCnt, _gain);
 
 	/// 敵の移動(移動する幅のXとYをグラフに変換して移動させている)
 	_pos.x = X * _sigRange.x + _sigBegin.x;
@@ -167,7 +169,6 @@ int Enemy::TargetUpdate()
 			Move();
 		}
 	}
-
 	return 0;
 }
 

@@ -55,6 +55,16 @@ int Bee::MoveUpdate()
 	_pos.x += _moveTblInfo.second;
 	_sigBegin = _pos;
 
+	/// ‰¼‚Ì“o˜^
+	if (_waitAction < 0)
+	{
+		Rotation();
+		_gain = 0.3;
+		_moveList.emplace_back(&Enemy::Sigmoid);
+		_moveList.emplace_back(&Enemy::Rotation);
+		_moveList.emplace_back(&Enemy::Target);
+	}
+	--_waitAction;
 	return 0;
 }
 
