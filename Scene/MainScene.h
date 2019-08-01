@@ -7,6 +7,7 @@
 class Object;
 
 using shared_obj = std::shared_ptr<Object>;
+using shared_itr = std::vector<shared_obj>::iterator;
 
 class MainScene :
 	public Scene
@@ -24,6 +25,9 @@ private:
 	void ResetTbl();
 	void AddEnemy(const int& line, const EnemyState& state);
 	void TblMoveUpdate();	// ﾃｰﾌﾞﾙ更新用
+
+	bool PlayerCol(const shared_obj& player);
+	shared_itr EnemyCol(const shared_obj& player);
 
 	// first : 移動幅, second : 速度
 	enTbl_pair _tblInfo;

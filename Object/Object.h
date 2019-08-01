@@ -25,8 +25,8 @@ enum class ANIM
 
 enum class OBJ
 {
-	PLAYER,
 	ENEMY,
+	PLAYER,
 	MAX
 };
 
@@ -61,7 +61,7 @@ public:
 
 	// 先頭に登録された敵のｱﾆﾒｰｼｮﾝ更新
 	void LeadAnimUpdate();
-	bool CheckMoveTbl() const;
+	bool IsMoveTbl() const;
 	void SetMoveTbl(const enTbl_pair& tblInfo);
 	int GetEnemyNum() const;
 
@@ -85,7 +85,7 @@ protected:
 	//// keyの情報を取得している
 	//const ANIM& animKey() const;
 
-	// std::array<shared_shot, 2> _shots;
+	std::array<shared_shot, 2> _shots;
 
 	Vector2d _sigBegin;		// ｼｸﾞﾓｲﾄﾞの始点
 	Vector2d _sigEnd;		// ｼｸﾞﾓｲﾄﾞの終点
@@ -96,9 +96,9 @@ protected:
 	Rect _rect;
 	double _rad;			// 画像の向き(ﾗｼﾞｱﾝ)
 
-	bool _isTable = false;		// true : ﾃｰﾌﾞﾙに配置された, false : ﾃｰﾌﾞﾙに配置されていない
-	bool _isAlive = true;		// true : 生存, false : 死亡
-	bool _isDeath = false;		// true : 死亡, false : 死亡処理中
+	bool _isTable;		// true : ﾃｰﾌﾞﾙに配置された, false : ﾃｰﾌﾞﾙに配置されていない
+	bool _isAlive;		// true : 生存, false : 死亡
+	bool _isDeath;		// true : 死亡, false : 死亡処理中
 
 	int _enNum;					// 敵の番号
 	
@@ -113,9 +113,9 @@ private:
 	std::map<ANIM, anim_vec> _animMap;
 
 	ANIM _animKey;
-	int _invCnt = 0;
-	int _animID = 0;
-	int enAction = 0;
+	int _invCnt;
+	int _animID;
+	int _enAction;
 
 };
 

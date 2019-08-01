@@ -4,20 +4,21 @@ class Shot
 {
 public:
 	Shot();
-	Shot(const Vector2d& pos);
+	Shot(const Vector2d& pos, const Vector2d& vel);
 	~Shot();
 
-	bool ShotCheck() const;
-	void SetShot(const Vector2d& pos);
+	bool IsOutScreen() const;
 	void Update();
-	void Draw();
+	void Draw(const int& id);
+
 private:
 	Vector2d _pos;
 	Vector2d _vel;
+	Size _size;
 	Rect _rect;
 
 	bool _isShot;		// true : ‘Å‚Á‚Ä‚¢‚é, false : ‘Å‚Á‚Ä‚¢‚È‚¢
 
-	const Size _shotSize = Size(20,20);
+	const Size _shotSize;
 };
 

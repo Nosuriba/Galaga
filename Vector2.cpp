@@ -20,3 +20,13 @@ const int Rect::Bottom() const
 {
 	return center.y + (size.height / 2);
 }
+
+const int Rect::Width() const
+{
+	return size.width;
+}
+
+const int Rect::Height() const
+{
+	return size.height;
+}

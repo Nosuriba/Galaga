@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="common\ImageMng.cpp" />
     <ClCompile Include="DebugConOut.cpp" />
     <ClCompile Include="DebugDisp.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="common\ImageMng.h" />
     <ClInclude Include="DebugConOut.h" />
     <ClInclude Include="DebugDisp.h" />

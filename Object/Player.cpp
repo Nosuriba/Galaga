@@ -123,14 +123,44 @@ void Player::Update()
 	}
 
 	/// 仮の死亡処理
-	if (_input->IsTrigger(INPUT_ID::BTN_1))
+	/*if (_input->IsTrigger(INPUT_ID::BTN_1))
 	{
 		animKey(ANIM::DEATH);
 		_isAlive = false;
 		ResetInvCnt();
-	}
+	}*/
 	auto center = Vector2(_pos.x + _size.width / 2, _pos.y + _size.height / 2);
 	_rect	    = Rect(center, _size);
+
+
+	/// ｼｮｯﾄに関する処理
+	for (auto& shot : _shots)
+	{
+		if (shot != nullptr)
+		{
+			if (shot->IsOutScreen())
+			{
+				shot = nullptr;
+				continue;
+			}
+			shot->Update();
+		}
+	}
+
+	/// ｼｮｯﾄの生成
+	/*if (_input->IsTrigger(INPUT_ID::BTN_1))*/
+	if (_input->state(INPUT_ID::BTN_1).first &&
+	  !(_input->state(INPUT_ID::BTN_1).second))
+	{
+		for (int i = 0; i < _shots.size(); ++i)
+		{
+			if (_shots[i] == nullptr)
+			{
+				_shots[i] = std::make_shared<Shot>(_pos, Vector2d(0, -6));
+				break;
+			}
+		}
+	}
 
 	/// 仮でﾃﾞﾊﾞｯｸﾞ用の描画をしている
 	_dbgDrawBox(_rect.Left()  - _size.width / 2, _rect.Top()	- _size.height / 2,
@@ -140,22 +170,6 @@ void Player::Update()
 	_dbgDrawFormatString(LpGame.gameScreenPos.x + _pos.x - _size.width - _size.width / 2, 
 						 LpGame.gameScreenPos.y + _pos.y - _size.height, 
 						 0xffffff, "(%d, %d)", (int)_pos.x, (int)(_pos.y));
-
-
-	/// とりあえず今は無視しておこう
-	///*if (_input->IsTrigger(INPUT_ID::BTN_1))*/
-	//if (_input->state(INPUT_ID::BTN_1).first &&
-	//  !(_input->state(INPUT_ID::BTN_1).second))
-	//{
-	//	_shots.push_back(std::make_shared<Shot>(_pos));
-	//}
-
-	///// 仮のショット
-	//for (auto& shot : _shots)
-	//{
-	//	shot->Update();
-	//	shot->Draw();
-	//}
 }
 
 const OBJ Player::GetObjID() const

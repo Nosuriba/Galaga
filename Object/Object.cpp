@@ -1,4 +1,5 @@
 #include "Object.h"
+#include "Shot.h"
 #include "../DebugDisp.h"
 
 int Object::_leadCnt = 0;
@@ -6,6 +7,18 @@ enTbl_pair Object::_moveTblInfo = {0,0};
 
 Object::Object()
 {
+	_isTable = false;
+	_isAlive = true;
+	_isDeath = false;
+
+	_invCnt = 0;
+	_animID = 0;
+	_enAction = 0;
+
+	/*for (auto& shot : _shots)
+	{
+		shot = std::make_shared<Shot>(Vector2d(0, 0));
+	}*/
 }
 
 Object::~Object()
@@ -104,7 +117,13 @@ void Object::Draw()
 	}
 
 	//AnimUpdate();
-
+	for (auto shot : _shots)
+	{
+		if (shot != nullptr)
+		{
+			shot->Draw(static_cast<int>(GetObjID()));
+		}
+	}
 	DrawRotaGraph(_pos.x, _pos.y, 1.0, _rad, _animMap[_animKey][_animID].first, true);
 }
 
@@ -113,7 +132,7 @@ void Object::LeadAnimUpdate()
 	++_leadCnt;
 }
 
-bool Object::CheckMoveTbl() const
+bool Object::IsMoveTbl() const
 {
 	return _isTable;
 }

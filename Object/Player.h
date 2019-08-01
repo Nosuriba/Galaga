@@ -32,6 +32,5 @@ private:
 	void (Player::*_updater)();
 
 	std::unique_ptr<InputState> _input;
-	std::vector<shared_shot> _shots;
 };
 

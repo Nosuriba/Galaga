@@ -193,4 +193,6 @@ struct Rect
 	const int Right() const;
 	const int Top() const;
 	const int Bottom() const;
+	const int Width() const;
+	const int Height() const;
 };

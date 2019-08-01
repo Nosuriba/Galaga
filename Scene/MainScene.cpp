@@ -127,6 +127,16 @@ void MainScene::TblMoveUpdate()
 	_tblInfo.first += _tblInfo.second;
 }
 
+bool MainScene::PlayerCol(const shared_obj & player)
+{
+	return false;
+}
+
+shared_itr MainScene::EnemyCol(const shared_obj & player)
+{
+	return shared_itr();
+}
+
 unique_scene MainScene::Update(unique_scene scene, const Input & p)
 {
 	/// 敵を仮生成するための設定
@@ -166,12 +176,13 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		}
 	}
 
+	/// 先頭の敵が来たときのみ更新する情報
 	for (auto obj : _objs)
 	{
 		/// 最初に登録された敵のｱﾆﾒｰｼｮﾝｶｳﾝﾄを加算する処理
 		if (obj->GetObjID() == OBJ::ENEMY)
 		{
-			if (obj->CheckMoveTbl())
+			if (obj->IsMoveTbl())
 			{
 				_tblInfo.second = (_tblInfo.second == 0 ? 1 : _tblInfo.second);
 				TblMoveUpdate();
@@ -193,6 +204,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		}
 	}
 
+	/// ｱｸｼｮﾝ中の敵がいるとき、はじくような処理にしてみる
 	if (_enCnt >= (_enMax.x * _enMax.y))
 	{
 		Vector2d pPos;
@@ -205,7 +217,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		}
 		for (auto& obj : _objs)
 		{
-			if (obj->GetObjID() == OBJ::ENEMY && obj->CheckMoveTbl())
+			if (obj->GetObjID() == OBJ::ENEMY && obj->IsMoveTbl())
 			{
 				auto isAction = (rand() % 20 == 0);
 				if (isAction)
@@ -213,9 +225,11 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
  					obj->SetMoveInfo(pPos);
 				}
 			}
-			
 		}
 	}
+
+	/// remove_ifを使って当たり判定がtrueになった時の
+	/// イテレータの先頭をソートする仕組みをする
 
 	for (auto obj : _objs)
 	{
