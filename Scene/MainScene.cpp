@@ -318,12 +318,9 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	{
 		ResetTbl();
 	}
-	//auto Collision = [&](const shared_obj& obj)
-	//{
-	//
-	//};
-
-	auto aliveBegin = remove_if(_objs.begin(),
+	
+	//// 当たり判定の処理(remove_ifを使ったとき、中身が空になるときがあるので、その原因を探る)
+	/*auto aliveBegin = remove_if(_objs.begin(),
 								_objs.end(),
 							  [&](std::shared_ptr<Object>& obj) {return CheckCol(obj); });
 
@@ -331,7 +328,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	for (; obj != _objs.end(); ++obj)
 	{
 		(*obj)->ChangeAlive();
-	}
+	}*/
 	/// ﾃｰﾌﾞﾙ制御のﾃﾞﾊﾞｯｸﾞ描画
 	for (auto& tPos : _tblCtlPos)
 	{
