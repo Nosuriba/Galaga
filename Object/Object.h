@@ -9,12 +9,6 @@
 
 class Shot;
 
-// ｱﾆﾒｰｼｮﾝ管理用の可変長配列
-using anim_vec = std::vector<std::pair<int, int>>;
-
-// 敵配置用ﾃｰﾌﾞﾙの移動情報
-using enTbl_pair = std::pair<int, int>;
-
 enum class ANIM
 {
 	NORMAL,		// 通常
@@ -30,25 +24,14 @@ enum class OBJ
 	MAX
 };
 
-struct ShotInfo
-{
-	Vector2d _pos;
-	Vector2d _vel;
-	Size _size;
-	Rect _rect;
-
-	bool flag;
-
-	ShotInfo() : _pos(0, 0), _vel(0, 0), _size(0, 0) {};
-	ShotInfo(const Vector2d& pos, const Vector2d& vel, const Size& size)
-	{
-		_pos = pos;
-		_vel = vel;
-		_size = size;
-	}
-};
+// ｱﾆﾒｰｼｮﾝ管理用の可変長配列
+using anim_vec = std::vector<std::pair<int, int>>;
+// 敵配置用ﾃｰﾌﾞﾙの移動情報
+using enTbl_pair = std::pair<int, int>;
 
 using shared_shot = std::shared_ptr<Shot>;
+// shared_ptrの固定長配列
+using shot_array  = std::array<shared_shot, 2>;
 
 class Object
 {
@@ -64,6 +47,9 @@ public:
 	bool IsMoveTbl() const;
 	void SetMoveTbl(const enTbl_pair& tblInfo);
 	int GetEnemyNum() const;
+
+	Rect GetRect() const;
+	shot_array GetShot() const;
 
 	//	敵の移動情報を継承の継承先で設定している
 	virtual void SetMoveInfo(const Vector2d& sigEnd);
@@ -85,7 +71,7 @@ protected:
 	//// keyの情報を取得している
 	//const ANIM& animKey() const;
 
-	std::array<shared_shot, 2> _shots;
+	shot_array _shots;
 
 	Vector2d _sigBegin;		// ｼｸﾞﾓｲﾄﾞの始点
 	Vector2d _sigEnd;		// ｼｸﾞﾓｲﾄﾞの終点

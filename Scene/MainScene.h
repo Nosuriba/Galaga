@@ -3,8 +3,9 @@
 #include <array>
 #include "Scene.h"
 #include "../Object/Enemy.h"
+#include "../Object/Object.h"
 
-class Object;
+class Collision;
 
 using shared_obj = std::shared_ptr<Object>;
 using shared_itr = std::vector<shared_obj>::iterator;
@@ -26,11 +27,20 @@ private:
 	void AddEnemy(const int& line, const EnemyState& state);
 	void TblMoveUpdate();	// ﾃｰﾌﾞﾙ更新用
 
-	bool PlayerCol(const shared_obj& player);
-	shared_itr EnemyCol(const shared_obj& player);
+	/// 当たり判定の確認用
+	bool PlayerCol(const Rect& pRect, const shared_obj& obj);
+	bool EnemyCol(const Rect& pRect, const shared_obj& obj);
 
 	// first : 移動幅, second : 速度
 	enTbl_pair _tblInfo;
+
+	std::unique_ptr<Collision> _col;
+	std::vector<shared_obj> _objs;
+	
+	std::vector<char> _enTblInfo;			// 敵の配置情報を確認するﾃｰﾌﾞﾙ
+	std::array<Vector2, 2> _tblCtlPos;		// ﾃｰﾌﾞﾙ移動制御用の座標
+	std::array<Vector2, 6> _initPos;		// 敵の初期座標
+
 
 	int _ghGameScreen;		// ｹﾞｰﾑｽｸﾘｰﾝの画像ﾊﾝﾄﾞﾙ
 	int _enCnt;				// 出現している敵のｶｳﾝﾄ
@@ -39,13 +49,7 @@ private:
 	char _dbgKey;
 	char _dbgKeyOld;
 
-	std::vector<shared_obj> _objs;
-
-	std::array<Vector2, 2> _tblCtlPos;		// ﾃｰﾌﾞﾙ移動制御用の座標
-
-	std::vector<char> _enTblInfo;			// 敵の配置情報を確認するﾃｰﾌﾞﾙ
-	std::array<Vector2, 6> _initPos;		// 敵の初期座標
-
+	
 	const Size _charSize;
 	const Vector2 _enMax;					// 敵の最大数
 };

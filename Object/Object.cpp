@@ -30,6 +30,16 @@ int Object::GetEnemyNum() const
 	return _enNum;
 }
 
+Rect Object::GetRect() const
+{
+	return _rect;
+}
+
+shot_array Object::GetShot() const
+{
+	return _shots;
+}
+
 void Object::SetMoveInfo(const Vector2d& sigEnd)
 {
 	/// ‰½‚à‚µ‚È‚¢

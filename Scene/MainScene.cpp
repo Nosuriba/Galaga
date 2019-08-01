@@ -1,11 +1,13 @@
 #include <algorithm>
 #include <stdlib.h>	
 #include <time.h>				/// ﾗﾝﾀﾞﾑ生成をやめた時、いずれ消すかもしれない
-#include "../Game.h"
-#include "../DebugConOut.h"
 #include "MainScene.h"
 #include "ResultScene.h"
+#include "../Game.h"
+#include "../Collision.h"
+#include "../DebugConOut.h"
 
+#include "../Object/Shot.h"
 #include "../Object/Player.h"
 #include "../Object/Bee.h"
 #include "../Object/Butterfly.h"
@@ -14,6 +16,7 @@
 
 MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 {
+	_col = std::make_unique<Collision>();
 	/// 敵のﾃｰﾌﾞﾙを生成している
 	_enTblInfo.reserve(_enMax.x * _enMax.y);
 	for (int i = 0; i < (_enMax.x * _enMax.y); ++i)
@@ -127,14 +130,33 @@ void MainScene::TblMoveUpdate()
 	_tblInfo.first += _tblInfo.second;
 }
 
-bool MainScene::PlayerCol(const shared_obj & player)
+bool MainScene::PlayerCol(const Rect & pRect, const shared_obj & obj)
 {
+	if (obj->GetObjID() == OBJ::ENEMY)
+	{
+		/// 敵との当たり判定
+		if (_col->CheckCol(pRect, obj->GetRect()))
+		{
+			return true;
+		}
+
+		/// 敵のｼｮｯﾄとの当たり判定
+		for (auto shot : obj->GetShot())
+		{
+			if (_col->CheckCol(pRect, shot->GetRect()))
+			{
+				shot = nullptr;
+				return true;
+			}
+		}
+	}
 	return false;
 }
 
-shared_itr MainScene::EnemyCol(const shared_obj & player)
+bool MainScene::EnemyCol(const Rect & pRect, const shared_obj & obj)
 {
-	return shared_itr();
+	if (obj->Get)
+	return false;
 }
 
 unique_scene MainScene::Update(unique_scene scene, const Input & p)
@@ -256,6 +278,29 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		ResetTbl();
 	}
 
+	Rect pRect;
+	for (auto obj : _objs)
+	{
+		if (obj->GetObjID() == OBJ::PLAYER)
+		{
+			pRect = obj->GetRect();
+		}
+	}
+
+	for (auto& obj : _objs)
+	{
+		if (obj->GetObjID() == OBJ::PLAYER)
+		{
+			/// 中で敵全体のループを行って、どこと当たったかの検索をする
+			// PlayerCol();
+		}
+		else if (obj->GetObjID() == OBJ::ENEMY)
+		{
+			/// 中でﾌﾟﾚｲﾔｰの検索をするためのループを行って当たったかの判定をとる
+			// EnemyCol();
+		}
+		else{}
+	}
 	/// ﾃｰﾌﾞﾙ制御のﾃﾞﾊﾞｯｸﾞ描画
 	for (auto& tPos : _tblCtlPos)
 	{
