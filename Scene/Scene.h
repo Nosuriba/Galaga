@@ -1,5 +1,9 @@
 #pragma once
 
+#include <memory>
+#include "../Game.h"
+#include "../Input.h"
+
 enum class SCN_ID
 {
 	TITLE,
@@ -7,9 +11,6 @@ enum class SCN_ID
 	RESULT,
 	MAX
 };
-
-#include <memory>
-#include "../Input.h"
 
 class Scene
 {

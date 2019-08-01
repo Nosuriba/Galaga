@@ -54,6 +54,7 @@ public:
 	//	“G‚ÌˆÚ“®î•ñ‚ğŒp³‚ÌŒp³æ‚Åİ’è‚µ‚Ä‚¢‚é
 	virtual void SetMoveInfo(const Vector2d& sigEnd);
 
+	void ChangeAlive();			// €–Só‘Ô‚É•ÏX‚·‚é
 	bool GetDeath() const;
 
 	const Vector2d& GetPos() const;
@@ -69,7 +70,7 @@ protected:
 	// key‚Ìó‘Ô‚ğ•ÏX‚µ‚Ä‚¢‚é
 	bool animKey(const ANIM key);
 	//// key‚Ìî•ñ‚ğæ“¾‚µ‚Ä‚¢‚é
-	//const ANIM& animKey() const;
+	const ANIM& animKey() const;
 
 	shot_array _shots;
 

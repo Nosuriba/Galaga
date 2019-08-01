@@ -28,8 +28,9 @@ private:
 	void TblMoveUpdate();	// ﾃｰﾌﾞﾙ更新用
 
 	/// 当たり判定の確認用
-	bool PlayerCol(const Rect& pRect, const shared_obj& obj);
-	bool EnemyCol(const Rect& pRect, const shared_obj& obj);
+	bool CheckCol(const shared_obj& obj);
+	bool PlayerCol(const shared_obj& player);
+	bool EnemyCol(const shared_obj& enemy);
 
 	// first : 移動幅, second : 速度
 	enTbl_pair _tblInfo;

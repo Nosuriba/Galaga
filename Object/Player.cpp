@@ -114,13 +114,20 @@ void Player::DieUpdate()
 
 void Player::Update()
 {
+	if (DestryCheck())
+	{
+		if (!_isAlive && animKey() != ANIM::DEATH)
+		{
+			animKey(ANIM::DEATH);
+			ResetInvCnt();
+		}
+		AnimUpdate(1);
+		return;
+	}
 	AnimUpdate(1);
 	_input->Update();
 	(this->*_updater)();
-	if (DestryCheck())
-	{
-		return;
-	}
+	
 
 	/// 仮の死亡処理
 	/*if (_input->IsTrigger(INPUT_ID::BTN_1))

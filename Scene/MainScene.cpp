@@ -130,32 +130,73 @@ void MainScene::TblMoveUpdate()
 	_tblInfo.first += _tblInfo.second;
 }
 
-bool MainScene::PlayerCol(const Rect & pRect, const shared_obj & obj)
+bool MainScene::CheckCol(const shared_obj & obj)
 {
-	if (obj->GetObjID() == OBJ::ENEMY)
+	if (obj->GetObjID() == OBJ::PLAYER)
 	{
-		/// 敵との当たり判定
-		if (_col->CheckCol(pRect, obj->GetRect()))
-		{
-			return true;
-		}
+		return PlayerCol(obj);
+	}
+	else if (obj->GetObjID() == OBJ::ENEMY)
+	{
+		return EnemyCol(obj);
+	}
+	else {}
 
-		/// 敵のｼｮｯﾄとの当たり判定
-		for (auto shot : obj->GetShot())
+	return false;
+}
+
+bool MainScene::PlayerCol(const shared_obj& player)
+{
+	for (auto obj : _objs)
+	{
+		if (obj->GetObjID() == OBJ::ENEMY)
 		{
-			if (_col->CheckCol(pRect, shot->GetRect()))
+			if (_col->IsCollision(player->GetRect(), obj->GetRect()))
 			{
-				shot = nullptr;
 				return true;
+			}
+
+			for (auto& shot : obj->GetShot())
+			{
+				if (shot != nullptr)
+				{
+					if (_col->IsCollision(player->GetRect(), shot->GetRect()))
+					{
+						shot = nullptr;
+						return true;
+					}
+				}	
 			}
 		}
 	}
 	return false;
 }
 
-bool MainScene::EnemyCol(const Rect & pRect, const shared_obj & obj)
+bool MainScene::EnemyCol(const shared_obj& enemy)
 {
-	if (obj->Get)
+	for (auto& obj : _objs)
+	{
+		if (obj->GetObjID() == OBJ::PLAYER)
+		{
+			if (_col->IsCollision(enemy->GetRect(), obj->GetRect()))
+			{
+				return true;
+			}
+
+			for (auto& shot : obj->GetShot())
+			{
+				if (shot != nullptr)
+				{
+					if (_col->IsCollision(enemy->GetRect(), shot->GetRect()))
+					{
+						shot = nullptr;
+						return true;
+					}
+				}
+				
+			}
+		}
+	}
 	return false;
 }
 
@@ -170,7 +211,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	/// 敵の生成(仮で生成している)
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		for (int cnt = 0; cnt < 8;)
+		for (int cnt = 0; cnt < 1;)
 		{
 			/// 出現している敵が最大数を超えている時、処理を抜ける
  			if (_enCnt >= (_enMax.x * _enMax.y))
@@ -277,29 +318,19 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	{
 		ResetTbl();
 	}
+	//auto Collision = [&](const shared_obj& obj)
+	//{
+	//
+	//};
 
-	Rect pRect;
-	for (auto obj : _objs)
-	{
-		if (obj->GetObjID() == OBJ::PLAYER)
-		{
-			pRect = obj->GetRect();
-		}
-	}
+	auto aliveBegin = remove_if(_objs.begin(),
+								_objs.end(),
+							  [&](std::shared_ptr<Object>& obj) {return CheckCol(obj); });
 
-	for (auto& obj : _objs)
+	auto obj = aliveBegin;
+	for (; obj != _objs.end(); ++obj)
 	{
-		if (obj->GetObjID() == OBJ::PLAYER)
-		{
-			/// 中で敵全体のループを行って、どこと当たったかの検索をする
-			// PlayerCol();
-		}
-		else if (obj->GetObjID() == OBJ::ENEMY)
-		{
-			/// 中でﾌﾟﾚｲﾔｰの検索をするためのループを行って当たったかの判定をとる
-			// EnemyCol();
-		}
-		else{}
+		(*obj)->ChangeAlive();
 	}
 	/// ﾃｰﾌﾞﾙ制御のﾃﾞﾊﾞｯｸﾞ描画
 	for (auto& tPos : _tblCtlPos)

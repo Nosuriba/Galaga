@@ -6,9 +6,6 @@
 
 int Enemy::_actionCnt = 0;
 
-char Enemy::now = 0;
-char Enemy::old = 0;
-
 Enemy::Enemy() : _sigMax(10), _distance(30)
 {
 	/// 初期の移動ﾘｽﾄを登録している
@@ -222,3 +219,23 @@ int Enemy::TargetUpdate()
 	}
 	return 0;
 }
+
+void Enemy::Update()
+{
+	if (DestryCheck())
+	{
+		if (!_isAlive && animKey() != ANIM::DEATH)
+		{
+			animKey(ANIM::DEATH);
+			ResetInvCnt();
+		}
+		AnimUpdate(1);
+		return;
+	}
+	(this->*_updater)();
+	_pos += _vel;
+
+	auto center = Vector2(_pos.x + _size.width / 2, _pos.y + _size.height / 2);
+	_rect = Rect(center, _size);
+}
+

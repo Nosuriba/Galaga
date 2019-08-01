@@ -7,6 +7,6 @@ class Collision
 public:
 	Collision();
 	~Collision();
-	bool CheckCol(const Rect& rcA, const Rect& rcB) const;
+	bool IsCollision(const Rect& rcA, const Rect& rcB) const;
 };
 

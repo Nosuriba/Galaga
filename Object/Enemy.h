@@ -46,7 +46,7 @@ class Enemy :
 public:
 	Enemy();
 	virtual ~Enemy();
-	virtual void Update() = 0;
+	void Update();
 
 	/// 関数ﾎﾟｲﾝﾀのｱﾄﾞﾚｽを取得するため、publicに移動した
 	int Sigmoid();
@@ -86,10 +86,6 @@ protected:
 	double _gain;			// ｼｸﾞﾓｲﾄﾞのｸﾞﾗﾌ制御用
 
 	static int _actionCnt;		// 行動中の敵の数
-
-	/// debug用で敵を削除している(後で必ず消せ！！)
-	static char now;
-	static char old;
 private:
 	bool ChangeMove();			// 移動状態の変更
 	void CalRad(const Vector2d& sPos, const Vector2d& ePos, const double& angle);

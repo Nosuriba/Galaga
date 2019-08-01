@@ -72,36 +72,3 @@ void Boss::SetMoveInfo(const Vector2d& sigEnd)
 	}
 	
 }
-
-void Boss::Update()
-{
-	if (DestryCheck())
-	{
-		AnimUpdate(1);
-		return;
-	}
-	(this->*_updater)();
-	_pos += _vel;
-
-	auto center = Vector2(_pos.x + _size.width / 2, _pos.y + _size.height / 2);
-	_rect = Rect(center, _size);
-
-	/// debug—p‚Å“G‚ğíœ‚µ‚Ä‚¢‚é
-	old = now;
-	now = CheckHitKey(KEY_INPUT_C);
-
-	if (now && !old)
-	{
-		animKey(ANIM::DEATH);
-		_isAlive = false;
-		ResetInvCnt();
-	}
-
-	/// ÃŞÊŞ¯¸Ş—p‚Ì•`‰æ
-	//if (_updater == &Enemy::RotationUpdate)
-	//{
-	//	_dbgDrawCircle(_rotCenter.x, _rotCenter.y, 5, 0x00ff00, true);
-	//}
-	//_dbgDrawBox(_rect.Left() - _size.width / 2, _rect.Top() - _size.height / 2,
-	//	_rect.Right() - _size.width / 2, _rect.Bottom() - _size.height / 2, 0xff0000, true);
-}

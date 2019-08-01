@@ -45,6 +45,11 @@ void Object::SetMoveInfo(const Vector2d& sigEnd)
 	/// ‰½‚à‚µ‚È‚¢
 }
 
+void Object::ChangeAlive()
+{
+	_isAlive = false;
+}
+
 bool Object::GetDeath() const
 {
 	return _isDeath;
@@ -54,8 +59,6 @@ const Vector2d & Object::GetPos() const
 {
 	return _pos;
 }
-
-
 
 bool Object::SetAnim(ANIM key, anim_vec& data)
 {
@@ -110,10 +113,10 @@ void Object::AnimUpdate(const int & animSpeed)
 	_invCnt += animSpeed;
 }
 
-//const ANIM& Object::animKey() const
-//{
-//	return _animKey;
-//}
+const ANIM& Object::animKey() const
+{
+	return _animKey;
+}
 
 void Object::Draw()
 {

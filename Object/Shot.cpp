@@ -26,8 +26,8 @@ void Shot::Update()
 {
 	_shot._pos += _shot._vel;
 
-	auto center = Vector2(_shot._pos.x + (_shot._size.width / 2), _shot._pos.y + (_size.height / 2));
-	_shot._rect = Rect(center, _size);
+	auto center = Vector2(_shot._pos.x + (_shot._size.width / 2), _shot._pos.y + (_shot._size.height / 2));
+	_shot._rect = Rect(center, _shot._size);
 }
 
 void Shot::Draw(const int& id)
