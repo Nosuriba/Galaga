@@ -130,32 +130,17 @@ void MainScene::TblMoveUpdate()
 	_tblInfo.first += _tblInfo.second;
 }
 
-bool MainScene::CheckCol(const shared_obj & obj)
-{
-	/*if (obj->GetObjID() == OBJ::PLAYER)
-	{
-		return PlayerCol(obj);
-	}
-	else if (obj->GetObjID() == OBJ::ENEMY)
-	{
-		return EnemyCol(obj);
-	}
-	else {}
-*/
-	return false;
-}
-
 bool MainScene::PlayerCol(const shared_obj& player, const shared_itr& enBegin)
 {
-	auto en = enBegin;
-	for (; en != _objs.end(); ++en)
+	auto enemy = enBegin;
+	for (; enemy != _objs.end(); ++enemy)
 	{
-		if (_col->IsCollision(player->GetRect(), (*en)->GetRect()))
+		if (_col->IsCollision(player->GetRect(), (*enemy)->GetRect()))
 		{
 			return true;
 		}
 
-		for (auto& shot : (*en)->GetShot())
+		for (auto& shot : (*enemy)->GetShot())
 		{
 			if (shot != nullptr)
 			{
@@ -167,34 +152,15 @@ bool MainScene::PlayerCol(const shared_obj& player, const shared_itr& enBegin)
 			}
 		}
 	}
-	/*for (auto obj : _objs)
-	{
-		if (_col->IsCollision(player->GetRect(), obj->GetRect()))
-		{
-			return true;
-		}
-
-		for (auto& shot : obj->GetShot())
-		{
-			if (shot != nullptr)
-			{
-				if (_col->IsCollision(player->GetRect(), shot->GetRect()))
-				{
-					shot = nullptr;
-					return true;
-				}
-			}	
-		}
-	}*/
 	return false;
 }
 
 bool MainScene::EnemyCol(const shared_obj& enemy, const shared_itr& enBegin)
 {
-	auto pl = _objs.begin();
-	for (; pl != enBegin; ++pl)
+	auto player = _objs.begin();
+	for (; player != enBegin; ++player)
 	{
-		for (auto shot : (*pl)->GetShot())
+		for (auto shot : (*player)->GetShot())
 		{
 			if (shot != nullptr)
 			{
@@ -206,25 +172,6 @@ bool MainScene::EnemyCol(const shared_obj& enemy, const shared_itr& enBegin)
 			}
 		}
 	}
-	/*for (auto& obj : _objs)
-	{
-		if (obj->GetObjID() == OBJ::PLAYER)
-		{
-			for (auto& shot : obj->GetShot())
-			{
-				if (shot != nullptr)
-				{
-					if (_col->IsCollision(enemy->GetRect(), shot->GetRect()))
-					{
-						shot = nullptr;
-						return true;
-					}
-				}
-				
-			}
-		}
-	}
-	return false;*/
 	return false;
 }
 
@@ -267,113 +214,78 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		}
 	}
 
-	/// 先頭の敵が来たときのみ更新する情報
-	for (auto obj : _objs)
+	/// 敵を末尾にｿｰﾄしている
+	std::sort(_objs.begin(), _objs.end(),
+		[](shared_obj& obj, shared_obj& obj2) { return (*obj).GetObjID() > (*obj2).GetObjID(); });
+
+	/// 敵の先頭位置を取得している
+	auto enBegin = std::find_if(_objs.begin(), _objs.end(),
+		[](shared_obj& obj) {return (*obj).GetObjID() == OBJ::ENEMY; });
+
+	auto player = _objs.begin();
+	auto enemy  = enBegin;
+
+	/// 最初に登録された敵のみ情報を更新する処理
+	for (; enemy != _objs.end(); ++enemy)
 	{
-		/// 最初に登録された敵のｱﾆﾒｰｼｮﾝｶｳﾝﾄを加算する処理
-		if (obj->GetObjID() == OBJ::ENEMY)
+		if ((*enemy)->IsMoveTbl())
 		{
-			if (obj->IsMoveTbl())
+			_tblInfo.second = (_tblInfo.second == 0 ? 1 : _tblInfo.second);
+			TblMoveUpdate();
+			/// ﾃｰﾌﾞﾙ制御の座標更新
+			for (auto& tPos : _tblCtlPos)
 			{
-				_tblInfo.second = (_tblInfo.second == 0 ? 1 : _tblInfo.second);
-				TblMoveUpdate();
-				/// ﾃｰﾌﾞﾙ制御の座標更新
-				for (auto& tPos : _tblCtlPos)
-				{
-					tPos.x += _tblInfo.second;
-				}
+				tPos.x += _tblInfo.second;
 			}
-			else
-			{
-				//// ここはﾃﾞﾊﾞｯｸﾞ用でとりあえず作っているので、後から消す
-				ResetTbl();
-			}
-			/// 最初の敵がﾃｰﾌﾞﾙに配置したらﾃｰﾌﾞﾙの移動を開始するような処理を使用
-			obj->LeadAnimUpdate();
-			obj->SetMoveTbl(_tblInfo);
-			break;
 		}
+		(*enemy)->LeadAnimUpdate();
+		(*enemy)->SetMoveTbl(_tblInfo);
+		break;
 	}
 
-	/// ｱｸｼｮﾝ中の敵がいるとき、はじくような処理にしてみる
+	/// 行動中の敵が一定数いる時、処理をはじくようにしている
 	if (_enCnt >= (_enMax.x * _enMax.y))
 	{
 		Vector2d pPos;
-		for (auto obj : _objs)
+		pPos = (*player)->GetPos();
+		for (; enemy != _objs.end(); ++enemy)
 		{
-			if (obj->GetObjID() == OBJ::PLAYER)
-			{
-				pPos = obj->GetPos();
-			}
-		}
-		for (auto& obj : _objs)
-		{
-			if (obj->GetObjID() == OBJ::ENEMY && obj->IsMoveTbl())
+			if ((*enemy)->IsMoveTbl())
 			{
 				auto isAction = (rand() % 20 == 0);
 				if (isAction)
 				{
- 					obj->SetMoveInfo(pPos);
+					(*enemy)->SetMoveInfo(pPos);
 				}
 			}
 		}
 	}
 
-	/// remove_ifを使って当たり判定がtrueになった時の
-	/// イテレータの先頭をソートする仕組みをする
-
+	/// 敵とﾌﾟﾚｲﾔｰの更新
 	for (auto obj : _objs)
 	{
 		obj->Update();
-		if (obj->GetDeath() && obj->GetObjID() == OBJ::ENEMY)
-		{
-			/// ﾃﾞﾊﾞｯｸﾞ中のため、敵が死亡した位置に再生成できるようにしている
-			_enTblInfo[obj->GetEnemyNum()] = 0;
-			--_enCnt;
-		}
 	}
 
-	/// ﾃﾞﾊﾞｯｸﾞ用で作ったもの
-	auto checkEnemy = false;
-	for (auto obj : _objs)
+	/// ﾌﾟﾚｲﾔｰの当たり判定
+	player = _objs.begin();
+	for (; player != enBegin; ++player)
 	{
-		if (obj->GetObjID() == OBJ::ENEMY)
+		if (PlayerCol((*player), enBegin))
 		{
-			checkEnemy = true;
+			(*player)->ChangeAlive();
 		}
 	}
-	if (!checkEnemy)
+
+	/// 敵の当たり判定
+	enemy = enBegin;
+	for (; enemy != _objs.end(); ++enemy)
 	{
-		ResetTbl();
+		if (EnemyCol((*enemy), enBegin))
+		{
+			(*enemy)->ChangeAlive();
+		}
 	}
-	
-	/// ﾌﾟﾚｲﾔｰと敵をｿｰﾄで並び替えている
-  	std::sort(_objs.begin(), _objs.end(),
-			[](shared_obj& obj, shared_obj& obj2){ return (*obj).GetObjID() > (*obj2).GetObjID(); });
-
-	/// 敵の先頭情報を取得している
-		auto enBegin = std::find_if(_objs.begin(), _objs.end(),
-					  [](shared_obj& obj) {return (*obj).GetObjID() == OBJ::ENEMY; });
-
-		/// ﾌﾟﾚｲﾔｰの当たり判定
-		auto pl = _objs.begin();
-		for (; pl != enBegin; ++pl)
-		{
-			if (PlayerCol((*pl), enBegin))
-			{
-				(*pl)->ChangeAlive();
-			}
-		}
-
-		/// 敵の当たり判定
-		auto en = enBegin;
-		for (; en != _objs.end(); ++en)
-		{
-			if (EnemyCol((*en), enBegin))
-			{
-				(*en)->ChangeAlive();
-			}
-		}
 
 	/// ﾃｰﾌﾞﾙ制御のﾃﾞﾊﾞｯｸﾞ描画
 	for (auto& tPos : _tblCtlPos)
@@ -383,22 +295,14 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 					0xffff00, true);
 		_dbgDrawFormatString(0, 0, 0xffffff, "移動幅 : %d", _tblInfo.first);
 	}
-	
+
+	/// ｹﾞｰﾑｽｸﾘｰﾝ上の描画
 	Draw();
 
 	/*if (p.IsKeyTrigger(KEY_INPUT_SPACE))
 	{
 		return std::make_unique<ResultScene>();
 	}*/
-
-	for (auto dbg : _objs)
-	{
-		if (dbg->GetDeath())
-		{
-			break;
-		}
-	}
-	
 
 	/// vectorの削除する範囲の指定
 	auto eraseBegin = remove_if(_objs.begin(),				// 開始位置
