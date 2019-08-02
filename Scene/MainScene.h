@@ -29,8 +29,8 @@ private:
 
 	/// 当たり判定の確認用
 	bool CheckCol(const shared_obj& obj);
-	bool PlayerCol(const shared_obj& player);
-	bool EnemyCol(const shared_obj& enemy);
+	bool PlayerCol(const shared_obj& player, const shared_itr& enBegin);
+	bool EnemyCol(const shared_obj& enemy, const shared_itr& enBegin);
 
 	// first : 移動幅, second : 速度
 	enTbl_pair _tblInfo;
