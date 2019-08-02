@@ -84,9 +84,10 @@ void Object::SetInvCnt(const int & leadCnt)
 	_invCnt = leadCnt;
 }
 
-void Object::ResetInvCnt()
+void Object::ResetAnim()
 {
 	_invCnt = 0;
+	_animID = 0;
 }
 
 bool Object::animKey(const ANIM key)

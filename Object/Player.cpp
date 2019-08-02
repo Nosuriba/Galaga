@@ -119,9 +119,20 @@ void Player::Update()
 		if (!_isAlive && animKey() != ANIM::DEATH)
 		{
 			animKey(ANIM::DEATH);
-			ResetInvCnt();
+			ResetAnim();
 		}
 		AnimUpdate(1);
+		/// 死亡した時、蘇生するようにしている
+		if (_isDeath)
+		{
+			/// 死亡した時、体力があるか確認して
+			/// あった時は、リスタートの情報を更新してから体力を
+			/// 減らす仕組みにすればいいのかな
+			animKey(ANIM::NORMAL);
+			ResetAnim();
+			_isAlive = true;
+			_isDeath = false;
+		}
 		return;
 	}
 	AnimUpdate(1);

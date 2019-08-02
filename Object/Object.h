@@ -65,7 +65,7 @@ protected:
 	bool DestryCheck();
 
 	void SetInvCnt(const int& leadCnt);
-	void ResetInvCnt();						// €–S‚É±ÆÒ°¼®İ‚ğØ¾¯Ä‚·‚é‚½‚ß‚Ì‚à‚Ì
+	void ResetAnim();						// €–S‚É±ÆÒ°¼®İ‚ğØ¾¯Ä‚·‚é‚½‚ß‚Ì‚à‚Ì
 
 	// key‚Ìó‘Ô‚ğ•ÏX‚µ‚Ä‚¢‚é
 	bool animKey(const ANIM key);

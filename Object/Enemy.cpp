@@ -227,7 +227,7 @@ void Enemy::Update()
 		if (!_isAlive && animKey() != ANIM::DEATH)
 		{
 			animKey(ANIM::DEATH);
-			ResetInvCnt();
+			ResetAnim();
 		}
 		AnimUpdate(1);
 		return;

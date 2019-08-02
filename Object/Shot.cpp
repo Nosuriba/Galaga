@@ -33,9 +33,7 @@ void Shot::Update()
 void Shot::Draw(const int& id)
 {
 	DrawGraph(_shot._pos.x, _shot._pos.y, IMAGE_ID("shot")[id], true);
-
 	_dbgDrawCircle(_shot._pos.x, _shot._pos.y, _shot._size.height / 2, 0xffffff, true);;
-
 }
 
 const Rect Shot::GetRect() const
