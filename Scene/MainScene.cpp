@@ -135,18 +135,21 @@ bool MainScene::PlayerCol(const shared_obj& player, const shared_itr& enBegin)
 	auto enemy = enBegin;
 	for (; enemy != _objs.end(); ++enemy)
 	{
+		/// “G‚Æ‚Ì“–‚½‚è”»’è
 		if (_col->IsCollision(player->GetRect(), (*enemy)->GetRect()))
 		{
 			return true;
 		}
 
+		/// “G‚Ì¼®¯Ä‚Æ‚Ì“–‚½‚è”»’è
 		for (auto& shot : (*enemy)->GetShot())
 		{
 			if (shot != nullptr)
 			{
-				if (_col->IsCollision(player->GetRect(), shot->GetRect()))
+				if (_col->IsCollision(player->GetRect(), shot->GetRect()) &&
+					player->IsAlive())
 				{
-					shot = nullptr;
+					(*enemy)->ShotDelete(shot);
 					return true;
 				}
 			}
@@ -160,13 +163,15 @@ bool MainScene::EnemyCol(const shared_obj& enemy, const shared_itr& enBegin)
 	auto player = _objs.begin();
 	for (; player != enBegin; ++player)
 	{
+		/// ÌßÚ²Ô°‚Ì¼®¯Ä‚Æ‚Ì“–‚½‚è”»’è
 		for (auto shot : (*player)->GetShot())
 		{
 			if (shot != nullptr)
 			{
-				if (_col->IsCollision(enemy->GetRect(), shot->GetRect()))
+				if (_col->IsCollision(enemy->GetRect(), shot->GetRect()) &&
+					enemy->IsAlive())
 				{
-					shot = nullptr;
+					(*player)->ShotDelete(shot);
 					return true;
 				}
 			}

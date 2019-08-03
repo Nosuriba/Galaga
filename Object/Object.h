@@ -50,10 +50,12 @@ public:
 
 	Rect GetRect() const;
 	shot_array GetShot() const;
+	void ShotDelete(const shared_shot& shot);
 
 	//	“G‚ÌˆÚ“®î•ñ‚ğŒp³‚ÌŒp³æ‚Åİ’è‚µ‚Ä‚¢‚é
 	virtual void SetMoveInfo(const Vector2d& sigEnd);
 
+	bool IsAlive() const;
 	void ChangeAlive();			// €–Só‘Ô‚É•ÏX‚·‚é
 	bool GetDeath() const;
 

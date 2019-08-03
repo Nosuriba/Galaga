@@ -40,9 +40,25 @@ shot_array Object::GetShot() const
 	return _shots;
 }
 
+void Object::ShotDelete(const shared_shot & shot)
+{
+	for (auto& s : _shots)
+	{
+		if (s != nullptr && s == shot)
+		{
+			s = nullptr;
+		}
+	}
+}
+
 void Object::SetMoveInfo(const Vector2d& sigEnd)
 {
 	/// ‰½‚à‚µ‚È‚¢
+}
+
+bool Object::IsAlive() const
+{
+	return _isAlive;
 }
 
 void Object::ChangeAlive()
