@@ -16,7 +16,6 @@
 
 MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 {
-	_col = std::make_unique<Collision>();
 	/// 敵のﾃｰﾌﾞﾙを生成している
 	_enTblInfo.reserve(_enMax.x * _enMax.y);
 	for (int i = 0; i < (_enMax.x * _enMax.y); ++i)
@@ -36,7 +35,6 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 	_enTblInfo[29] = 1;
 
 	_enCnt = 10;
-
 	ResetTbl();
 
 	/// 左端
@@ -50,6 +48,8 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 	_initPos[5] = Vector2(LpGame.gameScreenSize.x,
 						  LpGame.gameScreenSize.y - _charSize.height * 2);
 	Init();
+
+	_col = std::make_unique<Collision>();
 }
 
 MainScene::~MainScene()
@@ -191,7 +191,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	/// 敵の生成(仮で生成している)
 	if (_dbgKey && !_dbgKeyOld)
 	{
-		for (int cnt = 0; cnt < 1;)
+		for (int cnt = 0; cnt < 8;)
 		{
 			/// 出現している敵が最大数を超えている時、処理を抜ける
  			if (_enCnt >= (_enMax.x * _enMax.y))
@@ -230,25 +230,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	auto player = _objs.begin();
 	auto enemy  = enBegin;
 
-	/// 最初に登録された敵のみ情報を更新する処理
-	for (; enemy != _objs.end(); ++enemy)
-	{
-		if ((*enemy)->IsMoveTbl())
-		{
-			_tblInfo.second = (_tblInfo.second == 0 ? 1 : _tblInfo.second);
-			TblMoveUpdate();
-			/// ﾃｰﾌﾞﾙ制御の座標更新
-			for (auto& tPos : _tblCtlPos)
-			{
-				tPos.x += _tblInfo.second;
-			}
-		}
-		(*enemy)->LeadAnimUpdate();
-		(*enemy)->SetMoveTbl(_tblInfo);
-		break;
-	}
-
-	/// 行動中の敵が一定数いる時、処理をはじくようにしている
+	_isTable = (_enCnt >= (_enMax.x * _enMax.y));
 	if (_enCnt >= (_enMax.x * _enMax.y))
 	{
 		Vector2d pPos;
@@ -258,13 +240,49 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 			if ((*enemy)->IsMoveTbl())
 			{
 				auto isAction = (rand() % 20 == 0);
-				if (isAction)
+				if (isAction && _tblInfo.second == 0)
 				{
-					(*enemy)->SetMoveInfo(pPos);
+					(*enemy)->SetSigEnd(pPos);
 				}
+			}
+			else
+			{
+				_isTable = false;
 			}
 		}
 	}
+
+	/// 最初に登録された敵のみ情報を更新する処理
+	enemy = enBegin;
+	for (; enemy != _objs.end(); ++enemy)
+	{
+		if ((*enemy)->IsMoveTbl())
+		{
+			_tblInfo.second = (_tblInfo.second == 0 ? 1 : _tblInfo.second);
+			if (!_isTable)
+			{
+				_tblInfo.second = (_tblInfo.second == 0 ? 1 : _tblInfo.second);
+			}
+			else
+			{
+				/// 全員配置された後、真ん中に到着したとき横移動を止めている
+				_tblInfo.second = (_tblInfo.first == 0 ? 0 : _tblInfo.second);
+			}
+			
+			TblMoveUpdate();
+			/// ﾃｰﾌﾞﾙ制御の座標更新
+			for (auto& tPos : _tblCtlPos)
+			{
+				tPos.x += _tblInfo.second;
+			}
+		}
+		(*enemy)->LeadAnimUpdate();
+		(*enemy)->SetTblInfo(_tblInfo);
+		break;
+	}
+	
+
+
 
 	/// 敵とﾌﾟﾚｲﾔｰの更新
 	for (auto obj : _objs)

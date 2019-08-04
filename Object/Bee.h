@@ -10,7 +10,7 @@ public:
 	~Bee();
 	int MoveUpdate() override;
 
-	void SetMoveInfo(const Vector2d& sigEnd) override;
+	void SetSigEnd(const Vector2d& sigEnd) override;
 	
 private:
 	void Init(EN_TYPE type);

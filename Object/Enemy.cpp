@@ -14,6 +14,7 @@ Enemy::Enemy() : _sigMax(10), _distance(30)
 	_moveList.emplace_back(&Enemy::Target);
 
 	_sigAdd = 0.3;
+	_spMag = 0;
 
 	Wait();
 }
@@ -103,11 +104,6 @@ int Enemy::Target()
 	return 0;
 }
 
-//void Enemy::SetTarget(const Vector2d & sigEnd)
-//{
-//	_sigEnd = sigEnd;
-//}
-
 int Enemy::Move()
 {
 	/// 行動中の敵がいないときは、ｶｳﾝﾄを変動しないようにしている
@@ -123,6 +119,16 @@ int Enemy::Move()
 	SetInvCnt(_leadCnt);
 	_updater = &Enemy::MoveUpdate;
 
+	return 0;
+}
+
+int Enemy::Spread()
+{
+	_spLength = _pos - Vector2d(LpGame.gameScreenSize.x / 2, 1);
+	_spMag = 1.0;
+	_spVel = 0.002;
+
+	_updater = &Enemy::SpreadUpdate;
 	return 0;
 }
 
@@ -217,6 +223,24 @@ int Enemy::TargetUpdate()
 			Move();
 		}
 	}
+	return 0;
+}
+
+int Enemy::SpreadUpdate()
+{
+	AnimUpdate(1);
+	_pos = (_spLength * _spMag) + Vector2d(LpGame.gameScreenSize.x / 2, 1);
+
+	_spMag += _spVel;
+	if (_spVel <= 0)
+	{
+		_spVel = (_spMag <= 1.0 ? -_spVel : _spVel);
+	}
+	else
+	{
+		_spVel = (_spMag >= 1.24 ? -_spVel : _spVel);
+	}
+
 	return 0;
 }
 

@@ -126,7 +126,7 @@ void Player::Update()
 		if (_isDeath)
 		{
 			/// 死亡した時、体力があるか確認して
-			/// あった時は、リスタートの情報を更新してから体力を
+
 			/// 減らす仕組みにすればいいのかな
 			animKey(ANIM::NORMAL);
 			ResetAnim();
@@ -139,17 +139,8 @@ void Player::Update()
 	_input->Update();
 	(this->*_updater)();
 	
-
-	/// 仮の死亡処理
-	/*if (_input->IsTrigger(INPUT_ID::BTN_1))
-	{
-		animKey(ANIM::DEATH);
-		_isAlive = false;
-		ResetInvCnt();
-	}*/
 	auto center = Vector2(_pos.x + _size.width / 2, _pos.y + _size.height / 2);
 	_rect	    = Rect(center, _size);
-
 
 	/// ｼｮｯﾄに関する処理
 	for (auto& shot : _shots)

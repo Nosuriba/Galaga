@@ -51,7 +51,7 @@ void Object::ShotDelete(const shared_shot & shot)
 	}
 }
 
-void Object::SetMoveInfo(const Vector2d& sigEnd)
+void Object::SetSigEnd(const Vector2d& sigEnd)
 {
 	/// 何もしない
 }
@@ -167,7 +167,7 @@ bool Object::IsMoveTbl() const
 	return _isTable;
 }
 
-void Object::SetMoveTbl(const enTbl_pair& tblInfo)
+void Object::SetTblInfo(const enTbl_pair& tblInfo)
 {
 	/// 最初の敵がﾃｰﾌﾞﾙに配置された時、情報を更新する
 	if (_isTable)

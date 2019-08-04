@@ -53,21 +53,21 @@ public:
 	int Rotation();
 	int Target();
 
-	//static void SetTarget(const Vector2d& sigEnd);
-
 	const OBJ GetObjID() const override;
-	virtual void SetMoveInfo(const Vector2d& sigEnd) override = 0;
+	virtual void SetSigEnd(const Vector2d& sigEnd) override = 0;
 
 protected:
 	/// 各行動の初期化
 	int Wait();
 	int Move();
+	int Spread();
 
 	/// 各行動の更新
 	int WaitUpdate();
 	int SigmoidUpdate();
 	int RotationUpdate();
 	int TargetUpdate();
+	int SpreadUpdate();						//// 敵が全員出現したときに拡大縮小するような挙動にする
 	virtual int MoveUpdate() = 0;
 
 	void SetSigAdd(const double& sigAdd);	// ｼｸﾞﾓｲﾄﾞに加算する値の変更用
@@ -79,11 +79,15 @@ protected:
 	Vector2d _aimPos;		// 目標座標
 	Vector2d _sigRange;		// ｼｸﾞﾓｲﾄﾞの移動幅
 
+	Vector2d _spLength;		// 広がる範囲
+
 	int _waitTime;			// 敵が移動する前の待機時間
 	int _waitAction;		// 敵が行動するまでの待機時間
 
 	double _sigAdd;			// ｼｸﾞﾓｲﾄﾞのｶｳﾝﾄ加算用
 	double _gain;			// ｼｸﾞﾓｲﾄﾞのｸﾞﾗﾌ制御用
+	double _spMag;			// 広がる倍率
+	double _spVel;			// 広がる速度
 
 	static int _actionCnt;		// 行動中の敵の数
 private:
@@ -100,7 +104,5 @@ private:
 	double _sigCnt;			// ｼｸﾞﾓｲﾄﾞの値
 	const double _sigMax;
 	const double _distance;
-
-	
 };
 

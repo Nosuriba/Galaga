@@ -45,10 +45,11 @@ private:
 	int _ghGameScreen;		// ¹Ş°Ñ½¸Ø°İ‚Ì‰æ‘œÊİÄŞÙ
 	int _enCnt;				// oŒ»‚µ‚Ä‚¢‚é“G‚Ì¶³İÄ
 
+	bool _isTable;
+
 	/// ÃŞÊŞ¯¸Ş—p‚È‚Ì‚ÅAŒã‚ÅÁ‚·
 	char _dbgKey;
 	char _dbgKeyOld;
-
 	
 	const Size _charSize;
 	const Vector2 _enMax;					// “G‚ÌÅ‘å”

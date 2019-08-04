@@ -57,13 +57,18 @@ int Butterfly::MoveUpdate()
 	_pos.x += _moveTblInfo.second;
 	_sigBegin = _pos;
 
+	if (_moveTblInfo.second == 0)
+	{
+		Spread();
+	}
+
 	/// ‰ñ“], ¼¸ÞÓ²ÄÞ, –Ú•W’n“_, 
 	return 0;
 }
 
-void Butterfly::SetMoveInfo(const Vector2d& sigEnd)
+void Butterfly::SetSigEnd(const Vector2d& sigEnd)
 {
-	if (_moveList.size() == 0 && _actionCnt < 2)
+	/*if (_moveList.size() == 0 && _actionCnt < 2)
 	{
  		++_actionCnt;
 		_sigEnd = sigEnd;
@@ -72,6 +77,6 @@ void Butterfly::SetMoveInfo(const Vector2d& sigEnd)
 		Rotation();
 		_moveList.emplace_back(&Enemy::Sigmoid);
 		_moveList.emplace_back(&Enemy::Target);
-	}
+	}*/
 }
 

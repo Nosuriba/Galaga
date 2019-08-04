@@ -45,7 +45,7 @@ public:
 	// æ“ª‚É“o˜^‚³‚ê‚½“G‚Ì±ÆÒ°¼®İXV
 	void LeadAnimUpdate();
 	bool IsMoveTbl() const;
-	void SetMoveTbl(const enTbl_pair& tblInfo);
+	void SetTblInfo(const enTbl_pair& tblInfo);
 	int GetEnemyNum() const;
 
 	Rect GetRect() const;
@@ -53,7 +53,7 @@ public:
 	void ShotDelete(const shared_shot& shot);
 
 	//	“G‚ÌˆÚ“®î•ñ‚ğŒp³‚ÌŒp³æ‚Åİ’è‚µ‚Ä‚¢‚é
-	virtual void SetMoveInfo(const Vector2d& sigEnd);
+	virtual void SetSigEnd(const Vector2d& sigEnd);
 
 	bool IsAlive() const;
 	void ChangeAlive();			// €–Só‘Ô‚É•ÏX‚·‚é

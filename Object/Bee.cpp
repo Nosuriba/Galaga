@@ -56,12 +56,17 @@ int Bee::MoveUpdate()
 	AnimUpdate(1);
 	_pos.x += _moveTblInfo.second;
 	_sigBegin = _pos;
+
+	if (_moveTblInfo.second == 0)
+	{
+		Spread();
+	}
 	return 0;
 }
 
-void Bee::SetMoveInfo(const Vector2d& sigEnd)
+void Bee::SetSigEnd(const Vector2d& sigEnd)
 {
-	if (_moveList.size() == 0 && _actionCnt < 2)
+	/*if (_moveList.size() == 0 && _actionCnt < 2)
 	{
  		++_actionCnt;
 		_sigEnd = sigEnd - Vector2d(0, _size.height * 2);
@@ -71,6 +76,6 @@ void Bee::SetMoveInfo(const Vector2d& sigEnd)
 		_moveList.emplace_back(&Enemy::Sigmoid);
 		_moveList.emplace_back(&Enemy::Rotation);
 		_moveList.emplace_back(&Enemy::Target);
-	}
+	}*/
 	
 }
