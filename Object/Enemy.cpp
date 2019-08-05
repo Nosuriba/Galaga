@@ -14,7 +14,7 @@ Enemy::Enemy() : _sigMax(10), _distance(30)
 	_moveList.emplace_back(&Enemy::Target);
 
 	_sigAdd = 0.3;
-	_spMag = 0;
+	_moveTblInfo.first = 1;
 
 	Wait();
 }
@@ -241,6 +241,20 @@ int Enemy::SpreadUpdate()
 		_spVel = (_spMag >= 1.24 ? -_spVel : _spVel);
 	}
 
+	return 0;
+}
+
+int Enemy::MoveUpdate()
+{
+	AnimUpdate(1);
+	_pos.x += _moveTblInfo.second;
+	_sigBegin = _pos;
+
+	if (_moveTblInfo.first == 0 &&
+		_moveTblInfo.second == 0)
+	{
+		Spread();
+	}
 	return 0;
 }
 

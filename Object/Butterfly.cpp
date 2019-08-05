@@ -50,22 +50,6 @@ void Butterfly::Init(EN_TYPE type)
 	SetAnim(ANIM::DEATH, data);
 }
 
-
-int Butterfly::MoveUpdate()
-{
-	AnimUpdate(1);
-	_pos.x += _moveTblInfo.second;
-	_sigBegin = _pos;
-
-	if (_moveTblInfo.second == 0)
-	{
-		Spread();
-	}
-
-	/// ‰ñ“], ¼¸ÞÓ²ÄÞ, –Ú•W’n“_, 
-	return 0;
-}
-
 void Butterfly::SetSigEnd(const Vector2d& sigEnd)
 {
 	/*if (_moveList.size() == 0 && _actionCnt < 2)

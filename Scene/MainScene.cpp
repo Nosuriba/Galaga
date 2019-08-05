@@ -35,7 +35,7 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 	_enTblInfo[29] = 1;
 
 	_enCnt = 10;
-	ResetTbl();
+	InitTbl();
 
 	/// ¶’[
 	_initPos[0] = Vector2(-_charSize.width, _charSize.height);
@@ -71,9 +71,9 @@ const SCN_ID MainScene::GetSceneID() const
 	return SCN_ID::MAIN;
 }
 
-void MainScene::ResetTbl()
+void MainScene::InitTbl()
 {
-	_tblInfo = { 0,0 };
+	_tblInfo = { 1,0 };
 
 	double posX, posY;
 	/// ¶‰º‚ÌÃ°ÌŞÙˆÊ’u‚ğ‹‚ß‚éŒvZ
@@ -84,6 +84,62 @@ void MainScene::ResetTbl()
 	/// ‰E‰º‚ÌÃ°ÌŞÙˆÊ’u‚ğ‹‚ß‚éŒvZ
 	posX = LpGame.gameScreenPos.x / 2 + _enMax.x * _charSize.width;
 	_tblCtlPos[1] = Vector2(posX, posY);
+}
+
+void MainScene::CreateEnemy(const shared_itr& enBegin)
+{
+	auto isCreate = enBegin == _objs.end();
+	auto enemy = enBegin;
+	for (; enemy != _objs.end(); ++enemy)
+	{
+		if ((*enemy)->IsMoveTbl())
+		{
+			isCreate = true;
+		}
+		else
+		{
+			isCreate = false;
+			break;
+		}
+	}
+	
+	/// “G‚Ì¶¬(‰¼‚Å¶¬‚µ‚Ä‚¢‚é)
+	if (isCreate)
+	{
+		auto randNum = rand();
+		auto debugPos = Vector2d(200 + (rand() % 10 * 10), 250);
+		for (int cnt = 0; cnt < 8;)
+		{
+			/// oŒ»‚µ‚Ä‚¢‚é“G‚ªÅ‘å”‚ğ’´‚¦‚Ä‚¢‚éAˆ—‚ğ”²‚¯‚é
+			if (_enCnt >= (_enMax.x * _enMax.y))
+			{
+				break;
+			}
+			auto num = rand() % (_enMax.x * _enMax.y);
+			if (!_enTblInfo[num])
+			{
+				/// “G‚Ìî•ñİ’è
+				auto aimPos = Vector2d(LpGame.gameScreenPos.x / 2 + ((num % _enMax.x) + 1) * _charSize.width,
+									   LpGame.gameScreenPos.y / 2 + ((num / _enMax.x) - 1) * _charSize.height);
+
+				/// “G‚Ì¶¬
+				auto line = num / _enMax.x;
+				EnemyState state = { _initPos[randNum % 6], _charSize,
+									 EN_TYPE::NORMAL, num, 10 * cnt, debugPos, aimPos };
+
+				AddEnemy(line, state);
+				++cnt;
+				++_enCnt;
+				_enTblInfo[num] = 1;
+			}
+		}
+
+		/// “G‚ğ––”ö‚É¿°Ä‚µ‚Ä‚¢‚é
+		std::sort(_objs.begin(),
+				  _objs.end(),
+				  [](shared_obj& obj, shared_obj& obj2) { return (*obj).GetObjID() > (*obj2).GetObjID(); });
+	}
+
 }
 
 void MainScene::AddEnemy(const int & line, const EnemyState & state)
@@ -182,62 +238,31 @@ bool MainScene::EnemyCol(const shared_obj& enemy, const shared_itr& enBegin)
 
 unique_scene MainScene::Update(unique_scene scene, const Input & p)
 {
-	/// “G‚ğ‰¼¶¬‚·‚é‚½‚ß‚Ìİ’è
-	_dbgKeyOld = _dbgKey;
-	_dbgKey    = CheckHitKey(KEY_INPUT_SPACE);
-
-	auto randNum = rand();
-
-	/// “G‚Ì¶¬(‰¼‚Å¶¬‚µ‚Ä‚¢‚é)
-	if (_dbgKey && !_dbgKeyOld)
-	{
-		for (int cnt = 0; cnt < 8;)
-		{
-			/// oŒ»‚µ‚Ä‚¢‚é“G‚ªÅ‘å”‚ğ’´‚¦‚Ä‚¢‚éAˆ—‚ğ”²‚¯‚é
- 			if (_enCnt >= (_enMax.x * _enMax.y))
-			{
-				break;
-			}
-			auto num = rand() % (_enMax.x * _enMax.y);
-			if (!_enTblInfo[num])
-			{
-				/// “G‚Ìî•ñİ’è
-				auto aimPos = Vector2d(LpGame.gameScreenPos.x / 2 + ((num % _enMax.x) + 1) * _charSize.width,
-									   LpGame.gameScreenPos.y / 2 + ((num / _enMax.x) - 1) * _charSize.height);
-				
-				/// “G‚Ì¶¬
-				auto line = num / _enMax.x;
-				auto debugPos = Vector2d(200, 250);
-				EnemyState state = { _initPos[randNum % 6], _charSize, 
-									 EN_TYPE::NORMAL, num, 10 * cnt, debugPos, aimPos};
-				
-				AddEnemy(line, state);
-				++cnt;
-				++_enCnt;
-				_enTblInfo[num] = 1;
-			}
-		}
-	}
-
-	/// “G‚ğ––”ö‚É¿°Ä‚µ‚Ä‚¢‚é
-	std::sort(_objs.begin(), _objs.end(),
-		[](shared_obj& obj, shared_obj& obj2) { return (*obj).GetObjID() > (*obj2).GetObjID(); });
-
+	
 	/// “G‚Ìæ“ªˆÊ’u‚ğæ“¾‚µ‚Ä‚¢‚é
-	auto enBegin = std::find_if(_objs.begin(), _objs.end(),
-		[](shared_obj& obj) {return (*obj).GetObjID() == OBJ::ENEMY; });
+	auto enBegin = std::find_if(_objs.begin(),
+								_objs.end(),
+								[](shared_obj& obj) {return (*obj).GetObjID() == OBJ::ENEMY; });
 
 	auto player = _objs.begin();
 	auto enemy  = enBegin;
 
-	_isTable = (_enCnt >= (_enMax.x * _enMax.y));
+	CreateEnemy(enBegin);
+
+	/// “G‚Ìæ“ªˆÊ’u‚ğæ“¾‚µ‚Ä‚¢‚é
+	enBegin = std::find_if(_objs.begin(),
+						   _objs.end(),
+						   [](shared_obj& obj) {return (*obj).GetObjID() == OBJ::ENEMY; });
+
+
 	if (_enCnt >= (_enMax.x * _enMax.y))
 	{
+		_isTable = true;
 		Vector2d pPos;
-		pPos = (*player)->GetPos();
+  		pPos = (*player)->GetPos();
 		for (; enemy != _objs.end(); ++enemy)
 		{
-			if ((*enemy)->IsMoveTbl())
+ 			if ((*enemy)->IsMoveTbl())
 			{
 				auto isAction = (rand() % 20 == 0);
 				if (isAction && _tblInfo.second == 0)
@@ -258,17 +283,6 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	{
 		if ((*enemy)->IsMoveTbl())
 		{
-			_tblInfo.second = (_tblInfo.second == 0 ? 1 : _tblInfo.second);
-			if (!_isTable)
-			{
-				_tblInfo.second = (_tblInfo.second == 0 ? 1 : _tblInfo.second);
-			}
-			else
-			{
-				/// ‘Sˆõ”z’u‚³‚ê‚½ŒãA^‚ñ’†‚É“’…‚µ‚½‚Æ‚«‰¡ˆÚ“®‚ğ~‚ß‚Ä‚¢‚é
-				_tblInfo.second = (_tblInfo.first == 0 ? 0 : _tblInfo.second);
-			}
-			
 			TblMoveUpdate();
 			/// Ã°ÌŞÙ§Œä‚ÌÀ•WXV
 			for (auto& tPos : _tblCtlPos)
@@ -280,9 +294,16 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		(*enemy)->SetTblInfo(_tblInfo);
 		break;
 	}
-	
 
-
+	if (!_isTable)
+	{
+		_tblInfo.second = (_tblInfo.second == 0 ? 1 : _tblInfo.second);
+	}
+	else
+	{
+		/// ‘Sˆõ”z’u‚³‚ê‚½ŒãA^‚ñ’†‚É“’…‚µ‚½‚Æ‚«‰¡ˆÚ“®‚ğ~‚ß‚Ä‚¢‚é
+		_tblInfo.second = (_tblInfo.first == 0 ? 0 : _tblInfo.second);
+	}
 
 	/// “G‚ÆÌßÚ²Ô°‚ÌXV
 	for (auto obj : _objs)
@@ -308,15 +329,6 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		{
 			(*enemy)->ChangeAlive();
 		}
-	}
-
-	/// Ã°ÌŞÙ§Œä‚ÌÃŞÊŞ¯¸Ş•`‰æ
-	for (auto& tPos : _tblCtlPos)
-	{
- 		_dbgDrawBox(tPos.x - _charSize.width / 2, tPos.y - _charSize.height / 2,
-					tPos.x + _charSize.width / 2, tPos.y + _charSize.height / 2,
-					0xffff00, true);
-		_dbgDrawFormatString(0, 0, 0xffffff, "ˆÚ“®• : %d", _tblInfo.first);
 	}
 
 	/// ¹Ş°Ñ½¸Ø°İã‚Ì•`‰æ

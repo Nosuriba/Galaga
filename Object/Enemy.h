@@ -68,7 +68,7 @@ protected:
 	int RotationUpdate();
 	int TargetUpdate();
 	int SpreadUpdate();						//// 敵が全員出現したときに拡大縮小するような挙動にする
-	virtual int MoveUpdate() = 0;
+	int MoveUpdate();
 
 	void SetSigAdd(const double& sigAdd);	// ｼｸﾞﾓｲﾄﾞに加算する値の変更用
 

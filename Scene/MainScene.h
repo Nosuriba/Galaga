@@ -23,7 +23,8 @@ public:
 private:
 
 	// 敵の情報を再設定するもの
-	void ResetTbl();
+	void InitTbl();
+	void CreateEnemy(const shared_itr& enBegin);
 	void AddEnemy(const int& line, const EnemyState& state);
 	void TblMoveUpdate();	// ﾃｰﾌﾞﾙ更新用
 
@@ -41,16 +42,11 @@ private:
 	std::array<Vector2, 2> _tblCtlPos;		// ﾃｰﾌﾞﾙ移動制御用の座標
 	std::array<Vector2, 6> _initPos;		// 敵の初期座標
 
-
 	int _ghGameScreen;		// ｹﾞｰﾑｽｸﾘｰﾝの画像ﾊﾝﾄﾞﾙ
 	int _enCnt;				// 出現している敵のｶｳﾝﾄ
 
 	bool _isTable;
 
-	/// ﾃﾞﾊﾞｯｸﾞ用なので、後で消す
-	char _dbgKey;
-	char _dbgKeyOld;
-	
 	const Size _charSize;
 	const Vector2 _enMax;					// 敵の最大数
 };

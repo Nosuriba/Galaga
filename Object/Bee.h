@@ -8,7 +8,6 @@ public:
 	Bee();
 	Bee(const EnemyState& state);
 	~Bee();
-	int MoveUpdate() override;
 
 	void SetSigEnd(const Vector2d& sigEnd) override;
 	
