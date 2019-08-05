@@ -74,7 +74,7 @@ void Butterfly::SetSigEnd(const Vector2d& sigEnd)
 	{
  		++_actionCnt;
 		_sigEnd = sigEnd + Vector2d(0, _size.height * 2);
-		_gain = 0.3;
+		_gain = 1.2;
 		_sigAdd = 0.2;
 		Rotation();
 		_isAction = true;

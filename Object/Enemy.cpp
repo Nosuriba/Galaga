@@ -313,6 +313,8 @@ void Enemy::Update()
 		}
 	}
 
+
+
 	_pos += _vel;
 
 	auto center = Vector2(_pos.x + _size.width / 2, _pos.y + _size.height / 2);
