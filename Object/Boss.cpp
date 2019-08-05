@@ -57,7 +57,7 @@ void Boss::SetSigEnd(const Vector2d& sigEnd)
 	{
 		++_actionCnt;
 		_sigEnd = sigEnd;
-		_gain = 0.5;
+		_gain = 0.3;
 		_sigAdd = 0.2;
 		Rotation();
 		_isAction = true;

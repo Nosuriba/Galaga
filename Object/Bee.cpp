@@ -57,7 +57,7 @@ void Bee::SetSigEnd(const Vector2d& sigEnd)
  		++_actionCnt;
 		_sigEnd = sigEnd - Vector2d(0, _size.height * 2);
 		Rotation();
-		_gain = 0.5;
+		_gain = 0.3;
 		_sigAdd = 0.2;
 		_isAction = true;
 		_moveList.emplace_back(&Enemy::Sigmoid);

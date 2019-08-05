@@ -29,6 +29,23 @@ Butterfly::~Butterfly()
 	TRACE("Butterfly Die!! \n");
 }
 
+int Butterfly::Target()
+{
+	if (_isTable)
+	{
+		_pos = Vector2d(LpGame.gameScreenSize.x / 2 + _spLength.x, -_size.height * 3);
+	}
+
+	CalRad(_pos, _aimPos + Vector2d(_moveTblInfo.first, 0), 90);
+	auto theta = atan2(_aimPos.y - _pos.y, _aimPos.x - _pos.x);
+	auto cost = cos(theta);
+	auto sint = sin(theta);
+	_vel	  = Vector2d(3 * cost, 3 * sint);
+	_updater = &Enemy::TargetUpdate;
+
+	return 0;
+}
+
 void Butterfly::Init(EN_TYPE type)
 {
 	anim_vec data;
@@ -56,8 +73,8 @@ void Butterfly::SetSigEnd(const Vector2d& sigEnd)
 		_spVel != 0)
 	{
  		++_actionCnt;
-		_sigEnd = sigEnd;
-		_gain = 0.5;
+		_sigEnd = sigEnd + Vector2d(0, _size.height * 2);
+		_gain = 0.3;
 		_sigAdd = 0.2;
 		Rotation();
 		_isAction = true;

@@ -57,7 +57,7 @@ void Enemy::MakeRotaInfo()
 	_rotCenter = _pos + Vector2d(0, _distance * _rotDir.y);
 
 	auto theta = atan2(_pos.y - _rotCenter.y, _pos.x - _rotCenter.x);
-	_angle = theta * (180 / DX_PI);
+	_angle	= theta * (180 / DX_PI);
 	_rotAngle = 0;
 }
 
@@ -162,8 +162,17 @@ int Enemy::SigmoidUpdate()
 	}
 
 	auto sigmoid = [](const double& x, const double& gain){ return 1.0 / (1.0 + exp(-gain * x));};
-	double X = (_sigCnt + _sigMax) / (_sigMax * 2);
-	double Y = sigmoid(_sigCnt, _gain);
+	double X, Y;
+	if (_isTable)
+	{
+		X = sigmoid(_sigCnt, _gain);
+		Y = (_sigCnt + _sigMax) / (_sigMax * 2);
+	}
+	else
+	{
+		X = (_sigCnt + _sigMax) / (_sigMax * 2);
+		Y = sigmoid(_sigCnt, _gain);
+	}
 
 	/// 敵の移動(移動する幅のXとYをグラフに変換して移動させている)
 	_pos.x = X * _sigRange.x + _sigBegin.x;

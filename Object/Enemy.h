@@ -50,7 +50,8 @@ public:
 	/// 関数ﾎﾟｲﾝﾀのｱﾄﾞﾚｽを取得するため、publicに移動した
 	int Sigmoid();
 	int Rotation();
-	int Target();
+	virtual int Target();
+	int TargetUpdate();
 
 	const OBJ GetObjID() const override;
 	virtual void SetSigEnd(const Vector2d& sigEnd) override = 0;
@@ -63,13 +64,13 @@ protected:
 
 	/// 各行動の更新
 	int WaitUpdate();
-	int SigmoidUpdate();
+	virtual int SigmoidUpdate();
 	int RotationUpdate();
-	int TargetUpdate();
 	int SpreadUpdate();						//// 敵が全員出現したときに拡大縮小するような挙動にする
 	int MoveUpdate();
 
 	void SetSigAdd(const double& sigAdd);	// ｼｸﾞﾓｲﾄﾞに加算する値の変更用
+	void CalRad(const Vector2d& sPos, const Vector2d& ePos, const double& angle);
 
 	std::list<int(Enemy::*)()> _moveList;	// 移動状態の保存用
 	int (Enemy::*_updater)();
@@ -94,7 +95,7 @@ protected:
 	static int _actionCnt;		// 行動中の敵の数
 private:
 	bool ChangeMove();			// 移動状態の変更
-	void CalRad(const Vector2d& sPos, const Vector2d& ePos, const double& angle);
+
 	void MakeRotaInfo();		// 回転するための情報を生成している
 
 	Vector2  _rotDir;
