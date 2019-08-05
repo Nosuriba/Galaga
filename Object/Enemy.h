@@ -60,51 +60,50 @@ protected:
 	/// 各行動の初期化
 	int Wait();
 	int Move();
-	int Spread();
+	int Scaling();
 
 	/// 各行動の更新
 	int WaitUpdate();
 	virtual int SigmoidUpdate();
 	int RotationUpdate();
-	int SpreadUpdate();						//// 敵が全員出現したときに拡大縮小するような挙動にする
+	int ScalingUpdate();						
 	int MoveUpdate();
 
-	void SetSigAdd(const double& sigAdd);	// ｼｸﾞﾓｲﾄﾞに加算する値の変更用
 	void CalRad(const Vector2d& sPos, const Vector2d& ePos, const double& angle);
 
 	std::list<int(Enemy::*)()> _moveList;	// 移動状態の保存用
 	int (Enemy::*_updater)();
 
-	/// protectedに必要のないものは、privateに移動しておく
 	Vector2d _aimPos;		// 目標座標
-	Vector2d _sigRange;		// ｼｸﾞﾓｲﾄﾞの移動幅
+	Vector2d _sigRange;		
 
-	Vector2d _spLength;		// 広がる範囲
-	Vector2d _spDistance;	// 広がる距離
+	/// 拡縮の移動で使用するもの
+	Vector2d _spLength;		
+	Vector2d _spDistance;	
 
 	int _waitTime;			// 敵が移動する前の待機時間
-	int _waitAction;		// 敵が行動するまでの待機時間
+	int _shotWait;
 
 	bool _isAction;
 
 	double _sigAdd;			// ｼｸﾞﾓｲﾄﾞのｶｳﾝﾄ加算用
-	double _gain;			// ｼｸﾞﾓｲﾄﾞのｸﾞﾗﾌ制御用
-	double _spMag;			// 広がる倍率
-	double _spVel;			// 広がる速度
+	double _gain;			
+	double _spMag;			
+	double _spVel;			
 
-	static int _actionCnt;		// 行動中の敵の数
+	static int _actionCnt;		
 private:
-	bool ChangeMove();			// 移動状態の変更
+	bool ChangeMove();
 
-	void MakeRotaInfo();		// 回転するための情報を生成している
+	void MakeRotaInfo();		
 
 	Vector2  _rotDir;
-	Vector2d _rotCenter;	// 回転するときの中心点
+	Vector2d _rotCenter;	
 
 	int _angle;
 	int _rotAngle;			// 回転した角度
 
-	double _sigCnt;			// ｼｸﾞﾓｲﾄﾞの値
+	double _sigCnt;			
 	const double _sigMax;
 	const double _distance;
 };

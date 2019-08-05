@@ -73,6 +73,7 @@ void Boss::SetSigEnd(const Vector2d& sigEnd)
 		_spVel != 0)
 	{
 		++_actionCnt;
+		_shotWait = 60;
 		_sigEnd = sigEnd + Vector2d(0, _size.height * 2);
 		_gain	= 1.2;
 		_sigAdd = 0.2;

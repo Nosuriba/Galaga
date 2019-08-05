@@ -1,6 +1,7 @@
 ﻿#include <DxLib.h>
 #include <stdlib.h>
 #include "Enemy.h"
+#include "Shot.h"
 #include "../DebugDisp.h"
 #include "../DebugConOut.h"
 
@@ -28,12 +29,6 @@ Enemy::~Enemy()
 	_moveTblInfo = { 0,0 };
 	_actionCnt -= (_isAction ? 1 : 0);
 }
-
-void Enemy::SetSigAdd(const double & sigAdd)
-{
-	_sigAdd = sigAdd;
-}
-
 bool Enemy::ChangeMove()
 {
 	if (_moveList.size() > 0)
@@ -113,8 +108,6 @@ int Enemy::Move()
 	{
 		_actionCnt -= (_actionCnt == 0 ? 0 : 1);
 	}
-	
-	_waitAction = 60;		/// 行動待機時間の仮設定
 	_isTable = true;
 	_rad = 0;
 	/// 先頭のｱﾆﾒｰｼｮﾝｶｳﾝﾄを渡している
@@ -124,7 +117,7 @@ int Enemy::Move()
 	return 0;
 }
 
-int Enemy::Spread()
+int Enemy::Scaling()
 {
 	_spDistance = (_spDistance == Vector2d() ? _pos - Vector2d(LpGame.gameScreenSize.x / 2, 1) 
 											 : _spDistance);
@@ -132,7 +125,7 @@ int Enemy::Spread()
 	_spVel		= (_spVel == 0 ? 0.002 : _spVel);
 	_spLength = _spDistance * _spMag;
 
-	_updater = &Enemy::SpreadUpdate;
+	_updater = &Enemy::ScalingUpdate;
 	return 0;
 }
 
@@ -165,8 +158,24 @@ int Enemy::SigmoidUpdate()
 	double X, Y;
 	if (_isTable)
 	{
+		if (_shotWait % 30 == 0 && _shotWait >= 0)
+		{
+			for (int i = 0; i < _shots.size(); ++i)
+			{
+				if (_shots[i] == nullptr)
+				{
+					auto theta = atan2(_sigEnd.y - _pos.y, _sigEnd.x - _pos.x );
+					auto cost = cos(theta);
+					auto sint = sin(theta);
+
+					_shots[i] = std::make_shared<Shot>(_pos, Vector2d(4 * cost, 4 * sint));
+					break;
+				}
+			}
+		}
 		X = sigmoid(_sigCnt, _gain);
 		Y = (_sigCnt + _sigMax) / (_sigMax * 2);
+		--_shotWait;
 	}
 	else
 	{
@@ -262,7 +271,7 @@ int Enemy::TargetUpdate()
 	return 0;
 }
 
-int Enemy::SpreadUpdate()
+int Enemy::ScalingUpdate()
 {
 	AnimUpdate(1);
 	_pos = _spLength + Vector2d(LpGame.gameScreenSize.x / 2, 1);
@@ -278,7 +287,7 @@ int Enemy::MoveUpdate()
 	if (_moveTblInfo.first == 0 &&
 		_moveTblInfo.second == 0)
 	{
-		Spread();
+		Scaling();
 	}
 	return 0;
 }
@@ -297,6 +306,20 @@ void Enemy::Update()
 	}
 	(this->*_updater)();
 
+	/// ｼｮｯﾄに関する処理
+	for (auto& shot : _shots)
+	{
+		if (shot != nullptr)
+		{
+			if (shot->IsOutScreen())
+			{
+				shot = nullptr;
+				continue;
+			}
+			shot->Update();
+		}
+	}
+
 	/// 拡縮の情報を更新
 	if (_moveTblInfo.first == 0 &&
 		_moveTblInfo.second == 0)
@@ -312,9 +335,6 @@ void Enemy::Update()
 			_spVel = (_spMag >= 1.24 ? -_spVel : _spVel);
 		}
 	}
-
-
-
 	_pos += _vel;
 
 	auto center = Vector2(_pos.x + _size.width / 2, _pos.y + _size.height / 2);
