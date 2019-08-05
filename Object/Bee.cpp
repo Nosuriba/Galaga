@@ -19,8 +19,6 @@ Bee::Bee(const EnemyState & state)
 	_waitTime = std::get<static_cast<int>(EN_STATE::WAIT)>(state);
 
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
-
-	_enNum = std::get<static_cast<int>(EN_STATE::NUM)>(state);
 	animKey(ANIM::NORMAL);
 
 }
@@ -52,16 +50,19 @@ void Bee::Init(EN_TYPE type)
 
 void Bee::SetSigEnd(const Vector2d& sigEnd)
 {
-	/*if (_moveList.size() == 0 && _actionCnt < 2)
+	if (_moveList.size() == 0 &&
+		_actionCnt < 2 &&
+		_spVel != 0)
 	{
  		++_actionCnt;
 		_sigEnd = sigEnd - Vector2d(0, _size.height * 2);
 		Rotation();
 		_gain = 0.5;
 		_sigAdd = 0.2;
+		_isAction = true;
 		_moveList.emplace_back(&Enemy::Sigmoid);
 		_moveList.emplace_back(&Enemy::Rotation);
 		_moveList.emplace_back(&Enemy::Target);
-	}*/
+	}
 	
 }

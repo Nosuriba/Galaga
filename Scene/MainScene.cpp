@@ -125,7 +125,7 @@ void MainScene::CreateEnemy(const shared_itr& enBegin)
 				/// 敵の生成
 				auto line = num / _enMax.x;
 				EnemyState state = { _initPos[randNum % 6], _charSize,
-									 EN_TYPE::NORMAL, num, 10 * cnt, debugPos, aimPos };
+									 EN_TYPE::NORMAL, 10 * cnt, debugPos, aimPos };
 
 				AddEnemy(line, state);
 				++cnt;
@@ -238,23 +238,21 @@ bool MainScene::EnemyCol(const shared_obj& enemy, const shared_itr& enBegin)
 
 unique_scene MainScene::Update(unique_scene scene, const Input & p)
 {
-	
-	/// 敵の先頭位置を取得している
+	/// 敵の生成前の先頭を取得している
 	auto enBegin = std::find_if(_objs.begin(),
 								_objs.end(),
 								[](shared_obj& obj) {return (*obj).GetObjID() == OBJ::ENEMY; });
-
 	auto player = _objs.begin();
 	auto enemy  = enBegin;
 
 	CreateEnemy(enBegin);
 
-	/// 敵の先頭位置を取得している
+	/// 敵を生成後の先頭を取得している
 	enBegin = std::find_if(_objs.begin(),
 						   _objs.end(),
 						   [](shared_obj& obj) {return (*obj).GetObjID() == OBJ::ENEMY; });
 
-
+	/// 全ての敵が配置された時の処理
 	if (_enCnt >= (_enMax.x * _enMax.y))
 	{
 		_isTable = true;
@@ -294,7 +292,7 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 		(*enemy)->SetTblInfo(_tblInfo);
 		break;
 	}
-
+	/// ﾃｰﾌﾞﾙ情報の更新
 	if (!_isTable)
 	{
 		_tblInfo.second = (_tblInfo.second == 0 ? 1 : _tblInfo.second);

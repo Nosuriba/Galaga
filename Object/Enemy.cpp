@@ -14,7 +14,11 @@ Enemy::Enemy() : _sigMax(10), _distance(30)
 	_moveList.emplace_back(&Enemy::Target);
 
 	_sigAdd = 0.3;
+	_spMag = 0;
+	_spVel = 0;
+	_spDistance = Vector2d();
 	_moveTblInfo.first = 1;
+	_isAction = false;
 
 	Wait();
 }
@@ -22,6 +26,7 @@ Enemy::Enemy() : _sigMax(10), _distance(30)
 Enemy::~Enemy()
 {
 	_moveTblInfo = { 0,0 };
+	_actionCnt -= (_isAction ? 1 : 0);
 }
 
 void Enemy::SetSigAdd(const double & sigAdd)
@@ -43,14 +48,12 @@ bool Enemy::ChangeMove()
 void Enemy::CalRad(const Vector2d & sPos, const Vector2d & ePos, const double& angle)
 {
 	_rad = atan2(ePos.y - sPos.y, ePos.x - sPos.x);
-
 	_rad += angle * (DX_PI / 180);
 
 	auto debug = _rad * (180 / DX_PI);
 }
 void Enemy::MakeRotaInfo()
 {
-	/// 中心地点の計算を別の場所で行った方がいい
 	_rotCenter = _pos + Vector2d(0, _distance * _rotDir.y);
 
 	auto theta = atan2(_pos.y - _rotCenter.y, _pos.x - _rotCenter.x);
@@ -97,7 +100,6 @@ int Enemy::Target()
 	auto theta = atan2(_aimPos.y - _pos.y, _aimPos.x - _pos.x);
 	auto cost = cos(theta);
 	auto sint = sin(theta);
-
 	_vel	 = Vector2d(3 * cost, 3 * sint);
 	_updater = &Enemy::TargetUpdate;
 
@@ -124,9 +126,11 @@ int Enemy::Move()
 
 int Enemy::Spread()
 {
-	_spLength = _pos - Vector2d(LpGame.gameScreenSize.x / 2, 1);
-	_spMag = 1.0;
-	_spVel = 0.002;
+	_spDistance = (_spDistance == Vector2d() ? _pos - Vector2d(LpGame.gameScreenSize.x / 2, 1) 
+											 : _spDistance);
+	_spMag		= (_spMag == 0 ? 1.0 : _spMag);
+	_spVel		= (_spVel == 0 ? 0.002 : _spVel);
+	_spLength = _spDistance * _spMag;
 
 	_updater = &Enemy::SpreadUpdate;
 	return 0;
@@ -198,16 +202,31 @@ int Enemy::RotationUpdate()
 
 int Enemy::TargetUpdate()
 {
+	double theta, cost, sint;
+	Vector2 length;
 	/// 目標地点までのﾗｼﾞｱﾝ計算
-	auto theta = atan2(_aimPos.y - _pos.y, (_aimPos.x + _moveTblInfo.first) - _pos.x);
-	auto cost = cos(theta);
-	auto sint = sin(theta);
+	if (_isTable)
+	{
+		theta = atan2((_spLength.y + 1) - _pos.y, (_spLength.x + LpGame.gameScreenSize.x / 2) -_pos.x);
+		cost = cos(theta);
+		sint = sin(theta);
 
-	/// 敵の座標から目標地点までの距離の計算
-	auto length = Vector2(abs(_pos.x - (_aimPos.x + _moveTblInfo.first)), abs(_pos.y - _aimPos.y));
+		length = Vector2(abs(_pos.x - (_spLength.x + LpGame.gameScreenSize.x / 2)), 
+						 abs(_pos.y - _spLength.y));
+	}
+	else
+	{
+		theta = atan2(_aimPos.y - _pos.y, (_aimPos.x + _moveTblInfo.first) - _pos.x);
+		cost  = cos(theta);
+		sint  = sin(theta);
+
+		length = Vector2(abs(_pos.x - (_aimPos.x + _moveTblInfo.first)), abs(_pos.y - _aimPos.y));
+
+		_vel.x += _moveTblInfo.second;				// 移動ﾃｰﾌﾞﾙの速度を加算している
+	}
 
 	/// 目標地点に向けての速度設定
-	_vel.x += _moveTblInfo.second;				// 移動ﾃｰﾌﾞﾙの速度を加算している
+	
 	_vel.x = (length.x <= 1 ? 0 : _vel.x);
 	_vel.y = (length.y <= 1 ? 0 : _vel.y);
 
@@ -217,7 +236,15 @@ int Enemy::TargetUpdate()
 
 	if (_vel == Vector2d(0, 0))
 	{
-		_pos = Vector2d(_aimPos.x + _moveTblInfo.first, _aimPos.y);
+		if (_isTable)
+		{
+			_pos = Vector2d(_spLength.x + LpGame.gameScreenSize.x / 2, _spLength.y);
+		}
+		else
+		{
+			_pos = Vector2d(_aimPos.x + _moveTblInfo.first, _aimPos.y);
+		}
+
 		if (!ChangeMove())
 		{
 			Move();
@@ -229,18 +256,7 @@ int Enemy::TargetUpdate()
 int Enemy::SpreadUpdate()
 {
 	AnimUpdate(1);
-	_pos = (_spLength * _spMag) + Vector2d(LpGame.gameScreenSize.x / 2, 1);
-
-	_spMag += _spVel;
-	if (_spVel <= 0)
-	{
-		_spVel = (_spMag <= 1.0 ? -_spVel : _spVel);
-	}
-	else
-	{
-		_spVel = (_spMag >= 1.24 ? -_spVel : _spVel);
-	}
-
+	_pos = _spLength + Vector2d(LpGame.gameScreenSize.x / 2, 1);
 	return 0;
 }
 
@@ -271,6 +287,23 @@ void Enemy::Update()
 		return;
 	}
 	(this->*_updater)();
+
+	/// 拡縮の情報を更新
+	if (_moveTblInfo.first == 0 &&
+		_moveTblInfo.second == 0)
+	{
+		_spLength = _spDistance * _spMag;
+		_spMag += _spVel;
+		if (_spVel <= 0)
+		{
+			_spVel = (_spMag <= 1.0 ? -_spVel : _spVel);
+		}
+		else
+		{
+			_spVel = (_spMag >= 1.24 ? -_spVel : _spVel);
+		}
+	}
+
 	_pos += _vel;
 
 	auto center = Vector2(_pos.x + _size.width / 2, _pos.y + _size.height / 2);

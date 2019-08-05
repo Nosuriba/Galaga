@@ -25,11 +25,6 @@ Object::~Object()
 {
 }
 
-int Object::GetEnemyNum() const
-{
-	return _enNum;
-}
-
 Rect Object::GetRect() const
 {
 	return _rect;

@@ -12,7 +12,6 @@ enum class EN_STATE
 	POS,
 	SIZE,
 	TYPE,
-	NUM,
 	WAIT,
 	SIGPOS,
 	AIM,
@@ -37,8 +36,8 @@ enum class EN_ID
 	MAX
 };
 
-// 0 : 座標, 1 : ｻｲｽﾞ 2 : 種類, 3 : 敵のﾃｰﾌﾞﾙの位置 4 : 待機時間 5 : ｼｸﾞﾓｲﾄﾞの終点, 6 : 目標地点
-using EnemyState = std::tuple<Vector2, Size, EN_TYPE, int, int, Vector2d, Vector2d>;
+// 0 : 座標, 1 : ｻｲｽﾞ 2 : 種類, 3 : 待機時間 4 : ｼｸﾞﾓｲﾄﾞの終点, 5 : 目標地点
+using EnemyState = std::tuple<Vector2, Size, EN_TYPE, int, Vector2d, Vector2d>;
 
 class Enemy :
 	public Object
@@ -80,9 +79,12 @@ protected:
 	Vector2d _sigRange;		// ｼｸﾞﾓｲﾄﾞの移動幅
 
 	Vector2d _spLength;		// 広がる範囲
+	Vector2d _spDistance;	// 広がる距離
 
 	int _waitTime;			// 敵が移動する前の待機時間
 	int _waitAction;		// 敵が行動するまでの待機時間
+
+	bool _isAction;
 
 	double _sigAdd;			// ｼｸﾞﾓｲﾄﾞのｶｳﾝﾄ加算用
 	double _gain;			// ｼｸﾞﾓｲﾄﾞのｸﾞﾗﾌ制御用

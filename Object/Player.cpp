@@ -128,6 +128,10 @@ void Player::Update()
 			/// 死亡した時、体力があるか確認して
 
 			/// 減らす仕組みにすればいいのかな
+			for (auto shot : _shots)
+			{
+				shot = nullptr;
+			}
 			animKey(ANIM::NORMAL);
 			ResetAnim();
 			_isAlive = true;

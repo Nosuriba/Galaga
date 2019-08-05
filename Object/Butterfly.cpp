@@ -20,7 +20,6 @@ Butterfly::Butterfly(const EnemyState & state)
 
 	Init(std::get<static_cast<int>(EN_STATE::TYPE)>(state));
 
-	_enNum = std::get<static_cast<int>(EN_STATE::NUM)>(state);
 	animKey(ANIM::NORMAL);
 
 }
@@ -52,15 +51,18 @@ void Butterfly::Init(EN_TYPE type)
 
 void Butterfly::SetSigEnd(const Vector2d& sigEnd)
 {
-	/*if (_moveList.size() == 0 && _actionCnt < 2)
+	if (_moveList.size() == 0 && 
+		_actionCnt < 2 && 
+		_spVel != 0)
 	{
  		++_actionCnt;
 		_sigEnd = sigEnd;
 		_gain = 0.5;
 		_sigAdd = 0.2;
 		Rotation();
+		_isAction = true;
 		_moveList.emplace_back(&Enemy::Sigmoid);
 		_moveList.emplace_back(&Enemy::Target);
-	}*/
+	}
 }
 

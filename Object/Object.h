@@ -46,7 +46,6 @@ public:
 	void LeadAnimUpdate();
 	bool IsMoveTbl() const;
 	void SetTblInfo(const enTbl_pair& tblInfo);
-	int GetEnemyNum() const;
 
 	Rect GetRect() const;
 	shot_array GetShot() const;
@@ -88,8 +87,6 @@ protected:
 	bool _isTable;		// true : Ã°ÌŞÙ‚É”z’u‚³‚ê‚½, false : Ã°ÌŞÙ‚É”z’u‚³‚ê‚Ä‚¢‚È‚¢
 	bool _isAlive;		// true : ¶‘¶, false : €–S
 	bool _isDeath;		// true : €–S, false : €–Sˆ—’†
-
-	int _enNum;					// “G‚Ì”Ô†
 	
 	// first : ˆÚ“®•, second : ˆÚ“®‘¬“x
 	static enTbl_pair _moveTblInfo;
