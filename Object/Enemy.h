@@ -6,6 +6,7 @@
 #include "Object.h"
 #include "../Common/ImageMng.h"
 #include "../DebugConOut.h"
+#include "../Game.h"
 
 enum class EN_STATE
 {
