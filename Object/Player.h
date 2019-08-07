@@ -29,8 +29,12 @@ private:
 	void MoveUpdate();
 	void DieUpdate();
 
+	void IsOutScreen();
+
 	void (Player::*_updater)();
 
 	std::unique_ptr<InputState> _input;
+
+	int _inviCnt;		// –³“GŽžŠÔ
 };
 

@@ -72,6 +72,7 @@ protected:
 	bool animKey(const ANIM key);
 	//// key‚Ìî•ñ‚ğæ“¾‚µ‚Ä‚¢‚é
 	const ANIM& animKey() const;
+	void AnimUpdate(const int& animSpeed);
 
 	shot_array _shots;
 
@@ -91,10 +92,8 @@ protected:
 	// first : ˆÚ“®•, second : ˆÚ“®‘¬“x
 	static enTbl_pair _moveTblInfo;
 	static int _leadCnt;
-	void AnimUpdate(const int& animSpeed);
 private:
-	// void AnimUpdate();
-	
+
 	// first : ‰æ‘œID, second : ±ÆÒ°¼®İÌÚ°Ñ
 	std::map<ANIM, anim_vec> _animMap;
 

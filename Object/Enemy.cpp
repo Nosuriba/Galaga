@@ -158,6 +158,7 @@ int Enemy::SigmoidUpdate()
 	double X, Y;
 	if (_isTable)
 	{
+		/// ｼｮｯﾄを打つ処理
 		if (_shotWait % 30 == 0 && _shotWait >= 0)
 		{
 			for (int i = 0; i < _shots.size(); ++i)
@@ -189,6 +190,7 @@ int Enemy::SigmoidUpdate()
 	
 	_sigCnt += _sigAdd;
 	CalRad(_pos, _sigEnd, 90);
+
 
 	return 0;
 }

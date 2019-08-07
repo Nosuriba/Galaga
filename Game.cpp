@@ -8,6 +8,7 @@
 #include "Common/ImageMng.h"
 #include "DebugConOut.h"
 #include "DebugDisp.h"
+#include "resource.h"
 
 std::unique_ptr<Game, Game::GameDeleter> Game::s_Instance(new Game());
 
@@ -26,6 +27,7 @@ void Game::Init()
 	DxLib::SetGraphMode(screenSize.x, screenSize.y, 32);
 	DxLib::ChangeWindowMode(true);
 	DxLib::SetWindowText("1701310_ñkêÏ èÅàÍ : Galaga");
+	DxLib::SetWindowIconID(IDI_ICON1);
 	if (DxLib_Init() == -1)
 	{
 		return;

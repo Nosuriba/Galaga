@@ -118,8 +118,8 @@ void Object::AnimUpdate(const int & animSpeed)
 	if (_invCnt >= _animMap[_animKey][_animID].second)
 	{
 		auto debug = _animMap[_animKey][_animMap[_animKey].size() - 1].second;
-		_animID = (_animID + 1) % _animMap[_animKey].size();
-		_invCnt = (_invCnt < _animMap[_animKey][_animMap[_animKey].size() - 1].second ? _invCnt : 0);
+		_animID	   = (_animID + 1) % _animMap[_animKey].size();
+		_invCnt    = (_invCnt < _animMap[_animKey][_animMap[_animKey].size() - 1].second ? _invCnt : 0);
 	}
 	_leadCnt = (_leadCnt < _animMap[_animKey][_animMap[_animKey].size() - 1].second ? _leadCnt : 0);
 	_invCnt += animSpeed;
@@ -141,7 +141,6 @@ void Object::Draw()
 		return;
 	}
 
-	//AnimUpdate();
 	for (auto shot : _shots)
 	{
 		if (shot != nullptr)

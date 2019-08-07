@@ -184,6 +184,7 @@
     <ClInclude Include="Object\Boss.h" />
     <ClInclude Include="Object\Butterfly.h" />
     <ClInclude Include="Object\Shot.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\MainScene.h" />
     <ClInclude Include="Object\Enemy.h" />
     <ClInclude Include="Object\Object.h" />
@@ -192,6 +193,12 @@
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Vector2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Galaga.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="image\galaga.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

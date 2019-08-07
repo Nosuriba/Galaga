@@ -16,6 +16,7 @@ Player::Player(const Vector2 & pos, const Size& size)
 	_pos	= Vector2d(center.x, center.y);
 	_rad	= 0.0;
 	_rect   = Rect(center, _size);
+	_inviCnt = 0;
 	
 	Init();
 	animKey(ANIM::NORMAL);
@@ -112,6 +113,18 @@ void Player::DieUpdate()
 {
 }
 
+void Player::IsOutScreen()
+{
+	if (_pos.x < _size.width / 2)
+	{
+		_pos.x = _size.width / 2;
+	}
+	else if (_pos.x >= LpGame.gameScreenSize.x - _size.width / 2)
+	{
+		_pos.x = LpGame.gameScreenSize.x - _size.width / 2;
+	}
+}
+
 void Player::Update()
 {
 	if (DestryCheck())
@@ -143,6 +156,7 @@ void Player::Update()
 	_input->Update();
 	(this->*_updater)();
 	
+	IsOutScreen();
 	auto center = Vector2(_pos.x + _size.width / 2, _pos.y + _size.height / 2);
 	_rect	    = Rect(center, _size);
 
