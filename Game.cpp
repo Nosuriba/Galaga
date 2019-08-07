@@ -41,7 +41,7 @@ void Game::Init()
 	SET_IMAGE_ID("enemy",	 "image/enemy.png", Vector2(10, 3), Vector2(30, 32));
 	SET_IMAGE_ID("en_blast", "image/en_blast.png", Vector2(5, 1), Vector2(64, 64));
 	SET_IMAGE_ID("shot",	 "image/shot.png", Vector2(2, 1), Vector2(3, 8));
-
+	SET_IMAGE_ID("text",	 "image/text.png", Vector2(30, 1), Vector2(16, 16));
 	_scene = std::make_unique<MainScene>();
 }
 

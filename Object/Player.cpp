@@ -4,6 +4,7 @@
 #include "Shot.h"
 #include "../Input/KeyState.h"
 #include "../Input/PadState.h"
+#include "../AudioMng.h"
 
 Player::Player()
 {
@@ -131,6 +132,7 @@ void Player::Update()
 	{
 		if (!_isAlive && animKey() != ANIM::DEATH)
 		{
+			LpAudioMng.PlaySE("Music/pl_die.mp3");
 			animKey(ANIM::DEATH);
 			ResetAnim();
 		}
@@ -184,6 +186,7 @@ void Player::Update()
 			if (_shots[i] == nullptr)
 			{
 				_shots[i] = std::make_shared<Shot>(_pos, Vector2d(0, -6));
+				LpAudioMng.PlaySE("Music/shot.mp3");
 				break;
 			}
 		}

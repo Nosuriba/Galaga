@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AudioMng.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="common\ImageMng.cpp" />
     <ClCompile Include="DebugConOut.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AudioMng.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="common\ImageMng.h" />
     <ClInclude Include="DebugConOut.h" />

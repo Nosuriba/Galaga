@@ -4,6 +4,7 @@
 #include "Shot.h"
 #include "../DebugDisp.h"
 #include "../DebugConOut.h"
+#include "../AudioMng.h"
 
 int Enemy::_actionCnt = 0;
 
@@ -170,6 +171,8 @@ int Enemy::SigmoidUpdate()
 					auto sint = sin(theta);
 
 					_shots[i] = std::make_shared<Shot>(_pos, Vector2d(4 * cost, 4 * sint));
+					LpAudioMng.PlaySE("Music/shot.mp3");
+
 					break;
 				}
 			}
@@ -300,6 +303,7 @@ void Enemy::Update()
 	{
 		if (!_isAlive && animKey() != ANIM::DEATH)
 		{
+			LpAudioMng.PlaySE("Music/en_die.mp3");
 			animKey(ANIM::DEATH);
 			ResetAnim();
 		}

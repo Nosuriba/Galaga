@@ -13,6 +13,7 @@
 #include "../Object/Butterfly.h"
 #include "../Object/Boss.h"
 #include "../Common/ImageMng.h"
+#include "../AudioMng.h"
 
 MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 {
@@ -132,6 +133,7 @@ void MainScene::CreateEnemy(const shared_itr& enBegin)
 				++_enCnt;
 				_enTblInfo[num] = 1;
 			}
+			LpAudioMng.PlaySE("Music/comeOut.mp3");
 		}
 
 		/// “G‚ğ––”ö‚É¿°Ä‚µ‚Ä‚¢‚é
@@ -139,7 +141,6 @@ void MainScene::CreateEnemy(const shared_itr& enBegin)
 				  _objs.end(),
 				  [](shared_obj& obj, shared_obj& obj2) { return (*obj).GetObjID() > (*obj2).GetObjID(); });
 	}
-
 }
 
 void MainScene::AddEnemy(const int & line, const EnemyState & state)
@@ -173,6 +174,7 @@ void MainScene::Draw()
 			obj->Object::Draw();
 		}
 	}
+
 	LpGame.AddDrawQue({ _ghGameScreen, LpGame.gameScreenPos.x, LpGame.gameScreenPos.y});
 }
 
@@ -243,14 +245,15 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 								_objs.end(),
 								[](shared_obj& obj) {return (*obj).GetObjID() == OBJ::ENEMY; });
 	auto player = _objs.begin();
-	auto enemy  = enBegin;
-
+	
 	CreateEnemy(enBegin);
 
 	/// “G‚ğ¶¬Œã‚Ìæ“ª‚ğæ“¾‚µ‚Ä‚¢‚é
 	enBegin = std::find_if(_objs.begin(),
 						   _objs.end(),
 						   [](shared_obj& obj) {return (*obj).GetObjID() == OBJ::ENEMY; });
+	auto enemy = enBegin;
+
 
 	/// ‘S‚Ä‚Ì“G‚ª”z’u‚³‚ê‚½‚Ìˆ—
 	if (_enCnt >= (_enMax.x * _enMax.y))
