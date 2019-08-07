@@ -72,6 +72,7 @@ void Butterfly::SetSigEnd(const Vector2d& sigEnd)
 		_actionCnt < 2 && 
 		_spVel != 0)
 	{
+		LpAudioMng.PlaySE("Music/action.mp3");
  		++_actionCnt;
 		_shotWait = 60;
 		_sigEnd = sigEnd + Vector2d(0, _size.height * 2);

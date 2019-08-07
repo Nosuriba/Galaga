@@ -2,9 +2,7 @@
 #include <stdlib.h>
 #include "Enemy.h"
 #include "Shot.h"
-#include "../DebugDisp.h"
 #include "../DebugConOut.h"
-#include "../AudioMng.h"
 
 int Enemy::_actionCnt = 0;
 
@@ -303,6 +301,10 @@ void Enemy::Update()
 	{
 		if (!_isAlive && animKey() != ANIM::DEATH)
 		{
+			for (auto shot : _shots)
+			{
+				shot = nullptr;
+			}
 			LpAudioMng.PlaySE("Music/en_die.mp3");
 			animKey(ANIM::DEATH);
 			ResetAnim();

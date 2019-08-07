@@ -6,6 +6,7 @@
 #include "../Vector2.h"
 #include "../Input.h"
 #include "../DebugDisp.h"
+#include "../AudioMng.h"
 
 class Shot;
 

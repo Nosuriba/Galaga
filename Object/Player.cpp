@@ -4,7 +4,6 @@
 #include "Shot.h"
 #include "../Input/KeyState.h"
 #include "../Input/PadState.h"
-#include "../AudioMng.h"
 
 Player::Player()
 {
@@ -132,6 +131,12 @@ void Player::Update()
 	{
 		if (!_isAlive && animKey() != ANIM::DEATH)
 		{
+
+			/// 減らす仕組みにすればいいのかな
+			for (auto shot : _shots)
+			{
+				shot = nullptr;
+			}
 			LpAudioMng.PlaySE("Music/pl_die.mp3");
 			animKey(ANIM::DEATH);
 			ResetAnim();
@@ -141,12 +146,6 @@ void Player::Update()
 		if (_isDeath)
 		{
 			/// 死亡した時、体力があるか確認して
-
-			/// 減らす仕組みにすればいいのかな
-			for (auto shot : _shots)
-			{
-				shot = nullptr;
-			}
 			animKey(ANIM::NORMAL);
 			ResetAnim();
 			_isAlive = true;
