@@ -4,6 +4,7 @@
 #include "Shot.h"
 #include "../Input/KeyState.h"
 #include "../Input/PadState.h"
+#include "../Game.h"
 
 Player::Player()
 {
@@ -133,7 +134,7 @@ void Player::Update()
 		{
 
 			/// 減らす仕組みにすればいいのかな
-			for (auto shot : _shots)
+			for (auto& shot : _shots)
 			{
 				shot = nullptr;
 			}

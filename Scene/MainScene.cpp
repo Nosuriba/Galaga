@@ -12,8 +12,6 @@
 #include "../Object/Bee.h"
 #include "../Object/Butterfly.h"
 #include "../Object/Boss.h"
-#include "../Common/ImageMng.h"
-#include "../AudioMng.h"
 
 MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 {
@@ -51,6 +49,16 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 	Init();
 
 	_col = std::make_unique<Collision>();
+
+	_textCnt = 0;
+	_textData.emplace_back("PLAYER ");
+	_textData.emplace_back("STAGE ");
+
+	/// 音楽が停止されているかの判定用関数がなかったため
+	/// 後で追加する。
+	waitBGM = LoadSoundMem("Music/wait.mp3");
+	PlaySoundMem(waitBGM, DX_PLAYTYPE_BACK, true);
+	_mode = &MainScene::WaitMode;
 }
 
 MainScene::~MainScene()
@@ -62,9 +70,6 @@ void MainScene::Init()
 	srand((unsigned int)time(0));
 
 	_ghGameScreen = MakeScreen(LpGame.gameScreenSize.x, LpGame.gameScreenSize.y, true);
-
-	/// ﾌﾟﾚｲﾔｰの生成
-	_objs.emplace_back(std::make_shared<Player>(Vector2(100, LpGame.gameScreenSize.y - _charSize.height), _charSize));
 }
 
 const SCN_ID MainScene::GetSceneID() const
@@ -165,8 +170,10 @@ void MainScene::AddEnemy(const int & line, const EnemyState & state)
 void MainScene::Draw()
 {
 	/// ｹﾞｰﾑｽｸﾘｰﾝの描画を行っている
+	auto beforScr = GetDrawScreen();
 	SetDrawScreen(_ghGameScreen);
 	ClsDrawScreen();
+
 	for (auto obj : _objs)
 	{
 		if (obj != nullptr)
@@ -175,7 +182,36 @@ void MainScene::Draw()
 		}
 	}
 
+	if (_mode == &MainScene::WaitMode)
+	{
+		for (int i = 0; i <= (_textCnt / 120); ++i)
+		{
+			Vector2 offset(150, LpGame.gameScreenSize.y / 3 + (i * 30));
+			for (auto charCode : _textData[i])
+			{
+				if (charCode >= 'A' || charCode <= 'Z')
+				{
+					if (charCode <= 0)
+					{
+						continue;
+					}
+					if (charCode == 32)
+					{
+						offset.x += 16;
+						continue;
+					}
+					int id = charCode - 'A';
+					DrawGraph(offset.x, offset.y, IMAGE_ID("text")[id], true);
+					offset.x += 16;
+				}
+			}
+			DrawGraph(offset.x, offset.y, IMAGE_ID("num")[1], true);
+		}
+		
+	}
+
 	LpGame.AddDrawQue({ _ghGameScreen, LpGame.gameScreenPos.x, LpGame.gameScreenPos.y});
+	SetDrawScreen(beforScr);
 }
 
 void MainScene::TblMoveUpdate()
@@ -238,20 +274,38 @@ bool MainScene::EnemyCol(const shared_obj& enemy, const shared_itr& enBegin)
 	return false;
 }
 
-unique_scene MainScene::Update(unique_scene scene, const Input & p)
+int MainScene::WaitMode()
+{
+	Draw();
+	_textCnt = (_textCnt <= 238 ? _textCnt + 1 : _textCnt);
+	if (_textCnt == 120)
+	{
+		/// ﾌﾟﾚｲﾔｰの生成
+		_objs.emplace_back(std::make_shared<Player>(Vector2(LpGame.gameScreenSize.x / 2 - _charSize.width,
+															LpGame.gameScreenSize.y - _charSize.height), _charSize));
+	}
+
+	if (CheckSoundMem(waitBGM) == 0)
+	{
+		_mode = &MainScene::PlayingMode;
+	}
+	return 0;
+}
+
+int MainScene::PlayingMode()
 {
 	/// 敵の生成前の先頭を取得している
 	auto enBegin = std::find_if(_objs.begin(),
 								_objs.end(),
 								[](shared_obj& obj) {return (*obj).GetObjID() == OBJ::ENEMY; });
 	auto player = _objs.begin();
-	
+
 	CreateEnemy(enBegin);
 
 	/// 敵を生成後の先頭を取得している
 	enBegin = std::find_if(_objs.begin(),
-						   _objs.end(),
-						   [](shared_obj& obj) {return (*obj).GetObjID() == OBJ::ENEMY; });
+		_objs.end(),
+		[](shared_obj& obj) {return (*obj).GetObjID() == OBJ::ENEMY; });
 	auto enemy = enBegin;
 
 
@@ -260,10 +314,10 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 	{
 		_isTable = true;
 		Vector2d pPos;
-  		pPos = (*player)->GetPos();
+		pPos = (*player)->GetPos();
 		for (; enemy != _objs.end(); ++enemy)
 		{
- 			if ((*enemy)->IsMoveTbl())
+			if ((*enemy)->IsMoveTbl())
 			{
 				auto isAction = (rand() % 20 == 0);
 				if (isAction && _tblInfo.second == 0)
@@ -334,18 +388,37 @@ unique_scene MainScene::Update(unique_scene scene, const Input & p)
 
 	/// ｹﾞｰﾑｽｸﾘｰﾝ上の描画
 	Draw();
-
-	/*if (p.IsKeyTrigger(KEY_INPUT_SPACE))
-	{
-		return std::make_unique<ResultScene>();
-	}*/
-
 	/// vectorの削除する範囲の指定
 	auto eraseBegin = remove_if(_objs.begin(),				// 開始位置
-								_objs.end(),				// 終了位置
-							    [](shared_obj& obj) {return (*obj).GetDeath(); });		// moveするかの判定部
+		_objs.end(),				// 終了位置
+		[](shared_obj& obj) {return (*obj).GetDeath(); });		// moveするかの判定部
 
 	/// 指定した範囲のvectorを削除している
 	_objs.erase(eraseBegin, _objs.end());
+
+	return 0;
+}
+
+unique_scene MainScene::Update(unique_scene scene, const Input & p)
+{
+	(this->*_mode)();
+
+	if (_enCnt >= (_enMax.x * _enMax.y))
+	{
+		auto isClear = true;
+		for (auto obj : _objs)
+		{
+			if (obj->GetObjID() == OBJ::ENEMY)
+			{
+				isClear = false;
+				break;
+			}
+		}
+		
+		if (isClear)
+		{
+			return std::make_unique<ResultScene>();
+		}
+	}
 	return std::move(scene);
 }

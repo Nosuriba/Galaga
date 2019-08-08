@@ -3,6 +3,8 @@
 #include <memory>
 #include "../Game.h"
 #include "../Input.h"
+#include "../AudioMng.h"
+#include "../Common/ImageMng.h"
 
 enum class SCN_ID
 {

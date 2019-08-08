@@ -300,8 +300,8 @@ void Enemy::Update()
 	if (DestryCheck())
 	{
 		if (!_isAlive && animKey() != ANIM::DEATH)
-		{
-			for (auto shot : _shots)
+		{	/// ｼｮｯﾄが消えない
+			for (auto& shot : _shots)
 			{
 				shot = nullptr;
 			}

@@ -32,11 +32,17 @@ private:
 	bool PlayerCol(const shared_obj& player, const shared_itr& enBegin);
 	bool EnemyCol(const shared_obj& enemy, const shared_itr& enBegin);
 
+	int WaitMode();
+	int PlayingMode();
+
+	int (MainScene::*_mode)();
+
 	// first : 移動幅, second : 速度
 	enTbl_pair _tblInfo;
 
 	std::unique_ptr<Collision> _col;
 	std::vector<shared_obj> _objs;
+	std::vector<std::string> _textData;
 	
 	std::vector<char> _enTblInfo;			// 敵の配置情報を確認するﾃｰﾌﾞﾙ
 	std::array<Vector2, 2> _tblCtlPos;		// ﾃｰﾌﾞﾙ移動制御用の座標
@@ -49,5 +55,8 @@ private:
 
 	const Size _charSize;
 	const Vector2 _enMax;					// 敵の最大数
+
+	int _textCnt;
+	int waitBGM;
 };
 
