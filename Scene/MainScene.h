@@ -57,6 +57,5 @@ private:
 	const Vector2 _enMax;					// “G‚ÌÅ‘å”
 
 	int _textCnt;
-	int waitBGM;
 };
 

@@ -7,57 +7,55 @@ AudioMng::AudioMng()
 {
 }
 
-const VEC_INT & AudioMng::GetAudio(std::string f_name)
+void AudioMng::SetAudio(std::string f_name)
 {
 	if (musMap.find(f_name) == musMap.end())
 	{
-		musMap[f_name].resize(1);
-		musMap[f_name][0] = LoadSoundMem(f_name.c_str());
+		musMap[f_name];
+		musMap[f_name] = LoadSoundMem(f_name.c_str());
 	}
-	return musMap[f_name];
-}
-
-const SoundName AudioMng::GetSound()
-{
-	return audio;
 }
 
 void AudioMng::PlaySE(std::string f_name)
 {
-	GetAudio(f_name);
-	PlaySoundMem(musMap[f_name][0], DX_PLAYTYPE_BACK, true);
+	SetAudio(f_name);
+	PlaySoundMem(musMap[f_name], DX_PLAYTYPE_BACK, true);
 }
 
 void AudioMng::PlayBGM(std::string f_name)
 {
-	GetAudio(f_name);
-
-	if (!CheckSoundMem(musMap[f_name][0]))
+	SetAudio(f_name);
+	if (!CheckSoundMem(musMap[f_name]))
 	{
-		StopSoundMem(bgmName);
-		bgmName = musMap[f_name][0];
-		PlaySoundMem(bgmName, DX_PLAYTYPE_BACK, true);
+		StopSoundMem(nowBGM);
+		nowBGM = musMap[f_name];
+		PlaySoundMem(nowBGM, DX_PLAYTYPE_BACK, true);
 	}
 }
 
 void AudioMng::RepeatBGM(std::string f_name)
 {
-	GetAudio(f_name);
-	if (!CheckSoundMem(musMap[f_name][0]))
+	SetAudio(f_name);
+	if (!CheckSoundMem(musMap[f_name]))
 	{
-		StopSoundMem(bgmName);
-		bgmName = musMap[f_name][0];
-		PlaySoundMem(bgmName, DX_PLAYTYPE_LOOP, true);
+		StopSoundMem(nowBGM);
+		nowBGM = musMap[f_name];
+		PlaySoundMem(nowBGM, DX_PLAYTYPE_LOOP, true);
 	}
 }
 
 void AudioMng::ChangeVolume(int vol, std::string f_name)
 {
-	ChangeVolumeSoundMem(255 * vol / 100, musMap[f_name][0]);
+	ChangeVolumeSoundMem(255 * vol / 100, musMap[f_name]);
+}
+
+bool AudioMng::CheckSound(std::string f_name)
+{
+	return CheckSoundMem(musMap[f_name]);
 }
 
 void AudioMng::StopBGM()
 {
-	StopSoundMem(bgmName);
-	bgmName = 0;
+	StopSoundMem(nowBGM);
+	nowBGM = 0;
 }

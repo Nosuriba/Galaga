@@ -56,8 +56,7 @@ MainScene::MainScene() : _charSize(30,32), _enMax(10, 5)
 
 	/// ‰¹Šy‚ª’â~‚³‚ê‚Ä‚¢‚é‚©‚Ì”»’è—pŠÖ”‚ª‚È‚©‚Á‚½‚½‚ß
 	/// Œã‚Å’Ç‰Á‚·‚éB
-	waitBGM = LoadSoundMem("Music/wait.mp3");
-	PlaySoundMem(waitBGM, DX_PLAYTYPE_BACK, true);
+	LpAudioMng.PlayBGM("Music/wait.mp3");
 	_mode = &MainScene::WaitMode;
 }
 
@@ -285,7 +284,7 @@ int MainScene::WaitMode()
 															LpGame.gameScreenSize.y - _charSize.height), _charSize));
 	}
 
-	if (CheckSoundMem(waitBGM) == 0)
+	if (!LpAudioMng.CheckSound("Music/wait.mp3"))
 	{
 		_mode = &MainScene::PlayingMode;
 	}
