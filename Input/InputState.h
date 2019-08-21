@@ -17,11 +17,6 @@ public:
 	bool IsTrigger(const INPUT_ID& id) const;
 	bool IsPressing(const INPUT_ID& id) const;
 
-	// Ï¯Ìßî•ñ‚ğæ“¾—p
-	const key_map& state() const;
-	// ·°î•ñ‚Ìæ“¾—p
-	const key_pair state(INPUT_ID id) const;
-	// ·°“ü—Í‚Ìî•ñæ“¾—p
 	bool state(INPUT_ID id, int data);
 
 protected:

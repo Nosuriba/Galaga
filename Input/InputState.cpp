@@ -22,24 +22,6 @@ bool InputState::IsPressing(const INPUT_ID& id) const
 	return _state.at(id).first;
 }
 
-const key_map & InputState::state() const
-{
-	return _state;
-}
-
-const key_pair InputState::state(INPUT_ID id) const
-{
-	try
-	{
-		return _state.at(id);
-	}
-	catch(...)
-	{
-		return { 0,0 };
-		/// —áŠOˆ—
-	}
-}
-
 bool InputState::state(INPUT_ID id, int data)
 {
 	if (_state.find(id) == _state.end())

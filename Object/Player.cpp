@@ -29,8 +29,6 @@ Player::Player(const Vector2 & pos, const Size& size)
 	}
 	else
 	{
-		/// セーブとロードの部分を作成していないので
-		/// 作成しておくように...
 		_input = std::make_unique<PadState>();
 	}
 	
@@ -83,10 +81,8 @@ void Player::Move()
 
 void Player::IdleUpdate()
 {
-	/*if (_input->IsPressing(INPUT_ID::RIGHT) ||
-		  _input->IsPressing(INPUT_ID::LEFT))*/
-	if (_input->state(INPUT_ID::RIGHT).first ||
-		_input->state(INPUT_ID::LEFT).first) 
+	if (_input->IsPressing(INPUT_ID::RIGHT) ||
+		_input->IsPressing(INPUT_ID::LEFT))
 	{
 		Move();
 	}
@@ -94,13 +90,11 @@ void Player::IdleUpdate()
 
 void Player::MoveUpdate()
 {
-	/*if (_input->IsPressing(INPUT_ID::RIGHT))*/
-	if (_input->state(INPUT_ID::RIGHT).first)
+	if (_input->IsPressing(INPUT_ID::RIGHT))
 	{
 		_pos.x += 4;
 	}
-	/*else if (_input->IsPressing(INPUT_ID::LEFT))*/
-	else if (_input->state(INPUT_ID::LEFT).first)
+	else if (_input->IsPressing(INPUT_ID::LEFT))
 	{
 		_pos.x -= 4;
 	}
@@ -177,9 +171,7 @@ void Player::Update()
 	}
 
 	/// ｼｮｯﾄの生成
-	/*if (_input->IsTrigger(INPUT_ID::BTN_1))*/
-	if (_input->state(INPUT_ID::BTN_1).first &&
-	  !(_input->state(INPUT_ID::BTN_1).second))
+	if (_input->IsTrigger(INPUT_ID::BTN_1))
 	{
 		for (int i = 0; i < _shots.size(); ++i)
 		{
