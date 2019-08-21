@@ -72,11 +72,6 @@ void MainScene::Init()
 	_ghGameScreen = MakeScreen(LpGame.gameScreenSize.x, LpGame.gameScreenSize.y, true);
 }
 
-const SCN_ID MainScene::GetSceneID() const
-{
-	return SCN_ID::MAIN;
-}
-
 void MainScene::InitTbl()
 {
 	_tblInfo = { 1,0 };

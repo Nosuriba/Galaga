@@ -19,11 +19,6 @@ void ResultScene::Init()
 	_ghResultScene = MakeScreen(LpGame.gameScreenSize.x, LpGame.gameScreenSize.y, true);
 }
 
-const SCN_ID ResultScene::GetSceneID() const
-{
-	return SCN_ID::RESULT;
-}
-
 void ResultScene::Draw()
 {
 	/// ¹Ş°Ñ½¸Ø°İ‚Ì•`‰æ‚ğs‚Á‚Ä‚¢‚é

@@ -19,7 +19,6 @@ public:
 	void Init() override;
 	void Draw();
 	unique_scene Update(unique_scene scene, const std::unique_ptr<InputState>& p) override;
-	const SCN_ID GetSceneID() const override;
 private:
 
 	// “G‚Ìî•ñ‚ğÄİ’è‚·‚é‚à‚Ì

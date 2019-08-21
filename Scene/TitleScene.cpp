@@ -22,11 +22,6 @@ void TitleScene::Init()
 	_ghTitleScreen = MakeScreen(LpGame.gameScreenSize.x, LpGame.gameScreenSize.y, true);
 }
 
-const SCN_ID TitleScene::GetSceneID() const
-{
-	return SCN_ID::TITLE;
-}
-
 void TitleScene::Draw()
 {
 	auto beforScr = GetDrawScreen();
