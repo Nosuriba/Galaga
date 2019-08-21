@@ -1,3 +1,4 @@
+#include <DxLib.h>
 #include "Object.h"
 #include "Shot.h"
 #include "../DebugDisp.h"

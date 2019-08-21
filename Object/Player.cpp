@@ -21,17 +21,6 @@ Player::Player(const Vector2 & pos, const Size& size)
 	
 	Init();
 	animKey(ANIM::NORMAL);
-
-	/// ﾊﾟｯﾄﾞが接続されていない時、ｷｰ操作の情報を生成する
-	if (GetJoypadNum() == 0)
-	{
-		_input = std::make_unique<KeyState>();
-	}
-	else
-	{
-		_input = std::make_unique<PadState>();
-	}
-	
 	_updater = &Player::IdleUpdate;
 }
 
@@ -63,48 +52,48 @@ void Player::Init()
 	SetAnim(ANIM::DEATH, data);
 }
 
-void Player::Idle()
+void Player::Idle(const std::unique_ptr<InputState>& p)
 {
 	_updater = &Player::IdleUpdate;
 }
 
-void Player::Die()
+void Player::Die(const std::unique_ptr<InputState>& p)
 {
 	animKey(ANIM::DEATH);
 	_updater = &Player::DieUpdate;
 }
 
-void Player::Move()
+void Player::Move(const std::unique_ptr<InputState>& p)
 {
 	_updater = &Player::MoveUpdate;
 }
 
-void Player::IdleUpdate()
+void Player::IdleUpdate(const std::unique_ptr<InputState>& p)
 {
-	if (_input->IsPressing(INPUT_ID::RIGHT) ||
-		_input->IsPressing(INPUT_ID::LEFT))
+	if (p->IsPressing(INPUT_ID::RIGHT) ||
+		p->IsPressing(INPUT_ID::LEFT))
 	{
-		Move();
+		Move(p);
 	}
 }
 
-void Player::MoveUpdate()
+void Player::MoveUpdate(const std::unique_ptr<InputState>& p)
 {
-	if (_input->IsPressing(INPUT_ID::RIGHT))
+	if (p->IsPressing(INPUT_ID::RIGHT))
 	{
 		_pos.x += 4;
 	}
-	else if (_input->IsPressing(INPUT_ID::LEFT))
+	else if (p->IsPressing(INPUT_ID::LEFT))
 	{
 		_pos.x -= 4;
 	}
 	else
 	{
-		Idle();
+		Idle(p);
 	}
 }
 
-void Player::DieUpdate()
+void Player::DieUpdate(const std::unique_ptr<InputState>& p)
 {
 }
 
@@ -120,7 +109,7 @@ void Player::IsOutScreen()
 	}
 }
 
-void Player::Update()
+void Player::Update(const std::unique_ptr<InputState>& p)
 {
 	if (DestryCheck())
 	{
@@ -149,8 +138,7 @@ void Player::Update()
 		return;
 	}
 	AnimUpdate(1);
-	_input->Update();
-	(this->*_updater)();
+	(this->*_updater)(p);
 	
 	IsOutScreen();
 	auto center = Vector2(_pos.x + _size.width / 2, _pos.y + _size.height / 2);
@@ -171,7 +159,7 @@ void Player::Update()
 	}
 
 	/// ｼｮｯﾄの生成
-	if (_input->IsTrigger(INPUT_ID::BTN_1))
+	if (p->IsTrigger(INPUT_ID::BTN_1))
 	{
 		for (int i = 0; i < _shots.size(); ++i)
 		{

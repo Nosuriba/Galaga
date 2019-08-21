@@ -5,6 +5,7 @@
 #include "../Input.h"
 #include "../AudioMng.h"
 #include "../Common/ImageMng.h"
+#include "../Input/InputState.h"
 
 enum class SCN_ID
 {
@@ -20,7 +21,7 @@ public:
 	Scene() {};
 	virtual ~Scene() {};
 	virtual void Init() = 0;
-	virtual unique_scene Update(unique_scene scene, const Input& p) = 0;
+	virtual unique_scene Update(unique_scene scene, const std::unique_ptr<InputState>& p) = 0;
 	virtual const SCN_ID GetSceneID() const = 0;
 };
 

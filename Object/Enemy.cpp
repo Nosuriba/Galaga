@@ -295,7 +295,7 @@ int Enemy::MoveUpdate()
 	return 0;
 }
 
-void Enemy::Update()
+void Enemy::Update(const std::unique_ptr<InputState>& p)
 {
 	if (DestryCheck())
 	{

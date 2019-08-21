@@ -7,7 +7,7 @@ public:
 	ResultScene();
 	~ResultScene();
 	void Init()override;
-	unique_scene Update(unique_scene scene, const Input& p) override;
+	unique_scene Update(unique_scene scene, const std::unique_ptr<InputState>& p) override;
 	const SCN_ID GetSceneID() const override;
 private:
 	void Draw();

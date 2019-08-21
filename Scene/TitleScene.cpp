@@ -2,8 +2,11 @@
 #include "TitleScene.h"
 #include "MainScene.h"
 
+#include "../Input/KeyState.h"
+
 TitleScene::TitleScene()
 {
+	
 	Init();
 }
 
@@ -14,6 +17,7 @@ TitleScene::~TitleScene()
 void TitleScene::Init()
 {
 	_dispCnt = 0;
+	input = std::make_shared<KeyState>();
 	_ghTitleScreen = MakeScreen(LpGame.gameScreenSize.x, LpGame.gameScreenSize.y, true);
 }
 
@@ -55,10 +59,10 @@ void TitleScene::Draw()
 	SetDrawScreen(beforScr);
 }
 
-unique_scene TitleScene::Update(unique_scene scene, const Input & p)
+unique_scene TitleScene::Update(unique_scene scene, const std::unique_ptr<InputState>& p)
 {
 	_dispCnt = (_dispCnt <= 60 ? _dispCnt + 1 : 0);
-	if (p.IsKeyTrigger(KEY_INPUT_SPACE))
+	if (p->IsTrigger(INPUT_ID::START))
 	{
 		return std::make_unique<MainScene>();
 	}

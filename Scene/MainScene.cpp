@@ -273,7 +273,7 @@ bool MainScene::EnemyCol(const shared_obj& enemy, const shared_itr& enBegin)
 	return false;
 }
 
-int MainScene::WaitMode()
+int MainScene::WaitMode(const std::unique_ptr<InputState>& p)
 {
 	Draw();
 	_textCnt = (_textCnt <= 238 ? _textCnt + 1 : _textCnt);
@@ -291,7 +291,7 @@ int MainScene::WaitMode()
 	return 0;
 }
 
-int MainScene::PlayingMode()
+int MainScene::PlayingMode(const std::unique_ptr<InputState>& p)
 {
 	/// “G‚Ì¶¬‘O‚Ìæ“ª‚ðŽæ“¾‚µ‚Ä‚¢‚é
 	auto enBegin = std::find_if(_objs.begin(),
@@ -362,7 +362,7 @@ int MainScene::PlayingMode()
 	/// “G‚ÆÌßÚ²Ô°‚ÌXV
 	for (auto obj : _objs)
 	{
-		obj->Update();
+		obj->Update(p);
 	}
 
 	/// ÌßÚ²Ô°‚Ì“–‚½‚è”»’è
@@ -398,9 +398,9 @@ int MainScene::PlayingMode()
 	return 0;
 }
 
-unique_scene MainScene::Update(unique_scene scene, const Input & p)
+unique_scene MainScene::Update(unique_scene scene, const std::unique_ptr<InputState>& p)
 {
-	(this->*_mode)();
+	(this->*_mode)(p);
 
 	if (_enCnt >= (_enMax.x * _enMax.y))
 	{

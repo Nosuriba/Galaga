@@ -18,7 +18,7 @@ public:
 	~MainScene();
 	void Init() override;
 	void Draw();
-	unique_scene Update(unique_scene scene, const Input& p) override;
+	unique_scene Update(unique_scene scene, const std::unique_ptr<InputState>& p) override;
 	const SCN_ID GetSceneID() const override;
 private:
 
@@ -32,10 +32,10 @@ private:
 	bool PlayerCol(const shared_obj& player, const shared_itr& enBegin);
 	bool EnemyCol(const shared_obj& enemy, const shared_itr& enBegin);
 
-	int WaitMode();
-	int PlayingMode();
+	int WaitMode(const std::unique_ptr<InputState>& p);
+	int PlayingMode(const std::unique_ptr<InputState>& p);
 
-	int (MainScene::*_mode)();
+	int (MainScene::*_mode)(const std::unique_ptr<InputState>& p);
 
 	// first : à⁄ìÆïù, second : ë¨ìx
 	enTbl_pair _tblInfo;

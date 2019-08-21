@@ -6,6 +6,8 @@
 #include "Scene/TitleScene.h"
 #include "Scene/MainScene.h"
 #include "Common/ImageMng.h"
+#include "Input/KeyState.h"
+#include "Input/PadState.h"
 #include "DebugConOut.h"
 #include "DebugDisp.h"
 #include "resource.h"
@@ -48,13 +50,22 @@ void Game::Init()
 
 void Game::Run()
 {
-	Input input;
+	std::unique_ptr<InputState> input;
+	if (GetJoypadNum() == 0)
+	{
+		input = std::make_unique<KeyState>();
+	}
+	else
+	{
+		input = std::make_unique<PadState>();
+	}
+
 	while (!ProcessMessage() && !CheckHitKey(KEY_INPUT_ESCAPE))
 	{
  		_dbgStartUp;
 		_drawVector.clear();
-
-		input.Update();
+	
+		input->Update();
 		_scene = _scene->Update(std::move(_scene), input);
 
 		auto debug = GetDrawScreen();

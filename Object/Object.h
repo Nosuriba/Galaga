@@ -4,11 +4,11 @@
 #include <memory>
 #include <map>
 #include "../Vector2.h"
-#include "../Input.h"
 #include "../DebugDisp.h"
 #include "../AudioMng.h"
 
 class Shot;
+class InputState;
 
 enum class ANIM
 {
@@ -39,7 +39,7 @@ class Object
 public:
 	Object();
 	virtual ~Object();
-	virtual void Update() = 0;
+	virtual void Update(const std::unique_ptr<InputState>& p) = 0;
 	void Draw();
 	virtual const OBJ GetObjID() const = 0;
 

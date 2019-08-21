@@ -4,30 +4,31 @@
 
 PadState::PadState()
 {
-	_defPadID.reserve(static_cast<size_t>(end(INPUT_ID())));
-	_defPadID.emplace_back(PAD_INPUT_LEFT);
-	_defPadID.emplace_back(PAD_INPUT_RIGHT);
-	_defPadID.emplace_back(PAD_INPUT_UP);
-	_defPadID.emplace_back(PAD_INPUT_DOWN);
-	_defPadID.emplace_back(PAD_INPUT_A);
-	_defPadID.emplace_back(PAD_INPUT_B);
-	_defPadID.emplace_back(PAD_INPUT_X);
-	_defPadID.emplace_back(PAD_INPUT_Y);
-
 	_padID.reserve(static_cast<size_t>(end(INPUT_ID())));
+	_padID.emplace_back(PAD_INPUT_LEFT);
+	_padID.emplace_back(PAD_INPUT_RIGHT);
+	_padID.emplace_back(PAD_INPUT_UP);
+	_padID.emplace_back(PAD_INPUT_DOWN);
+	_padID.emplace_back(PAD_INPUT_A);
+	_padID.emplace_back(PAD_INPUT_B);
+	_padID.emplace_back(PAD_INPUT_X);
+	_padID.emplace_back(PAD_INPUT_Y);
+	_padID.emplace_back(PAD_INPUT_START);
+
+	_inputID.reserve(static_cast<size_t>(end(INPUT_ID())));
 	if (!LoadKeyData())
 	{
-		_padID = _defPadID;
+		_inputID = _padID;
 	}
 
 	/// ì«Ç›çûÇ›Ç…é∏îsÇµÇΩéûÅA∑∞èÓïÒÇ√ﬁÃ´ŸƒÇ…ñﬂÇ∑
 	for (auto id : INPUT_ID())
 	{
-		if (_padID[static_cast<int>(id)] <= 0)
+		if (_inputID[static_cast<int>(id)] <= 0)
 		{
 			TRACE("àÍïî∑∞ÇÃì«Ç›çûÇ›Ç…é∏îsÇµÇ‹ÇµÇΩÅB\n");
 			TRACE("√ﬁÃ´ŸƒÇÃ∑∞Ç…ñﬂÇµÇ‹Ç∑\n");
-			_padID = _defPadID;
+			_inputID = _padID;
 			break;
 		}
 	}
@@ -50,7 +51,7 @@ void PadState::Update()
 		_padMode == &PadState::RefKeyData)
 	{
 		TRACE("∑∞∫›Ã®∏ﬁ”∞ƒﬁÇ…à⁄çsÇ∑ÇÈ\n");
-		_padID.clear();
+		_inputID.clear();
 		for (auto id : INPUT_ID())
 		{
 			state(id, 0);
@@ -62,7 +63,7 @@ void PadState::Update()
 	{
 		for (auto id : INPUT_ID())
 		{
-			if (_padID[static_cast<int>(id)] != _defPadID[static_cast<int>(id)])
+			if (_inputID[static_cast<int>(id)] != _padID[static_cast<int>(id)])
 			{
 				TRACE("∑∞èÓïÒÇÿæØƒÇ∑ÇÈ\n");
 				_padMode = &PadState::ResetKeyData;
@@ -79,7 +80,7 @@ bool PadState::SaveKeyData()
 	{
 		return false;
 	}
-	fwrite(_padID.data(), (_padID.size() * sizeof(_padID[0])), 1, fp);
+	fwrite(_inputID.data(), (_inputID.size() * sizeof(_inputID[0])), 1, fp);
 	fclose(fp);
 
 	return true;
@@ -87,14 +88,14 @@ bool PadState::SaveKeyData()
 
 bool PadState::LoadKeyData()
 {
-	_padID.resize(static_cast<size_t>(INPUT_ID::MAX));
+	_inputID.resize(static_cast<size_t>(INPUT_ID::MAX));
 
 	FILE *fp;
 	if (fopen_s(&fp, "Data/pad.dat", "rb") != 0)
 	{
 		return false;
 	}
-	fread(_padID.data(), (_padID.size() * sizeof(_padID[0])), 1, fp);
+	fread(_inputID.data(), (_inputID.size() * sizeof(_inputID[0])), 1, fp);
 	fclose(fp);
 
 	return true;
@@ -104,13 +105,13 @@ void PadState::RefKeyData()
 {
 	for (auto id : INPUT_ID())
 	{
-		state(id, _padID[(static_cast<int>(id))] & _inputPad);
+		state(id, _inputID[(static_cast<int>(id))] & _inputPad);
 	}
 }
 
 void PadState::ResetKeyData()
 {
-	_padID = _defPadID;
+	_inputID = _padID;
 	_padMode = &PadState::RefKeyData;
 }
 
@@ -118,20 +119,20 @@ void PadState::SetKeyData()
 {
 	if (_inputPad > 0)
 	{
-		for (auto pad : _padID)
+		for (auto pad : _inputID)
 		{
 			if (pad == _inputPad &&
 				_inputPad == _lastID)
 			{
 				TRACE("ìØÇ∂∑∞Ç™ìoò^Ç≥ÇÍÇƒÇ¢Ç‹Ç∑ÅB\n");
-				return;
+				break;
 			}
 		}
 		_lastID = _inputPad;
-		_padID.emplace_back(_inputPad);
+		_inputID.emplace_back(_inputPad);
 	}
 
-	if (_padID.size() >= static_cast<int>(INPUT_ID::MAX))
+	if (_inputID.size() >= static_cast<int>(INPUT_ID::START))
 	{
 		_padMode = &PadState::RefKeyData;
 	}

@@ -16,24 +16,22 @@ public:
 	Player(const Vector2& pos, const Size& size);
 	~Player();
 
-	void Update() override;
+	void Update(const std::unique_ptr<InputState>& p) override;
 	const OBJ GetObjID() const override;
 private:
 	void Init();
 
-	void Idle();
-	void Die();
-	void Move();
+	void Idle(const std::unique_ptr<InputState>& p);
+	void Die(const std::unique_ptr<InputState>& p);
+	void Move(const std::unique_ptr<InputState>& p);
 
-	void IdleUpdate();
-	void MoveUpdate();
-	void DieUpdate();
+	void IdleUpdate(const std::unique_ptr<InputState>& p);
+	void MoveUpdate(const std::unique_ptr<InputState>& p);
+	void DieUpdate(const std::unique_ptr<InputState>& p);
 
 	void IsOutScreen();
 
-	void (Player::*_updater)();
-
-	std::unique_ptr<InputState> _input;
+	void (Player::*_updater)(const std::unique_ptr<InputState>& p);
 
 	int _inviCnt;		// –³“GŽžŠÔ
 };

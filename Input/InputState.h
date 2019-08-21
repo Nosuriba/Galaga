@@ -29,6 +29,8 @@ protected:
 	virtual void SetKeyData() = 0;
 
 	int _lastID;
+	std::vector<int> _inputID;
+
 private:
 	// first : nowInput, second : oldInput
 	key_map _state;

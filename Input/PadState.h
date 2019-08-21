@@ -21,6 +21,5 @@ private:
 	int _inputPad;
 
 	std::vector<int> _padID;
-	std::vector<int> _defPadID;
 };
 

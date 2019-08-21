@@ -5,31 +5,32 @@
 KeyState::KeyState()
 {
 	/// ﾃﾞﾌｫﾙﾄのｷｰ設定
-	_defKeyID.reserve(static_cast<size_t>(end(INPUT_ID())));
-	_defKeyID.emplace_back(KEY_INPUT_LEFT);
-	_defKeyID.emplace_back(KEY_INPUT_RIGHT);
-	_defKeyID.emplace_back(KEY_INPUT_UP);
-	_defKeyID.emplace_back(KEY_INPUT_DOWN);
-	_defKeyID.emplace_back(KEY_INPUT_Z);
-	_defKeyID.emplace_back(KEY_INPUT_X);
-	_defKeyID.emplace_back(KEY_INPUT_A);
-	_defKeyID.emplace_back(KEY_INPUT_S);
+	_keyID.reserve(static_cast<size_t>(end(INPUT_ID())));
+	_keyID.emplace_back(KEY_INPUT_LEFT);
+	_keyID.emplace_back(KEY_INPUT_RIGHT);
+	_keyID.emplace_back(KEY_INPUT_UP);
+	_keyID.emplace_back(KEY_INPUT_DOWN);
+	_keyID.emplace_back(KEY_INPUT_Z);
+	_keyID.emplace_back(KEY_INPUT_X);
+	_keyID.emplace_back(KEY_INPUT_A);
+	_keyID.emplace_back(KEY_INPUT_S);
+	_keyID.emplace_back(KEY_INPUT_SPACE);
 
 	/// ｷｰ情報の読み込み
 	if (!LoadKeyData())
 	{
-		_keyID.reserve(static_cast<size_t>(end(INPUT_ID())));
-		_keyID = _defKeyID;
+		_inputID.reserve(static_cast<size_t>(end(INPUT_ID())));
+		_inputID = _keyID;
 	}
 
 	/// 読み込みに失敗した時、ｷｰ情報をﾃﾞﾌｫﾙﾄに戻す
 	for (auto id : INPUT_ID())
 	{
-		if (_keyID[static_cast<int>(id)] <= 0)
+		if (_inputID[static_cast<int>(id)] <= 0)
 		{
 			TRACE("一部ｷｰの読み込みに失敗しました。\n");
 			TRACE("ﾃﾞﾌｫﾙﾄのｷｰに戻します\n");
-			_keyID = _defKeyID;
+			_inputID = _keyID;
 			break;
 		}
 	}
@@ -55,7 +56,7 @@ void KeyState::Update()
 		for (auto id : INPUT_ID())	
 		{
 			state(id, 0);
-			_keyID[static_cast<int>(id)] = 0;
+			_inputID[static_cast<int>(id)] = 0;
 		}
 
 		_confID = begin(INPUT_ID());
@@ -67,7 +68,7 @@ void KeyState::Update()
 	{
 		for (auto id : INPUT_ID())
 		{
-			if (_keyID[static_cast<int>(id)] != _defKeyID[static_cast<int>(id)])
+			if (_inputID[static_cast<int>(id)] != _keyID[static_cast<int>(id)])
 			{
 				TRACE("ｷｰ情報をﾘｾｯﾄする\n");
 				_keyMode = &KeyState::ResetKeyData;
@@ -84,7 +85,7 @@ bool KeyState::SaveKeyData()
 	{
 		return false;
 	}
-	fwrite(_keyID.data(), (_keyID.size() * sizeof(_keyID[0])), 1, fp);
+	fwrite(_inputID.data(), (_inputID.size() * sizeof(_inputID[0])), 1, fp);
 	fclose(fp);
 
 	return true;
@@ -92,14 +93,14 @@ bool KeyState::SaveKeyData()
 
 bool KeyState::LoadKeyData()
 {
-	_keyID.resize(static_cast<size_t>(INPUT_ID::MAX));
+	_inputID.resize(static_cast<size_t>(INPUT_ID::MAX));
 			
 	FILE *fp;
 	if (fopen_s(&fp, "Data/key.dat", "rb") != 0)
 	{
 		return false;
 	}
-	fread(_keyID.data(), (_keyID.size() * sizeof(_keyID[0])), 1, fp);
+	fread(_inputID.data(), (_inputID.size() * sizeof(_inputID[0])), 1, fp);
 	fclose(fp);
 
 	return true;
@@ -110,13 +111,13 @@ void KeyState::RefKeyData()
 	/// ボタンの入力情報の更新を行っている
 	for (auto id : INPUT_ID())
 	{
-		state(id, _buf[_keyID[static_cast<int>(id)]]);
+		state(id, _buf[_inputID[static_cast<int>(id)]]);
 	}
 }
 
 void KeyState::ResetKeyData()
 {
-	_keyID = _defKeyID;
+	_inputID = _keyID;
 	_keyMode = &KeyState::RefKeyData;
 }
 
@@ -130,14 +131,14 @@ void KeyState::SetKeyData()
 			id != KEY_INPUT_DELETE)
 		{
 			_lastID = id;
-			_keyID[static_cast<int>(_confID)] = id;
+			_inputID[static_cast<int>(_confID)] = id;
 			++_confID;
 			TRACE("設定したｷｰ : " "%d\nｷｰのID :%d\n",_confID, id);
 			break;
 		}
 	}
 	
-	if (_confID >= end(INPUT_ID()))
+	if (_confID >= INPUT_ID::START)
 	{
 		TRACE("ｷｰｺﾝﾌｨｸﾞ終了\n");
 		/// ここでセーブ処理を行う????

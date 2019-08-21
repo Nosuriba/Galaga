@@ -75,11 +75,11 @@ void ResultScene::Draw()
 	SetDrawScreen(beforScr);
 }
 
-unique_scene ResultScene::Update(unique_scene scene, const Input & p)
+unique_scene ResultScene::Update(unique_scene scene, const std::unique_ptr<InputState>& p)
 {
 	Draw();
 	_dispCnt = (_dispCnt <= 60 ? _dispCnt + 1 : 0);
-	if (p.IsKeyTrigger(KEY_INPUT_SPACE))
+	if (p->IsTrigger(INPUT_ID::START))
 	{
 		return std::make_unique<TitleScene>();
 	}

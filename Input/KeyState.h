@@ -21,9 +21,8 @@ private:
 
 	void (KeyState::*_keyMode)();
 
-	std::vector<int> _keyID;
 	// ÃŞÌ«ÙÄ·°‚Ìİ’è
-	std::vector<int> _defKeyID;
+	std::vector<int> _keyID;
 
 	INPUT_ID _confID;
 };

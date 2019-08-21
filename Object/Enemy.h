@@ -46,7 +46,7 @@ class Enemy :
 public:
 	Enemy();
 	virtual ~Enemy();
-	void Update();
+	void Update(const std::unique_ptr<InputState>& p);
 
 	/// ŠÖ”Îß²İÀ‚Ì±ÄŞÚ½‚ğæ“¾‚·‚é‚½‚ßApublic‚ÉˆÚ“®‚µ‚½
 	int Sigmoid();
