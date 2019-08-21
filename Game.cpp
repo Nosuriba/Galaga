@@ -1,6 +1,5 @@
 #include <DxLib.h>
 #include "Game.h"
-#include "Input.h"
 #include "Object/Player.h"
 #include "Scene/Scene.h"
 #include "Scene/TitleScene.h"

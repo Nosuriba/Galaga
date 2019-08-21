@@ -2,7 +2,6 @@
 
 #include <memory>
 #include "../Game.h"
-#include "../Input.h"
 #include "../AudioMng.h"
 #include "../Common/ImageMng.h"
 #include "../Input/InputState.h"

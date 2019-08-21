@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <stdlib.h>	
-#include <time.h>				/// ×İÀŞÑ¶¬‚ğ‚â‚ß‚½A‚¢‚¸‚êÁ‚·‚©‚à‚µ‚ê‚È‚¢
+#include <time.h>			/// —”‚Ì¶¬‚Åg—p‚µ‚Ä‚¢‚é
+#include <DxLib.h>
 #include "MainScene.h"
 #include "ResultScene.h"
 #include "../Game.h"
